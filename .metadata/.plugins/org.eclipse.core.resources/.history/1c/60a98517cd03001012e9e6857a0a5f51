@@ -1,0 +1,14 @@
+package main;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+
+public class chuanhoa {
+	public static void main(String[] args) {
+		Date d1 = new Date();
+		DateFormat inDF = DateFormat.getDateInstance(0, Locale.ITALIAN);
+		
+	}
+}

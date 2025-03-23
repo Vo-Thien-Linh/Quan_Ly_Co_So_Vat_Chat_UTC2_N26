@@ -1,0 +1,24 @@
+package entity;
+
+public class Generic <T extends Number>{
+	
+	public Generic() {
+		
+	}
+	
+	public <T extends Number> T sum(T...a) {
+		double kq  =0;
+		for(T number : a) {
+			kq += number.doubleValue();
+		}
+		return (T) convertToT kq;
+	}
+	
+	public <T extends Number> double tru(T a, T b) {
+		return a.doubleValue() - b.doubleValue();
+	}
+	
+	public < T extends Number> double pow(T a, T b) {
+		return Math.pow(a.doubleValue(), b.doubleValue());
+	}
+}

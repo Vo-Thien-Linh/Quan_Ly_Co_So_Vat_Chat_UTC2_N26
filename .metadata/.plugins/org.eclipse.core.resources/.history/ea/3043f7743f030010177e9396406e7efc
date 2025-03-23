@@ -1,0 +1,123 @@
+package frontend;
+
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class ScannerUtils {
+    private static Scanner sc = new Scanner(System.in);
+
+    // INT
+    public int NhapSoNguyen() {
+        while (true) {
+            try {
+                int a = sc.nextInt();
+                return a;
+            } catch (InputMismatchException e) {
+                System.out.println("Nhập số nguyên: ");
+                sc.nextLine(); // Xóa bỏ input không hợp lệ
+            }
+        }
+    }
+
+    public static void NhapSoDuong(int age) throws Exception {
+        if (age < 0)
+            throw new Exception("Input >= 0");
+    }
+
+    public int NhapSoNguyenDuong() throws Exception {
+        while (true) {
+            try {
+                int a = sc.nextInt();
+                NhapSoDuong(a);
+                return a;
+            } catch (InputMismatchException e) {
+                System.out.println("Nhập số nguyên! ");
+                sc.nextLine(); // Xóa bỏ input không hợp lệ
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    // FLOAT
+    public float NhapSoThuc() {
+        while (true) {
+            try {
+                float a = sc.nextFloat();
+                return a;
+            } catch (InputMismatchException e) {
+                System.out.println("Nhập số thực: ");
+                sc.nextLine(); // Xóa bỏ input không hợp lệ
+            }
+        }
+    }
+
+    public static void nhapSoTu0Den10(float a) throws Exception {
+        if (a < 0 || a > 10)
+            throw new Exception("Nhập phải lớn hơn 0 và nhỏ hơn 10");
+    }
+
+    public float NhapDiem() {
+        while (true) {
+            try {
+                float a = sc.nextFloat();
+                nhapSoTu0Den10(a);
+                return a;
+            } catch (InputMismatchException e) {
+                System.out.println("Nhập số thực: ");
+                sc.nextLine(); // Xóa bỏ input không hợp lệ
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    // DOUBLE
+    public double NhapSoThucDouble() {
+        while (true) {
+            try {
+                double a = sc.nextDouble();
+                return a;
+            } catch (InputMismatchException e) {
+                System.out.println("Nhập số thực: ");
+                sc.nextLine(); // Xóa bỏ input không hợp lệ
+            }
+        }
+    }
+
+    public static void NhapSoDuong(double a) throws Exception {
+        if (a < 0)
+            throw new Exception("Nhập phải >= 0");
+    }
+
+    public double NhapSoThucDoubleDuong() throws Exception {
+        while (true) {
+            try {
+                double a = sc.nextDouble();
+                NhapSoDuong(a);
+                return a;
+            } catch (InputMismatchException e) {
+                System.out.println("Nhập số thực: ");
+                sc.nextLine(); // Xóa bỏ input không hợp lệ
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    // String
+    public String NhapChuoi() {
+        while (true) {
+            try {
+                String input = sc.nextLine().trim();
+                if (!input.isEmpty()) return input;
+                else
+                    System.out.println("Không được bỏ trống");
+            } catch (InputMismatchException e) {
+                System.out.println("Nhập chuỗi!");
+                sc.nextLine(); // Xóa bỏ input không hợp lệ
+            }
+        }
+    }
+}

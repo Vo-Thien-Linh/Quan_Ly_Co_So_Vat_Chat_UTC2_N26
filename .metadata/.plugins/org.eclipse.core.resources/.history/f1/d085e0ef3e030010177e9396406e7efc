@@ -1,0 +1,81 @@
+package entity;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+public class DanhMucDatCho {
+	private List<ThongTinDatCho> dmdc;
+
+	public DanhMucDatCho() {
+		this.dmdc = new ArrayList<>();
+	}
+	
+	public void ThemThongTinDatCho(ThongTinDatCho ttdc){
+		this.dmdc.add(ttdc);
+	}
+
+	public void XuatThongDanhSach() {
+		for (ThongTinDatCho thongTinDatCho : dmdc) {
+			System.out.println(thongTinDatCho);
+		}
+	}
+	// Câu 7
+	public void DanhSachDonDatPhongCuaKhach(String string) {
+		// TODO Auto-generated method stub
+		for (ThongTinDatCho thongTinDatCho : dmdc) {
+			if (thongTinDatCho.getTenKhachHang().equals(string)) {
+				System.out.println(thongTinDatCho);
+			}
+		}
+	}
+
+	// Câu 8
+	public ThongTinDatCho DonDatPhongMax() {
+		ThongTinDatCho Max = dmdc.get(0);
+		for (ThongTinDatCho thongTinDatCho : dmdc) {
+			if (thongTinDatCho.TinhTongTien() > Max.TinhTongTien())
+				Max = thongTinDatCho;
+		}
+		return Max;
+	}
+
+	// Câu 9
+	public void LayRaDanhSachPhongDonDaDat() {
+		// TODO Auto-generated method stub
+		for (ThongTinDatCho thongTinDatCho : dmdc) {
+			for (Map.Entry<Phong, Integer> x : thongTinDatCho.getDs().entrySet()) {
+				if (x.getKey() instanceof PhongDon) {
+					System.out.println(thongTinDatCho);
+				}
+			}
+		}
+	}
+	
+	
+	//Câu 10
+	public void Sort() {
+		Collections.sort(dmdc);
+	}
+	
+	// Câu 11
+	public void ThongKeSoLuongPhongTheoLoai() {
+		int don =0, doi=0, giaDinh =0;
+		for (ThongTinDatCho thongTinDatCho : dmdc) {
+			for (Map.Entry<Phong, Integer> x : thongTinDatCho.getDs().entrySet()) {
+				if (x.getKey() instanceof PhongDon)
+					don++;
+				else if (x.getKey() instanceof PhongDoi)
+					doi++;
+				else if (x.getKey() instanceof PhongGiaDinh)
+					giaDinh++;
+			}
+		}
+		
+		System.out.println("Đơn: " + don + ", Gia đình: " + giaDinh + ", Đôi: " + doi);
+	}
+	
+	
+	
+}
