@@ -1,9 +1,11 @@
-package View;
+package view;
 
 import javax.swing.*;
 
-import Controller.LoginController;
-import Service.UserService;
+import service.UserService;
+import controller.LoginController;
+//import controller.RegisterController;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +14,7 @@ import java.awt.event.ActionListener;
 public class LoginView extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
-    private JButton btnLogin;
+    private JButton btnLogin, btnRegister;
 
     public LoginView() {
         setTitle("Đăng Nhập");
@@ -32,6 +34,9 @@ public class LoginView extends JFrame {
 
         btnLogin = new JButton("Đăng nhập");
         panel.add(btnLogin);
+        
+        btnRegister = new JButton("Đăng ký");
+        panel.add(btnRegister);
 
         add(panel);
 
@@ -42,6 +47,13 @@ public class LoginView extends JFrame {
                 String username = txtUsername.getText();
                 String password = new String(txtPassword.getPassword());
                 controller.login(username, password);
+            }
+        });
+        
+        btnRegister.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	controller.showRegister();
             }
         });
     }

@@ -1,10 +1,11 @@
-package Controller;
+package controller;
 
 import javax.swing.JOptionPane;
 
-import Service.UserService;
-import View.HomePage;
-import View.LoginView;
+import service.UserService;
+import view.HomePage;
+import view.LoginView;
+import view.RegisterView;
 
 public class LoginController {
     private UserService userService;
@@ -24,5 +25,10 @@ public class LoginController {
         } else {
             JOptionPane.showMessageDialog(loginView, "Sai tài khoản hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public void showRegister() {
+        new RegisterView().setVisible(true);
+        loginView.dispose(); 
     }
 }
