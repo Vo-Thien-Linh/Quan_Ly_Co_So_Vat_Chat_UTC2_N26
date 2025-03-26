@@ -1,11 +1,11 @@
-package controller;
+package Controller;
 
-import model.User;
-import service.UserService;
-import model.Role;
-import dao.UserDAO;
-import view.LoginView;
-import view.RegisterView;
+import Model.User;
+import Service.UserService;
+import Model.Role;
+import Dao.UserDAO;
+import View.LoginView;
+import View.RegisterView;
 
 public class RegisterController {
 	private RegisterView registerView;
