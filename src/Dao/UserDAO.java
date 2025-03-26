@@ -1,13 +1,13 @@
-package dao;
+package Dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import config.DatabaseConnection;
-import model.Role;
-import model.User;
+import Config.DatabaseConnection;
+import Model.Role;
+import Model.User;
 
 public class UserDAO {
 	public boolean checkUsernameExists(String username) {

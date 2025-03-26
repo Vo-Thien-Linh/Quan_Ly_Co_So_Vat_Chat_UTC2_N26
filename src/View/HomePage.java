@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import controller.LogoutController;
+import Controller.LogoutController;
 
 public class HomePage extends JFrame {
 	private JButton btnLogout;

@@ -1,9 +1,9 @@
-package controller;
+package Controller;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import view.LoginView;
+import View.LoginView;
 
 public class LogoutController {	
 	public static void logout(JFrame currentFrame) {

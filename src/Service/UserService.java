@@ -1,7 +1,7 @@
-package service;
+package Service;
 
-import model.User;
-import dao.UserDAO;
+import Model.User;
+import Dao.UserDAO;
 
 public class UserService {
     private UserDAO userDAO = new UserDAO();

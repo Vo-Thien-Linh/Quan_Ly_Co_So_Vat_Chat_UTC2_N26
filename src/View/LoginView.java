@@ -1,9 +1,9 @@
-package view;
+package View;
 
 import javax.swing.*;
 
-import service.UserService;
-import controller.LoginController;
+import Service.UserService;
+import Controller.LoginController;
 //import controller.RegisterController;
 
 
