@@ -1,4 +1,4 @@
-package view;
+package View;
 
 //import controller.RegisterController;
 import Model.Role;
