@@ -1,6 +1,6 @@
 package Model;
 
-public class User {
+public abstract class User {
 	private String username;
 	private int yearold;
     private String email;
@@ -40,4 +40,6 @@ public class User {
     public Role getRole() {
     	return role;
     }
+    
+    public abstract void displayInformationUser();
 }
