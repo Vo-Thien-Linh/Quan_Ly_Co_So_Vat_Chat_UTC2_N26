@@ -78,7 +78,7 @@ public class BorrowingRequest {
 		BorrowingRequest.idCounter = idCounter;
 	}
 
-	public void taoDon() {
+	public void createForm() {
         System.out.println("Đơn mượn phòng được tạo: ID=" + idForm + ", Phòng=" + idRoom + ", Người mượn=" + borrower);
     }
 }
