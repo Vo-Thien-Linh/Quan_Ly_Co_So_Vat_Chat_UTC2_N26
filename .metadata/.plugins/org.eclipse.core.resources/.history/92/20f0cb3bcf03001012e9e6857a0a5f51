@@ -1,0 +1,33 @@
+package main;
+
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class chuanhoa {
+    public static void main(String[] args) {
+        Date d1 = new Date(); 
+
+        DateFormat caDF = DateFormat.getDateInstance(0, Locale.CANADA);
+        System.out.println("Ngày ở Canada: " + caDF.format(d1));
+
+        DateFormat deDF = DateFormat.getDateInstance(0, Locale.GERMANY);
+        System.out.println("Ngày ở Đức: " + deDF.format(d1));
+        
+        double number = 1234567.89;
+
+        NumberFormat nfUS = NumberFormat.getInstance(Locale.CANADA);
+        System.out.println("Số ở canada: " + nfUS.format(number));
+
+        NumberFormat nfDE = NumberFormat.getInstance(Locale.GERMANY);
+        System.out.println("Số ở Đức: " + nfDE.format(number));
+
+        NumberFormat currencyUS = NumberFormat.getCurrencyInstance(Locale.CANADA);
+        System.out.println("Tiền tệ ở canada: " + currencyUS.format(number));
+
+        NumberFormat currencyDE = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+        System.out.println("Tiền tệ ở Đức: " + currencyDE.format(number));
+    }
+}
+

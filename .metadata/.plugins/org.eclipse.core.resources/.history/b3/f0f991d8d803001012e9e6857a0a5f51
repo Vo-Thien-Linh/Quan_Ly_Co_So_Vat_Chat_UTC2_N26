@@ -1,0 +1,10 @@
+package main;
+
+import entity.Generic;
+
+public class program {
+	public static void main(String[] args) {
+		Generic g1 = new Generic<Number>();
+		System.out.println(g1.sum(1,2));
+	}
+}

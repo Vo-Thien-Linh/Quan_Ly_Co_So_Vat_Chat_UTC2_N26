@@ -1,0 +1,21 @@
+package main;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class chuanhoa {
+    public static void main(String[] args) {
+        Date d1 = new Date(); 
+
+        DateFormat caDF = DateFormat.getDateInstance(DateFormat.FULL, Locale.CANADA);
+        System.out.println("Ngày (Canada): " + caDF.format(d1));
+
+        DateFormat deDF = DateFormat.getDateInstance(DateFormat.FULL, Locale.GERMANY);
+        System.out.println("Ngày (Germany): " + deDF.format(d1));
+
+        DateFormat vnDF = DateFormat.getDateInstance(DateFormat.FULL, new Locale("vi", "VN"));
+        System.out.println("Ngày (Việt Nam): " + vnDF.format(d1));
+    }
+}
+

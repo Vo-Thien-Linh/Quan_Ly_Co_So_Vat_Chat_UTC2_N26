@@ -1,0 +1,11 @@
+package main;
+
+import java.util.Date;
+
+public class tatCanhBao {
+    @SuppressWarnings("deprecation") 
+    public static void main(String[] args) {
+    	Date d1 = new Date(12,1,2005);
+        System.out.println("Ngày vừa được tạo: " + d1);
+    }
+}
