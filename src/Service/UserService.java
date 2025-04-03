@@ -1,10 +1,14 @@
 package Service;
 
 import Model.User;
+<<<<<<< HEAD
 import Dao.UserDAO;
+=======
+import Repository.UserRepository;
+>>>>>>> Tinh-nang-dang-nhap
 
 public class UserService {
-    private UserDAO userDAO = new UserDAO();
+    private UserRepository userDAO = new UserRepository();
 
     public boolean login(String username, String password) {
         User user = userDAO.getUserByUsername(username);

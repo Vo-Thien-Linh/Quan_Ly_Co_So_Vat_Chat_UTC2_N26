@@ -2,13 +2,13 @@ package Model;
 
 public abstract class User {
 	private String username;
-	private int yearold;
+	private String yearold;
     private String email;
     private String phoneNumber;
     private String password;
     private Role role;
 
-    public User(String username, int yearold, String email, String phoneNumber, String password, Role role) {
+    public User(String username, String yearold, String email, String phoneNumber, String password, Role role) {
         this.username = username;
         this.yearold = yearold;
         this.email = email;
@@ -21,7 +21,7 @@ public abstract class User {
         return username;
     }
 	
-	public int getYearold() {
+	public String getYearold() {
 		return yearold;
 	}
 	
