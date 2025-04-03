@@ -1,11 +1,11 @@
-package controller;
+package Controller;
 
 import javax.swing.JOptionPane;
 
-import service.UserService;
-import view.HomePage;
-import view.LoginView;
-import view.RegisterView;
+import Service.UserService;
+import View.HomePage;
+import View.LoginView;
+import View.RegisterView;
 
 public class LoginController {
     private UserService userService;

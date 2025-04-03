@@ -1,11 +1,12 @@
-package controller;
+package Controller;
 
-import model.User;
-import service.UserService;
-import model.Role;
-import dao.UserDAO;
-import view.LoginView;
-import view.RegisterView;
+import Model.User;
+import Repository.UserRepository;
+import Service.UserService;
+import View.LoginView;
+import View.RegisterView;
+import Model.Admin;
+import Model.Role;
 
 public class RegisterController {
 	private RegisterView registerView;
@@ -16,7 +17,7 @@ public class RegisterController {
         this.userService = new UserService();
     }
 
-    public void register(String username, int yearold, String email, String phoneNumber, String password, Role role) {
+    public void register(String username, String yearold, String email, String phoneNumber, String password, Role role) {
     	if (userService.isUsernameExists(username)) {
     		registerView.showErrorMessage("Tên đăng nhập đã tồn tại!");
             return;
@@ -31,9 +32,9 @@ public class RegisterController {
             return;
         }
     	
-    	User user = new User(username, yearold, email, phoneNumber, password, role);
+    	User admin = new Admin(username, yearold, email, phoneNumber, password, role);
 
-        boolean isRegistered = userService.registerUser(user);
+        boolean isRegistered = userService.registerUser(admin);
         if (isRegistered) {
             registerView.showSuccessMessage("Đăng ký thành công!");
             new LoginView().setVisible(true);
