@@ -1,20 +1,12 @@
 package Controller;
 
 import Model.User;
-<<<<<<< HEAD
-import Service.UserService;
-import Model.Role;
-import Dao.UserDAO;
-import View.LoginView;
-import View.RegisterView;
-=======
 import Repository.UserRepository;
 import Service.UserService;
 import View.LoginView;
 import View.RegisterView;
 import Model.Admin;
 import Model.Role;
->>>>>>> Tinh-nang-dang-nhap
 
 public class RegisterController {
 	private RegisterView registerView;

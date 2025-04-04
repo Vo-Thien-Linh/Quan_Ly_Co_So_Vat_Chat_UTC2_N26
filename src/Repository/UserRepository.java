@@ -1,21 +1,13 @@
-<<<<<<< HEAD:src/Dao/UserDAO.java
-package Dao;
-=======
 package Repository;
->>>>>>> Tinh-nang-dang-nhap:src/Repository/UserRepository.java
 
+import Config.DatabaseConnection;
+import Model.Admin;
+import Model.Role;
+import Model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import Config.DatabaseConnection;
-<<<<<<< HEAD:src/Dao/UserDAO.java
-=======
-import Model.Admin;
->>>>>>> Tinh-nang-dang-nhap:src/Repository/UserRepository.java
-import Model.Role;
-import Model.User;
 
 public class UserRepository {
 	public boolean checkUsernameExists(String username) {
