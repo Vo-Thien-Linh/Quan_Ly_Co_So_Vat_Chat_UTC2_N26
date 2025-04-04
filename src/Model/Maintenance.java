@@ -1,38 +1,32 @@
 package Model;
+
+public class Maintenance extends User {
+    private String department;
+
+    public Maintenance() {}
+
+    public Maintenance(String id, String name, String yearOld, String phoneNumber, String password, Role role, String department) {
+        super(id, name, yearOld, phoneNumber, password, role);
+        this.department = department;
+    }
+
+    public void createIncidentReport(IncidentHandling incident) {
+        System.out.println("Maintenance " + getUsername() + " created incident report " + incident.getIdReport());
+    }
+
+    public void incidentHandling(IncidentHandling incident) {
+        System.out.println("Incident has been handled by Maintenance " + getUsername());
+        incident.setHandledBy(this);
+    }
  
- public class Maintenance extends User{
- 	private String department;
- 
- 	public Maintenance(String username, String yearold, String email, String phoneNumber, String password, Role role, String department) {
- 		super(username, yearold, email, phoneNumber, password, role);
- 		this.department = department;
- 	}
- 
- 	public String getDepartment() {
- 		return department;
- 	}
- 
- 	public void setDepartment(String department) {
- 		this.department = department;
- 	}
- 	
- 	public void createIncidentReport() {
-         System.out.println("Nhân viên bảo trì " + getUsername() + " lập báo cáo bảo trì.");
-     }
- 	
- 	//ccc
- //    public void updateIncidentHandling() {
- //        System.out.println("Nhân viên bảo trì " + getUsername() + " cập nhật xử lý sự cố.");
- //    }
- 
-     public void incidentHandling() {
-         System.out.println("Nhân viên bảo trì " + getUsername() + " xử lý sự cố.");
-     }
- 
-     
  	@Override
  	public void displayInformationUser() {
- 		 System.out.println("Nhân viên bảo trì: Tên=" + getUsername() + ", Bộ phận=" + department);
+ 		System.out.println("Maintenance Username: " + getUsername());
+        System.out.println("Year Old: " + getYearold());
+        System.out.println("Email: " + getEmail());
+        System.out.println("Phone Number: " + getPhoneNumber());
+        System.out.println("Role: " + getRole());
+        System.out.println("Password: " + getPassword());
+        System.out.println("BoPHAN: " + department);
  	}
- 	
  }

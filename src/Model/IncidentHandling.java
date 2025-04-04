@@ -1,63 +1,92 @@
 package Model;
  
- import java.util.Date;
- 
- public class IncidentHandling {
-     private String idReport;
-     private String  handler;
-     private Date incidentHandlingDate;
-     private String contentToBeHandled;
-     private static int idCounter = 0;
- 
-     public IncidentHandling(String idReport, String handler, Date incidentHandlingDate, String contentToBeHandled) {
- 		super();
- 		this.idReport = idReport;
- 		this.handler = handler;
- 		this.incidentHandlingDate = incidentHandlingDate;
- 		this.contentToBeHandled = contentToBeHandled;
- 	}
- 
- 	public String getIdReport() {
- 		return idReport;
- 	}
- 
- 	public void setIdReport(String idReport) {
- 		this.idReport = idReport;
- 	}
- 
- 	public String getHandler() {
- 		return handler;
- 	}
- 
- 	public void setHandler(String handler) {
- 		this.handler = handler;
- 	}
- 
- 	public Date getIncidentHandlingDate() {
- 		return incidentHandlingDate;
- 	}
- 
- 	public void setIncidentHandlingDate(Date incidentHandlingDate) {
- 		this.incidentHandlingDate = incidentHandlingDate;
- 	}
- 
- 	public String getContentToBeHandled() {
- 		return contentToBeHandled;
- 	}
- 
- 	public void setContentToBeHandled(String contentToBeHandled) {
- 		this.contentToBeHandled = contentToBeHandled;
- 	}
- 
- 	public static int getIdCounter() {
- 		return idCounter;
- 	}
- 
- 	public static void setIdCounter(int idCounter) {
- 		IncidentHandling.idCounter = idCounter;
- 	}
- 
- 	public void displayHandlingInformation() {
-         System.out.println("Sự cố: ID=" + idReport + ", Người xử lý=" + handler + ", Ngày xử lý=" + incidentHandlingDate + ", Nội dung=" + contentToBeHandled);
-     }
+ import java.time.LocalDateTime;
+import java.util.Date;
+
+
+public class IncidentHandling {
+    private String idReport;
+    private User reportedBy; // Người báo cáo (Lecturer)
+    private String device;
+    private String room;
+    private String description;
+    private LocalDateTime reportDate;
+    private User handledBy; // Người xử lý (Maintenance)
+
+    // Constructor
+    public IncidentHandling() {}
+
+    public IncidentHandling(String idReport, User reportedBy, String device, String room, String description, LocalDateTime reportDate, User handledBy) {
+        this.idReport = idReport;
+        this.reportedBy = reportedBy;
+        this.device = device;
+        this.room = room;
+        this.description = description;
+        this.reportDate = reportDate;
+        this.handledBy = handledBy;
+    }
+
+    // Getters and Setters
+    public String getIdReport() {
+        return idReport;
+    }
+
+    public void setIdReport(String idReport) {
+        this.idReport = idReport;
+    }
+
+    public User getReportedBy() {
+        return reportedBy;
+    }
+
+    public void setReportedBy(User reportedBy) {
+        this.reportedBy = reportedBy;
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(LocalDateTime reportDate) {
+        this.reportDate = reportDate;
+    }
+
+    public User getHandledBy() {
+        return handledBy;
+    }
+
+    public void setHandledBy(User handledBy) {
+        this.handledBy = handledBy;
+    }
+
+
+    public void informationReportDisplay() {
+        System.out.println("Incident Report ID: " + idReport + ", Reported By: " + reportedBy.getUsername() +
+                ", Device: " + device + ", Room: " + room + ", Description: " + description +
+                ", Report Date: " + reportDate + ", Handled By: " + (handledBy != null ? handledBy.getUsername() : "Not handled yet"));
+    }
  }
