@@ -1,11 +1,7 @@
 package Service;
 
 import Model.User;
-<<<<<<< HEAD
-import Dao.UserDAO;
-=======
 import Repository.UserRepository;
->>>>>>> Tinh-nang-dang-nhap
 
 public class UserService {
     private UserRepository userDAO = new UserRepository();

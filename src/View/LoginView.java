@@ -2,15 +2,8 @@ package View;
 
 import javax.swing.*;
 
-<<<<<<< HEAD
-import Service.UserService;
-import Controller.LoginController;
-//import controller.RegisterController;
-
-=======
 import Controller.LoginController;
 import Service.UserService;
->>>>>>> Tinh-nang-dang-nhap
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

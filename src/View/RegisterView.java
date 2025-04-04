@@ -1,19 +1,9 @@
 package View;
-<<<<<<< HEAD
-
-//import controller.RegisterController;
-import Model.Role;
-import Service.UserService;
-import Controller.RegisterController;
-import javax.swing.*;
-import java.awt.*;
-=======
 
 
 import Model.Role;
 import Service.UserService;
 
->>>>>>> Tinh-nang-dang-nhap
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.EventQueue;

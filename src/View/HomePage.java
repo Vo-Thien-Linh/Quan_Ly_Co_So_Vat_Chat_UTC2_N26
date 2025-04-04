@@ -24,11 +24,6 @@ import java.awt.CardLayout;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-<<<<<<< HEAD
-import javax.swing.*;
-
-=======
->>>>>>> Tinh-nang-dang-nhap
 import Controller.LogoutController;
 
 public class HomePage extends JFrame {
