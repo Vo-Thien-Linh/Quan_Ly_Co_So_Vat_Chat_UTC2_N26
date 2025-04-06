@@ -2,47 +2,34 @@ package View;
 
 
 import Model.Role;
-import Service.UserService;
+import utils.ScannerUtils;
+import Controller.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import Controller.RegisterController;
-
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
-import java.awt.FlowLayout;
-import javax.swing.JComboBox;
-import javax.swing.JTextPane;
-import java.awt.GridLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.BoxLayout;
-import javax.swing.SpringLayout;
 import javax.swing.JPasswordField;
-import javax.swing.JSpinner;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-
 import java.awt.Choice;
-import javax.swing.JButton;
-import javax.swing.UIManager;
 import java.awt.Button;
 
 public class RegisterView extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
+	private JTextField text;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
@@ -50,9 +37,11 @@ public class RegisterView extends JFrame{
 
 
     public RegisterView() {
-
+    	
+    	setTitle("Quản lý cơ sở vật chất UTC2 - Đăng ký");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/IMG/logo-utc.png")));
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1149, 700);
+		setBounds(150, 0, 1200, 800);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 248, 220));
 		contentPane.setForeground(new Color(255, 248, 220));
@@ -75,13 +64,53 @@ public class RegisterView extends JFrame{
 		gbc_lblNewLabel.gridy = 0;
 		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 		
+		ImageIcon originalIcon = new ImageIcon(Register.class.getResource("/IMG/logo-utc.png"));
+
+		Image scaledImage = originalIcon.getImage().getScaledInstance(300, 230, Image.SCALE_SMOOTH);
+		ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
 		JLabel lblNewLabel_1 = new JLabel("");
-//		lblNewLabel_1.setIcon(new ImageIcon(Register.class.getResource("/view/img/logo-utc.png")));
+		lblNewLabel_1.setIcon(scaledIcon);
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 1;
 		contentPane.add(lblNewLabel_1, gbc_lblNewLabel_1);
+		
+		JPanel panel_title = new JPanel();
+		panel_title.setBackground(new Color(255, 248, 220));
+		GridBagConstraints gbc_panel_title = new GridBagConstraints();
+		gbc_panel_title.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_title.fill = GridBagConstraints.VERTICAL;
+		gbc_panel_title.gridx = 0;
+		gbc_panel_title.gridy = 2;
+		contentPane.add(panel_title, gbc_panel_title);
+		GridBagLayout gbl_panel_title = new GridBagLayout();
+		gbl_panel_title.columnWidths = new int[]{508, 508, 0};
+		gbl_panel_title.rowHeights = new int[]{37, 0};
+		gbl_panel_title.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_title.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		panel_title.setLayout(gbl_panel_title);
+		
+		JLabel title = new JLabel("Họ và tên: ");
+		title.setForeground(new Color(0, 0, 128));
+		title.setFont(new Font("Calibri", Font.BOLD, 25));
+		GridBagConstraints gbc_title = new GridBagConstraints();
+		gbc_title.anchor = GridBagConstraints.EAST;
+		gbc_title.fill = GridBagConstraints.VERTICAL;
+		gbc_title.insets = new Insets(0, 0, 0, 5);
+		gbc_title.gridx = 0;
+		gbc_title.gridy = 0;
+		panel_title.add(title, gbc_title);
+		
+		text = new JTextField();
+		text.setFont(new Font("Arial", Font.BOLD, 25));
+		GridBagConstraints gbc_text = new GridBagConstraints();
+		gbc_text.fill = GridBagConstraints.BOTH;
+		gbc_text.gridx = 1;
+		gbc_text.gridy = 0;
+		panel_title.add(text, gbc_text);
+		text.setColumns(10);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 248, 220));
@@ -89,7 +118,7 @@ public class RegisterView extends JFrame{
 		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.fill = GridBagConstraints.VERTICAL;
 		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 2;
+		gbc_panel.gridy = 3;
 		contentPane.add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{508, 508, 0};
@@ -123,7 +152,7 @@ public class RegisterView extends JFrame{
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_1.gridx = 0;
-		gbc_panel_1.gridy = 3;
+		gbc_panel_1.gridy = 4;
 		contentPane.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[]{508, 508, 0};
@@ -157,7 +186,7 @@ public class RegisterView extends JFrame{
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_2.gridx = 0;
-		gbc_panel_2.gridy = 4;
+		gbc_panel_2.gridy = 5;
 		contentPane.add(panel_2, gbc_panel_2);
 		GridBagLayout gbl_panel_2 = new GridBagLayout();
 		gbl_panel_2.columnWidths = new int[]{508, 508, 0};
@@ -191,7 +220,7 @@ public class RegisterView extends JFrame{
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
 		gbc_panel_3.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_3.gridx = 0;
-		gbc_panel_3.gridy = 5;
+		gbc_panel_3.gridy = 6;
 		contentPane.add(panel_3, gbc_panel_3);
 		GridBagLayout gbl_panel_3 = new GridBagLayout();
 		gbl_panel_3.columnWidths = new int[]{508, 508, 0};
@@ -225,7 +254,7 @@ public class RegisterView extends JFrame{
 		GridBagConstraints gbc_panel_4 = new GridBagConstraints();
 		gbc_panel_4.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_4.gridx = 0;
-		gbc_panel_4.gridy = 6;
+		gbc_panel_4.gridy = 7;
 		contentPane.add(panel_4, gbc_panel_4);
 		GridBagLayout gbl_panel_4 = new GridBagLayout();
 		gbl_panel_4.columnWidths = new int[]{508, 508, 0};
@@ -258,7 +287,7 @@ public class RegisterView extends JFrame{
 		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
 		gbc_panel_5.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_5.gridx = 0;
-		gbc_panel_5.gridy = 7;
+		gbc_panel_5.gridy = 8;
 		contentPane.add(panel_5, gbc_panel_5);
 		GridBagLayout gbl_panel_5 = new GridBagLayout();
 		gbl_panel_5.columnWidths = new int[]{508, 508, 0};
@@ -280,7 +309,11 @@ public class RegisterView extends JFrame{
 		
 		Choice choice = new Choice();
 		for (Role role : Role.values()) {
-		    choice.add(role.name()); // Thêm giá trị Enum vào Choice
+			if(role.name() == "MAINTENANCE") {
+				choice.add("BẢO TRÌ");
+			} else {
+				choice.add("GIÁO VIÊN");
+			}
 		}
 		GridBagConstraints gbc_choice = new GridBagConstraints();
 		gbc_choice.anchor = GridBagConstraints.WEST;
@@ -292,7 +325,7 @@ public class RegisterView extends JFrame{
 		panel_6.setBackground(new Color(255, 250, 205));
 		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
 		gbc_panel_6.gridx = 0;
-		gbc_panel_6.gridy = 8;
+		gbc_panel_6.gridy = 9;
 		contentPane.add(panel_6, gbc_panel_6);
 		GridBagLayout gbl_panel_6 = new GridBagLayout();
 		gbl_panel_6.columnWidths = new int[]{508, 508, 0};
@@ -323,39 +356,45 @@ public class RegisterView extends JFrame{
 		panel_6.add(button_1, gbc_button_1);
 
 
-        RegisterController controller = new RegisterController(this);
+        UserController userController = new UserController(null, this);
         
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	String fullname = text.getText();
             	String username = textField.getText();
                 String yearold = textField_1.getText();
                 String email = textField_2.getText();
                 String phoneNumber = textField_3.getText();
                 String password = new String(passwordField.getPassword());
-                Role role = Role.valueOf(choice.getSelectedItem());
+                String roleString = choice.getSelectedItem(); 
+                		
+                Role role = Role.LECTURER; 
+		        if (roleString.equals("BẢO TRÌ")) {
+		            role = Role.MAINTENANCE;	
+		        }
             	
-            	if (username.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || password.isEmpty()) {
-                    showErrorMessage("Các trường không được để trống!");
+            	if (ScannerUtils.isEmpty(fullname, username, yearold, email, phoneNumber, password)) {
+                    ScannerUtils.showErrorMessage(RegisterView.this, "Các trường không được để trống!");
                     return;
                 }
 
-                if (!isValidEmail(email)) {
-                    showErrorMessage("Email không hợp lệ!");
+                if (!ScannerUtils.isValidEmail(email)) {
+                    ScannerUtils.showErrorMessage(RegisterView.this, "Email không hợp lệ!");
                     return;
                 }
                 
-                if(!isValidPhoneNumber(phoneNumber)) {
-                	showErrorMessage("Số điện thoại không hợp lệ!");
+                if(!ScannerUtils.isValidPhoneNumber(phoneNumber)) {
+                	ScannerUtils.showErrorMessage(RegisterView.this, "Số điện thoại không hợp lệ!");
                 	return;
                 }
 
-                if (!isValidPassword(password)) {
-                    showErrorMessage("Mật khẩu phải có ít nhất 8 ký tự, tối đa 15 ký tự, bao gồm chữ in hoa, chữ in thường, số và ký tự đặc biệt!");
+                if (!ScannerUtils.isValidPassword(password)) {
+                    ScannerUtils.showErrorMessage(RegisterView.this, "Mật khẩu phải có ít nhất 8 ký tự, tối đa 15 ký tự, bao gồm chữ in hoa, chữ in thường, số và ký tự đặc biệt!");
                     return;
                 }
             	
-                controller.register(username, yearold, email, phoneNumber, password, role);
+                userController.register(fullname, username, yearold, email, phoneNumber, password, role);
             }
         });
         
@@ -367,27 +406,5 @@ public class RegisterView extends JFrame{
 				new LoginView().setVisible(true);
 			}
 		});
-    }
-    
-    private boolean isValidEmail(String email) {
-        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,}$");
-    }
-
-    private boolean isValidPassword(String password) {
-        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$";
-        return password.matches(passwordPattern);
-    }
-    
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        String phonePattern = "^(\\+84|0)[0-9]{9}$";
-        return phoneNumber.matches(phonePattern);
-    }
-    
-    public void showErrorMessage(String message) {
-        JOptionPane.showMessageDialog(this, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public void showSuccessMessage(String message) {
-        JOptionPane.showMessageDialog(this, message, "Thàng công", JOptionPane.INFORMATION_MESSAGE);
     }
 }

@@ -1,20 +1,20 @@
 package Model;
  
  public class Manager extends User {
-     private String right;
+     private String userId;
  
-     public Manager(String username, String yearold, String email, String phoneNumber, String password, Role role,
- 			String right) {
- 		super(username, yearold, email, phoneNumber, password, role);
- 		this.right = right;
+     public Manager(String fullname, String username, String yearold, String email, String phoneNumber, String password, Status status, Role role,
+ 			String userId) {
+ 		super(fullname, username, yearold, email, phoneNumber, password, status, role);
+ 		this.userId = userId;
  	}
      
- 	public String getRight() {
- 		return right;
+ 	public String getUserId() {
+ 		return userId;
  	}
  
- 	public void setRight(String right) {
- 		this.right = right;
+ 	public void setUserId(String userId) {
+ 		this.userId = userId;
  	}
  
  	public void addInformation(Facilities facilities) {
@@ -45,6 +45,6 @@ package Model;
  
  	@Override
  	public void displayInformationUser() {
- 		 System.out.println("Quản lý: Tên=" + getUsername() + ", Quyền hạn=" + right);
+ 		 System.out.println("Quản lý: Tên=" + getUsername() + ", Quyền hạn=" + userId);
  	}
  }
