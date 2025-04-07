@@ -1,18 +1,19 @@
 package Model;
 
+ 
 public class Lecturer extends User {
     private String faculty;
-
-    public Lecturer() {}
-
-    public Lecturer(String id, String name, String yearOld, String phoneNumber, String password, Role role, String faculty) {
-        super(id, name, yearOld, phoneNumber, password, role);
+    
+    public Lecturer(String fullname, String username, String yearold, String email, String phoneNumber, String password, Status status, Role role, String faculty) {
+        super(fullname, username, yearold, email, phoneNumber, password, status, role);
         this.faculty = faculty;
     }
 
     public String getFaculty() {
 		return faculty;
 	}
+ 
+ 
     
 	public void setFaculty(String faculty) {
 		this.faculty = faculty;

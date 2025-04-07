@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Controller.UserController;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -13,6 +16,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.CardLayout;
 import java.awt.Button;
@@ -81,7 +86,7 @@ public class PageManager extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Quản Lý");
 		lblNewLabel.setForeground(new Color(255, 215, 0));
-		lblNewLabel.setIcon(new ImageIcon(PageManager.class.getResource("/IMG/imgManager.png")));
+//		lblNewLabel.setIcon(new ImageIcon(PageManager.class.getResource("/IMG/imgManager.png")));
 		lblNewLabel.setFont(new Font("Courier New", Font.BOLD, 25));
 		panel_2.add(lblNewLabel, BorderLayout.WEST);
 		
@@ -132,11 +137,25 @@ public class PageManager extends JFrame {
 		
 		JPanel panel_5 = new JPanel();
 		panel_1.add(panel_5, BorderLayout.CENTER);
-		panel_5.setLayout(new BoxLayout(panel_5, BoxLayout.X_AXIS));
+		CardLayout cardLayout = new CardLayout();
+		panel_5.setLayout(cardLayout);
 		
-		JPanel panel_7 = new JPanel();
-		panel_7.setBackground(new Color(255, 250, 240));
-		panel_5.add(panel_7);
+		
+		Panel_ManagerRoom panelManagerRoom = new Panel_ManagerRoom();
+		Panel_ManagerDevice panelManagerDevice = new Panel_ManagerDevice();
+		Panel_ManagerUser panelManagerUser = new Panel_ManagerUser();
+
+		panel_5.add(panelManagerRoom, "room");
+		panel_5.add(panelManagerDevice, "device");
+		panel_5.add(panelManagerUser, "user");
+		
+		cardLayout.show(panel_5, "user");
+		
+		button.addActionListener(e -> cardLayout.show(panel_5, "room"));
+		button_1.addActionListener(e -> cardLayout.show(panel_5, "device"));
+		button_2.addActionListener(e -> cardLayout.show(panel_5, "user"));
+
+
 		
 		JPanel panel_8 = new JPanel();
 		panel_8.setBackground(new Color(100, 149, 237));
@@ -145,5 +164,14 @@ public class PageManager extends JFrame {
 		
 		JButton btnNewButton = new JButton("Đăng xuất");
 		panel_8.add(btnNewButton, BorderLayout.WEST);
+		
+		LoginView loginView = new LoginView();
+		UserController userController = new UserController(loginView , null);
+		btnNewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                UserController.logout(PageManager.this);
+            }
+        });
 	}
 }

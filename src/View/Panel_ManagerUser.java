@@ -8,12 +8,32 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Choice;
 import javax.swing.table.DefaultTableModel;
+
+import Controller.ManagerUserController;
+import Controller.UserController;
+import Model.Admin;
+import Model.Manager;
+import Model.Role;
+import Model.Status;
+import Model.User;
+import utils.DateUtils;
+import utils.PasswordGeneratorUtils;
+import utils.ScannerUtils;
+
 import java.awt.Button;
 
 public class Panel_ManagerUser extends JPanel {
@@ -26,10 +46,12 @@ public class Panel_ManagerUser extends JPanel {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
+	private ManagerUserController controller;
 
 	/**
 	 * Create the panel.
 	 */
+	
 	public Panel_ManagerUser() {
 		setBackground(new Color(255, 250, 205));
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -58,25 +80,6 @@ public class Panel_ManagerUser extends JPanel {
 		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		panel_2.setLayout(gbl_panel_2);
 		
-		JLabel lblNewLabel = new JLabel("ID người dùng: ");
-		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
-		panel_2.add(lblNewLabel, gbc_lblNewLabel);
-		
-		textField = new JTextField();
-		textField.setFont(new Font("Arial", Font.PLAIN, 20));
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 0);
-		gbc_textField.anchor = GridBagConstraints.WEST;
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 0;
-		panel_2.add(textField, gbc_textField);
-		textField.setColumns(10);
-		
 		JLabel lblHVTn = new JLabel("Họ và tên: ");
 		lblHVTn.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_lblHVTn = new GridBagConstraints();
@@ -96,7 +99,7 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_textField_1.gridy = 1;
 		panel_2.add(textField_1, gbc_textField_1);
 		
-		JLabel lblPhi = new JLabel("Phái: ");
+		JLabel lblPhi = new JLabel("Tên đăng nhập: ");
 		lblPhi.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_lblPhi = new GridBagConstraints();
 		gbc_lblPhi.anchor = GridBagConstraints.EAST;
@@ -172,21 +175,53 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_textField_5.gridy = 5;
 		panel_2.add(textField_5, gbc_textField_5);
 		
+		JLabel lblStatus = new JLabel("Trạng thái: ");
+		lblStatus.setFont(new Font("Arial", Font.PLAIN, 20));
+		GridBagConstraints gbc_lblStatus = new GridBagConstraints();
+		gbc_lblStatus.anchor = GridBagConstraints.EAST;
+		gbc_lblStatus.insets = new Insets(0, 0, 0, 5);
+		gbc_lblStatus.gridx = 0;
+		gbc_lblStatus.gridy = 6;
+		panel_2.add(lblStatus, gbc_lblStatus);
+		
+		Choice choice_1 = new Choice();
+		for (Status status : Status.values()) {
+			if(status.name() == "MAINTENANCE") {
+				choice_1.add("ĐANG BẢO TRÌ");
+			} else if(status.name() == "ACTIVE") {
+				choice_1.add("HOẠT ĐỘNG");
+			} else {
+				choice_1.add("DỪNG HOẠT ĐỘNG");
+			}
+		}
+		GridBagConstraints gbc_choice_1 = new GridBagConstraints();
+		gbc_choice_1.anchor = GridBagConstraints.WEST;
+		gbc_choice_1.gridx = 1;
+		gbc_choice_1.gridy = 6;
+		panel_2.add(choice_1, gbc_choice_1);
+		
 		JLabel lblVaiTr = new JLabel("Vai trò: ");
 		lblVaiTr.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_lblVaiTr = new GridBagConstraints();
 		gbc_lblVaiTr.anchor = GridBagConstraints.EAST;
 		gbc_lblVaiTr.insets = new Insets(0, 0, 0, 5);
 		gbc_lblVaiTr.gridx = 0;
-		gbc_lblVaiTr.gridy = 6;
+		gbc_lblVaiTr.gridy = 7;
 		panel_2.add(lblVaiTr, gbc_lblVaiTr);
 		
-		Choice choice = new Choice();
-		GridBagConstraints gbc_choice = new GridBagConstraints();
-		gbc_choice.anchor = GridBagConstraints.WEST;
-		gbc_choice.gridx = 1;
-		gbc_choice.gridy = 6;
-		panel_2.add(choice, gbc_choice);
+		Choice choice_2 = new Choice();
+		for (Role role : Role.values()) {
+			if(role.name() == "MAINTENANCE") {
+				choice_2.add("BẢO TRÌ");
+			} else {
+				choice_2.add("GIÁO VIÊN");
+			}
+		}
+		GridBagConstraints gbc_choice_2 = new GridBagConstraints();
+		gbc_choice_2.anchor = GridBagConstraints.WEST;
+		gbc_choice_2.gridx = 1;
+		gbc_choice_2.gridy = 7;
+		panel_2.add(choice_2, gbc_choice_2);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -198,13 +233,15 @@ public class Panel_ManagerUser extends JPanel {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"ID User", "Họ và tên", "Phái", "Ngày tháng năm sinh","Số điện thoại", "Email", "Vai trò"
+				"Mã người dùng","Họ và tên", "Tên đăng nhập", "Ngày tháng năm sinh","Số điện thoại", "Email", "Trạng thái", "Vai trò"
 			}
 		));
 		scrollPane.setViewportView(table);
+		controller = new ManagerUserController(null, null);
+        loadUserData();
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 250, 240));
@@ -236,6 +273,7 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_button_1.gridx = 0;
 		gbc_button_1.gridy = 1;
 		panel_1.add(button_1, gbc_button_1);
+		button_1.setEnabled(false);
 		
 		Button button_2 = new Button("Xóa");
 		button_2.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -246,7 +284,197 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_button_2.gridx = 0;
 		gbc_button_2.gridy = 2;
 		panel_1.add(button_2, gbc_button_2);
+		button_2.setEnabled(false);
+		
+		//Bắt sự kiện nút thêm
+		button.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        String fullname = textField_1.getText();
+		        String username = textField_2.getText(); 
+		        String yearold = textField_3.getText();
+		        String phoneNumber = textField_4.getText();
+		        new PasswordGeneratorUtils();
+				String password = PasswordGeneratorUtils.generateStrongPassword();
+		        String email = textField_5.getText(); 
+		        String statusString = choice_1.getSelectedItem();
+		        String roleString = choice_2.getSelectedItem();
+		        
+		        Status status = Status.ACTIVE;
+		        if(statusString.equals("DỪNG HOẠT ĐỘNG")) {
+		        	status = Status.INACTIVE;
+		        } else if(statusString.equals("BẢO TRÌ")) {
+		        	status = Status.MAINTENANCE;
+		        }
+		        
+		        Role role = Role.LECTURER; 
+		        if (roleString.equals("BẢO TRÌ")) {
+		            role = Role.MAINTENANCE;	
+		        }
+		        
+		        PageManager pageManager = new PageManager();
+		        if (ScannerUtils.isEmpty(fullname, username, yearold, phoneNumber, email)) {
+		        	ScannerUtils.showErrorMessage(pageManager, "Vui lòng điền đầy đủ thông tin!");
+		            return;
+		        }
 
+		        String userId = controller.addUserAndReturnID(fullname, username, yearold, email, phoneNumber, password, status, role);
+		        if (userId != null) {
+		        	button_1.setEnabled(false);
+			    	button_2.setEnabled(false);
+		        	clearForm();
+		            loadUserData();
+		            ScannerUtils.showSuccessMessage(pageManager, "Thêm dữ liệu thành công!");
+		        }
+		    }
+		});
+		
+		//Bắt sự kiện nút sửa
+		button_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = table.getSelectedRow(); 
+				String userId = table.getValueAt(selectedRow, 0).toString();
+				String fullname = textField_1.getText();
+				String username = textField_2.getText();
+				String yearold = textField_3.getText();
+				String phoneNumber = textField_4.getText();
+				String email = textField_5.getText();
+				String statusString = choice_1.getSelectedItem();
+		        String roleString = choice_2.getSelectedItem();
+		        
+		        Status status = Status.ACTIVE;
+		        if(statusString.equals("DỪNG HOẠT ĐỘNG")) {
+		        	status = Status.INACTIVE;
+		        } else if(statusString.equals("ĐANG BẢO TRÌ")) {
+		        	status = Status.MAINTENANCE;
+		        }
+				
+				Role role = Role.LECTURER; 
+		        if (roleString.equals("BẢO TRÌ")) {
+		            role = Role.MAINTENANCE;	
+		        }
+				
+				User manager = new Manager(fullname, username, yearold, email, phoneNumber, null, status,  role, userId);
+				String editSuccess = controller.edit(manager);
+				if(editSuccess == "SUCCESS") {
+					button_1.setEnabled(false);
+			    	button_2.setEnabled(false);
+					clearForm();
+					loadUserData();
+					ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Cập nhật thành công!");
+				} else if(editSuccess == "UNSUCCESS"){
+					ScannerUtils.showErrorMessage(Panel_ManagerUser.this, "Cập nhật không thành công!");
+				}
+				
+			}
+		});
+		
+		//Bắt sự kiện nút xóa
+		button_2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = table.getSelectedRow();
+				String userId = table.getValueAt(selectedRow, 0).toString();
+				PageManager pageManager = new PageManager();
+				Boolean deleteSuccess = controller.delete(userId, pageManager);
+				if(deleteSuccess) {
+					button_1.setEnabled(false);
+			    	button_2.setEnabled(false);
+					clearForm();
+					loadUserData();
+					ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Xóa thành công!");
+				} else {
+					ScannerUtils.showErrorMessage(Panel_ManagerUser.this, "Xóa không thành công!");
+				}
+			}
+		});
+		
+		// Bắt sự kiện khi click vào bảng và hiển thị dữ liệu dòng được chọn vào các ô input
+		table.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		    	button_1.setEnabled(true);
+		    	button_2.setEnabled(true);
+		        int selectedRow = table.getSelectedRow(); 
+		        if (selectedRow >= 0) {
+		            String fullname = table.getValueAt(selectedRow, 1).toString();
+		            String username = table.getValueAt(selectedRow, 2).toString();
+		            String yearold = table.getValueAt(selectedRow, 3).toString();
+		            String phoneNumber = table.getValueAt(selectedRow, 4).toString();
+		            String email = table.getValueAt(selectedRow, 5).toString();
+		            String status = table.getValueAt(selectedRow, 6).toString();
+		            String role = table.getValueAt(selectedRow, 7).toString();
+		            
+		            textField_1.setText(fullname);
+		            textField_2.setText(username);
+		            textField_3.setText(yearold);
+		            textField_4.setText(phoneNumber);
+		            textField_5.setText(email);
+		            
+		            if (status.equals("HOẠT ĐỘNG")) {
+		            	choice_1.select("HOẠT ĐỘNG");
+		            } else if(status.equals("DỪNG HOẠT ĐỘNG")){
+		            	choice_1.select("DỪNG HOẠT ĐỘNG");
+		            } else {
+		            	choice_1.select("ĐANG BẢO TRÌ");
+		            }
+		            
+		            if (role.equals("BẢO TRÌ")) {
+		            	choice_2.select("BẢO TRÌ");
+		            } else {
+		            	choice_2.select("GIÁO VIÊN");
+		            }
+		        }
+		    }
+		});
+		
 	}
+	
+	//Hàm load lại dữ liệu
+	public void loadUserData() {
+        List<User> users = controller.getAllUsers();
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
 
+        for (User user : users) {
+        	String roleDisplay = user.getRole().name();
+        	String statusDisplay = user.getStatus().name();
+        	
+        	if(user.getStatus().name() == "ACTIVE") {
+        		statusDisplay = "HOẠT ĐỘNG";
+        	} else if(user.getStatus().name() == "INACTIVE") {
+        		statusDisplay = "DỪNG HOẠT ĐỘNG";
+        	} else if(user.getStatus().name() == "MAINTENANCE"){
+        		statusDisplay = "ĐANG BẢO TRÌ";
+        	}
+
+            if (user.getRole() == Role.LECTURER) {
+                roleDisplay = "GIÁO VIÊN";
+            } else if(user.getRole() == Role.MAINTENANCE) {
+            	roleDisplay = "BẢO TRÌ";
+            }
+        	
+            model.addRow(new Object[]{
+            	user.getUserId(),
+                user.getFullname(),
+                user.getUsername(),
+                user.getYearold(),
+                user.getPhoneNumber(),
+                user.getEmail(),
+                statusDisplay,
+                roleDisplay
+            });
+        }
+    }
+	
+	public void clearForm() {
+		textField_1.setText("");
+        textField_2.setText("");
+        textField_3.setText("");
+        textField_4.setText("");
+        textField_5.setText("");
+	}
 }

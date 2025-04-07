@@ -2,8 +2,9 @@ package View;
 
 import javax.swing.*;
 
-import Controller.LoginController;
+import Controller.UserController;
 import Service.UserService;
+import utils.ScannerUtils;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,7 +18,7 @@ public class LoginView extends JFrame {
 
     public LoginView() {
     	setTitle("Quản lý cơ sở vật chất UTC2 - Đăng nhập");
-//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/view/img/logo-utc.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/IMG/logo-utc.png")));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
         setLocationRelativeTo(null);
@@ -40,9 +41,14 @@ public class LoginView extends JFrame {
         contentPane.add(lblTitle, gbc);
         
         // Logo
-//        JLabel lblLogo = new JLabel(new ImageIcon(getClass().getResource("/view/img/logo-utc.png")));
-//        gbc.gridy = 1;
-//        contentPane.add(lblLogo, gbc);
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/IMG/logo-utc.png"));
+        Image img = originalIcon.getImage(); 
+        Image resizedImg = img.getScaledInstance(300, 230, Image.SCALE_SMOOTH); 
+        ImageIcon resizedIcon = new ImageIcon(resizedImg);
+
+        JLabel lblLogo = new JLabel(resizedIcon);
+        gbc.gridy = 1;
+        contentPane.add(lblLogo, gbc);
         
         gbc.gridwidth = 1;
         gbc.gridx = 0;
@@ -104,31 +110,29 @@ public class LoginView extends JFrame {
         gbc.gridy = 7;
         contentPane.add(btnForgotPassword, gbc);
 
-        LoginController controller = new LoginController(new UserService(), this);
+        UserController userController = new UserController(this, null);
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = textFieldID.getText();
                 String password = new String(passwordField.getPassword());
                 
-                if(username.isEmpty() || password.isEmpty()) {
-                	showErrorMessage("Các trường không được để trống!");
+                if(ScannerUtils.isEmpty(username, password)) {
+                	ScannerUtils.showErrorMessage(LoginView.this, "Các trường không được để trống!");
                 	return;
                 }
                 
-                controller.login(username, password);
+                userController.login(username, password);
             }
         });
         
         btnRegister.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	controller.showRegister();
+            	userController.showRegister();
             }
         });
     }
     
-    public void showErrorMessage(String message) {
-        JOptionPane.showMessageDialog(this, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }
+    
 }

@@ -8,10 +8,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository {
 	public boolean checkUsernameExists(String username) {
-		String query = "SELECT * FROM users WHERE username = ?";
+		String query = "SELECT * FROM users WHERE username = ? AND deleted = false";
 		try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
 	        stmt.setString(1, username);
@@ -24,7 +27,7 @@ public class UserRepository {
     }
 
     public boolean checkEmailExists(String email) {
-    	String query = "SELECT * FROM users WHERE email = ?";
+    	String query = "SELECT * FROM users WHERE email = ? AND deleted = false";
 		try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
 	        stmt.setString(1, email);
@@ -37,7 +40,7 @@ public class UserRepository {
     }
     
     public boolean checkNumberPhoneExists(String phoneNumber) {
-    	String query = "SELECT * FROM users WHERE phoneNumber = ?";
+    	String query = "SELECT * FROM users WHERE phoneNumber = ? AND deleted = false";
 		try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
 	        stmt.setString(1, phoneNumber);
@@ -50,18 +53,18 @@ public class UserRepository {
     }
 
 	
-	public boolean registerUser(User user) {
-        String query = "INSERT INTO users (username, yearold, email, phoneNumber, password, role) VALUES (?, ?, ?, ?, ?, ?)";
+	public boolean addUser(User user) {
+        String query = "INSERT INTO users (fullname, username, yearold, email, phoneNumber, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection(); 
         	PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getYearold());
-            stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getPhoneNumber());
-            stmt.setString(5, user.getPassword());
-            stmt.setString(6, user.getRole().name());
+        	stmt.setString(1, user.getFullname());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getYearold());
+            stmt.setString(4, user.getEmail());
+            stmt.setString(5, user.getPhoneNumber());
+            stmt.setString(6, user.getPassword());
+            stmt.setString(7, user.getRole().name());
             
-            System.out.println(user.getRole().name());
         
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
@@ -71,23 +74,18 @@ public class UserRepository {
         }
     }
 	
-    public User getUserByUsername(String username) {
-        String query = "SELECT * FROM users WHERE username = ?";
+    public String[] getUserByUsername(String username) {
+        String query = "SELECT * FROM users WHERE username = ? AND deleted = false";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-            	String name = rs.getString("username");
-                String yearold = rs.getString("yearold");
-                String email = rs.getString("email");
-                String phoneNumber = rs.getString("phoneNumber");
-                String password = rs.getString("password");
-            	String roleString = rs.getString("role");
+            	String password = rs.getString("password");
+            	String status = rs.getString("status");
+            	String role = rs.getString("role");
             	
-            	Role role = Role.valueOf(roleString);
-            	
-                return new Admin(name, yearold, email, phoneNumber, password, role);
+                return new String[] { password, status, role };
             }
         } catch (SQLException e) {
             e.printStackTrace();

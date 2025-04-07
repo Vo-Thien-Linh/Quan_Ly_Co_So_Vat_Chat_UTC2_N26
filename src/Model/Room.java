@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class Room extends Facilities {
     private String roomNumber;

@@ -4,27 +4,27 @@ import Model.User;
 import Repository.UserRepository;
 
 public class UserService {
-    private UserRepository userDAO = new UserRepository();
+    private UserRepository userRepository = new UserRepository();
 
-    public boolean login(String username, String password) {
-        User user = userDAO.getUserByUsername(username);
-        return user != null && user.getPassword().equals(password);
+    public String login(String username, String password) {
+        String[] user = userRepository.getUserByUsername(username);
+        if(user == null) {
+        	return "NOTEXIST";
+        }
+        
+        
+        if(user[1].equals("INACTIVE")) {
+        	return "INACTIVE";
+        } else if(user[1].equals("MAINTENANCE")){
+        	return "MAINTENANCE";
+        }
+        
+        if(!user[0].equals(password)) {
+        	return "UNSUCCESS";
+        }
+        
+        return "SUCCESS";
     }
     
-    public boolean isUsernameExists(String username) {
-        return userDAO.checkUsernameExists(username);
-    }
-
-    public boolean isEmailExists(String email) {
-        return userDAO.checkEmailExists(email);
-    }
     
-
-    public boolean isNumberPhoneExists(String numberPhone) {
-        return userDAO.checkNumberPhoneExists(numberPhone);
-    }
-
-    public boolean registerUser(User user) {
-        return userDAO.registerUser(user);
-    }
 }

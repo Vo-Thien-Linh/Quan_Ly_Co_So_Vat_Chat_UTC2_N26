@@ -3,10 +3,8 @@ package Model;
 public class Maintenance extends User {
     private String department;
 
-    public Maintenance() {}
-
-    public Maintenance(String id, String name, String yearOld, String phoneNumber, String password, Role role, String department) {
-        super(id, name, yearOld, phoneNumber, password, role);
+    public Maintenance(String fullname, String username, String yearold, String email, String phoneNumber, String password, Status status, Role role, String department) {
+        super(fullname, username, yearold, email, phoneNumber, password, status, role);
         this.department = department;
     }
 
@@ -18,7 +16,7 @@ public class Maintenance extends User {
         System.out.println("Incident has been handled by Maintenance " + getUsername());
         incident.setHandledBy(this);
     }
- 
+
  	@Override
  	public void displayInformationUser() {
  		System.out.println("Maintenance Username: " + getUsername());
