@@ -312,9 +312,8 @@ public class Panel_ManagerUser extends JPanel {
 		            role = Role.MAINTENANCE;	
 		        }
 		        
-		        PageManager pageManager = new PageManager();
 		        if (ScannerUtils.isEmpty(fullname, username, yearold, phoneNumber, email)) {
-		        	ScannerUtils.showErrorMessage(pageManager, "Vui lòng điền đầy đủ thông tin!");
+		        	ScannerUtils.showErrorMessage(Panel_ManagerUser.this, "Vui lòng điền đầy đủ thông tin!");
 		            return;
 		        }
 
@@ -322,9 +321,9 @@ public class Panel_ManagerUser extends JPanel {
 		        if (userId != null) {
 		        	button_1.setEnabled(false);
 			    	button_2.setEnabled(false);
-		        	clearForm();
+			    	ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
 		            loadUserData();
-		            ScannerUtils.showSuccessMessage(pageManager, "Thêm dữ liệu thành công!");
+		            ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Thêm dữ liệu thành công!");
 		        }
 		    }
 		});
@@ -359,9 +358,10 @@ public class Panel_ManagerUser extends JPanel {
 				User manager = new Manager(fullname, username, yearold, email, phoneNumber, null, status,  role, userId);
 				String editSuccess = controller.edit(manager);
 				if(editSuccess == "SUCCESS") {
+					button.setEnabled(true);
 					button_1.setEnabled(false);
 			    	button_2.setEnabled(false);
-					clearForm();
+			    	ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
 					loadUserData();
 					ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Cập nhật thành công!");
 				} else if(editSuccess == "UNSUCCESS"){
@@ -381,9 +381,10 @@ public class Panel_ManagerUser extends JPanel {
 				PageManager pageManager = new PageManager();
 				Boolean deleteSuccess = controller.delete(userId, pageManager);
 				if(deleteSuccess) {
+					button.setEnabled(true);
 					button_1.setEnabled(false);
 			    	button_2.setEnabled(false);
-					clearForm();
+					ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
 					loadUserData();
 					ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Xóa thành công!");
 				} else {
@@ -396,6 +397,7 @@ public class Panel_ManagerUser extends JPanel {
 		table.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
+		    	button.setEnabled(false);
 		    	button_1.setEnabled(true);
 		    	button_2.setEnabled(true);
 		        int selectedRow = table.getSelectedRow(); 
@@ -414,18 +416,18 @@ public class Panel_ManagerUser extends JPanel {
 		            textField_4.setText(phoneNumber);
 		            textField_5.setText(email);
 		            
-		            if (status.equals("HOẠT ĐỘNG")) {
-		            	choice_1.select("HOẠT ĐỘNG");
-		            } else if(status.equals("DỪNG HOẠT ĐỘNG")){
-		            	choice_1.select("DỪNG HOẠT ĐỘNG");
-		            } else {
-		            	choice_1.select("ĐANG BẢO TRÌ");
+		            for (int i = 0; i < choice_1.getItemCount(); i++) {
+		                if (status.equals(choice_1.getItem(i))) {
+		                    choice_1.select(i);
+		                    break; 
+		                }
 		            }
 		            
-		            if (role.equals("BẢO TRÌ")) {
-		            	choice_2.select("BẢO TRÌ");
-		            } else {
-		            	choice_2.select("GIÁO VIÊN");
+		            for (int i = 0; i < choice_2.getItemCount(); i++) {
+		                if (role.equals(choice_2.getItem(i))) {
+		                    choice_2.select(i);
+		                    break; 
+		                }
 		            }
 		        }
 		    }
@@ -469,12 +471,4 @@ public class Panel_ManagerUser extends JPanel {
             });
         }
     }
-	
-	public void clearForm() {
-		textField_1.setText("");
-        textField_2.setText("");
-        textField_3.setText("");
-        textField_4.setText("");
-        textField_5.setText("");
-	}
 }

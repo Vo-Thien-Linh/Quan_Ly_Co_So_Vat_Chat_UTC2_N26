@@ -33,11 +33,6 @@ public class Manager extends User {
          System.out.println("Quản lý " + getUsername() + " tìm kiếm thông tin.");
      }
  
-     public void updateStatus(Facilities facilities, String status) {
-         facilities.setStatus(status);
-         System.out.println("Quản lý " + getUsername() + " cập nhật trạng thái vật chất " + facilities.getId() + " thành " + status);
-     }
- 
  	@Override
  	public void displayInformationUser() {
  		 System.out.println("Quản lý: Tên=" + getUsername() + ", Quyền hạn=" + userId);

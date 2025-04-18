@@ -18,8 +18,9 @@ public class UserRepository {
 		try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
 	        stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next();
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -31,8 +32,9 @@ public class UserRepository {
 		try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
 	        stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next(); 
+	        try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            } 
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -44,8 +46,9 @@ public class UserRepository {
 		try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
 	        stmt.setString(1, phoneNumber);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next(); 
+	        try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -79,13 +82,13 @@ public class UserRepository {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-            	String password = rs.getString("password");
-            	String status = rs.getString("status");
-            	String role = rs.getString("role");
-            	
-                return new String[] { password, status, role };
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String password = rs.getString("password");
+                    String status = rs.getString("status");
+                    String role = rs.getString("role");
+                    return new String[]{password, status, role};
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,23 +1,87 @@
 package Model;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 public class Device extends Facilities {
-    private String deviceName;
-    private int quantity;
+	private String deviceName;
+    private String deviceType;
+    private LocalDate purchaseDate;
+    private String supplier;
+    private BigDecimal price;
+    private DeviceStatus status;
+    private Room room;
+    private int quantity; 
+    private boolean deleted;
 
-    public Device() {}
-
-    public Device(String id, String status, String deviceName, int quantity) {
-        super(id, status);
+    public Device(String id, String deviceName, String deviceType, LocalDate purchaseDate, String supplier, BigDecimal price, DeviceStatus status, Room room, int quantity) {
+        super(id, null, null);
         this.deviceName = deviceName;
+        this.deviceType = deviceType;
+        this.purchaseDate = purchaseDate;
+        this.supplier = supplier;
+        this.price = price;
+        this.status = status;
+        this.room = room;
+        this.quantity = quantity; 
+    }
+    
+    public void updateDevice(String deviceType, int quantity) {
+        this.deviceType = deviceType;
         this.quantity = quantity;
+        setUpdatedAt(LocalDate.now());  
     }
-
+    
     public String getDeviceName() {
-        return deviceName;
+		return deviceName;
+	}
+
+    public String getDeviceType() {
+        return deviceType;
     }
 
-    public void setDeviceName(String deviceName) {
-        this.deviceName = deviceName;
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public DeviceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DeviceStatus status) {
+        this.status = status;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public int getQuantity() {
@@ -28,13 +92,26 @@ public class Device extends Facilities {
         this.quantity = quantity;
     }
 
-	@Override
-	public void informationDisplay() {
-		System.out.println("Device ID: " + getId());
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
+    public void informationDisplay() {
+        System.out.println("Device ID: " + getId());
         System.out.println("Status: " + getStatus());
         System.out.println("Device Name: " + deviceName);
+        System.out.println("Device Type: " + deviceType);
         System.out.println("Quantity: " + quantity);
-        System.out.println("Room Number: " + deviceName);
-	}
-     
- }
+        System.out.println("Room Number: " + room.getRoomNumber());  
+        System.out.println("Purchase Date: " + purchaseDate);
+        System.out.println("Supplier: " + supplier);
+        System.out.println("Value: " + price);
+        System.out.println("Created At: " + getCreatedAt());
+        System.out.println("Updated At: " + getUpdatedAt());
+    }
+}

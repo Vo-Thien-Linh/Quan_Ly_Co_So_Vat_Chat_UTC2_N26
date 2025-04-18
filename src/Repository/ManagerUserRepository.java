@@ -79,7 +79,6 @@ public class ManagerUserRepository {
                     try {
                         role = Role.valueOf(roleString);
                     } catch (IllegalArgumentException e) {
-                        System.out.println("Invalid role: " + roleString);
                         role = null; 
                     }
                 }

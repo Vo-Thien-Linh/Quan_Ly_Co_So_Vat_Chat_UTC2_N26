@@ -3,16 +3,27 @@ package utils;
 import java.awt.Component;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class ScannerUtils {
-	public static boolean isEmpty(String... fields) {
-        for (String field : fields) {
-            if (field == null || field.trim().isEmpty()) {
-                return true;
-            }
+	public static boolean isEmpty(Object... fields) {
+	    for (Object field : fields) {
+	        if (field == null) {
+	            return true;
+	        }
+
+	        if (field instanceof String && ((String) field).trim().isEmpty()) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	public static void clearForm(JTextField... fields) {
+		for (JTextField field : fields) {
+            field.setText("");
         }
-        return false;
-    }
+	}
 	
 	public static void showErrorMessage(Component parent, String message) {
         JOptionPane.showMessageDialog(parent, message, "Lỗi", JOptionPane.ERROR_MESSAGE);

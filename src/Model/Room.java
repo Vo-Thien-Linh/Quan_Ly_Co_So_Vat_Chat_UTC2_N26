@@ -1,23 +1,25 @@
 package Model;
 
+import java.time.LocalDate;
+
 public class Room extends Facilities {
-    private String roomNumber;
+	private String roomNumber;
     private int seatingCapacity;
-
-    public Room() {}
-
-    public Room(String id, String status, String roomNumber, int seatingCapacity) {
-        super(id, status);
-        this.roomNumber = roomNumber;
+    private RoomStatus status;
+    
+    public Room(String id, String roomNumber) {
+    	super(id, null, null);
+    	this.roomNumber = roomNumber;
+    }
+    
+    public Room(String id, int seatingCapacity, RoomStatus status) {
+    	super(id, null, null);
         this.seatingCapacity = seatingCapacity;
+        this.status = status;
     }
-
+    
     public String getRoomNumber() {
-        return roomNumber;
-    }
-
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber;
+    	return roomNumber;
     }
 
     public int getSeatingCapacity() {
@@ -27,11 +29,16 @@ public class Room extends Facilities {
     public void setSeatingCapacity(int seatingCapacity) {
         this.seatingCapacity = seatingCapacity;
     }
+    
+    @Override
+    public String toString() {
+		return this.roomNumber;
+	}
 
 	@Override
     public void informationDisplay() {
         System.out.println("Room ID: " + getId());
-        System.out.println("Status: " + getStatus());
+        System.out.println("Status: " + status);
         System.out.println("Room Number: " + roomNumber);
         System.out.println("Seating Capacity: " + seatingCapacity);
     }
