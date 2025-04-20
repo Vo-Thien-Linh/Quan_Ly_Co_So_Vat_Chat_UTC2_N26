@@ -1,5 +1,5 @@
 
-module utc2_facilities_management {
+module QLCSVC {
 	requires java.desktop;
 	requires java.sql;
 }

@@ -19,14 +19,7 @@ public class Lecturer extends User {
 		this.faculty = faculty;
 	}
 
-	public void createBorrowingRoomRequest(BorrowingRoomRequest request) {
-        System.out.println("Đơn mượn phòng " + request.getIdRequest() + " đã được tạo bởi giảng viên " + getUsername());
-    }
-
-    public void createBorrowingDeviceRequest(BorrowingDeviceRequest request) {
-        System.out.println("Đơn mượn thiết bị " + request.getIdRequest() + " đã được tạo bởi giảng viên " + getUsername());
-    }
-
+	
     public void createIncidentReport(IncidentHandling report) {
         System.out.println("Đơn báo cáo sự cố " + report.getIdReport() + " đã được tạo bởi giảng viên " + getUsername());
     }

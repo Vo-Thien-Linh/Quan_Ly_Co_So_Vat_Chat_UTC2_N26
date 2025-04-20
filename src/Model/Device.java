@@ -3,13 +3,17 @@ package Model;
 public class Device extends Facilities {
     private String deviceName;
     private int quantity;
+    private String roomNumber;
 
-    public Device() {}
+    public Device() {
+        super();
+    }
 
-    public Device(String id, String status, String deviceName, int quantity) {
-        super(id, status);
+    public Device(String deviceName, int quantity, String roomNumber) {
+        super();
         this.deviceName = deviceName;
         this.quantity = quantity;
+        this.roomNumber = roomNumber;
     }
 
     public String getDeviceName() {
@@ -28,13 +32,20 @@ public class Device extends Facilities {
         this.quantity = quantity;
     }
 
-	@Override
-	public void informationDisplay() {
-		System.out.println("Device ID: " + getId());
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    @Override
+    public void informationDisplay() {
+        System.out.println("Device ID: " + getId());
         System.out.println("Status: " + getStatus());
         System.out.println("Device Name: " + deviceName);
         System.out.println("Quantity: " + quantity);
-        System.out.println("Room Number: " + deviceName);
-	}
-     
- }
+        System.out.println("Room Number: " + roomNumber);
+    }
+}
