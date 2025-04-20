@@ -1,15 +1,34 @@
 package Model;
 
-public class Room extends Facilities {
+public class Room {
+    private String id;
+    private RoomStatus status;
     private String roomNumber;
     private int seatingCapacity;
 
     public Room() {}
 
-    public Room(String id, String status, String roomNumber, int seatingCapacity) {
-        super(id, status);
+    public Room(String id, RoomStatus status, String roomNumber, int seatingCapacity) {
+        this.id = id;
+        this.status = status;
         this.roomNumber = roomNumber;
         this.seatingCapacity = seatingCapacity;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public RoomStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RoomStatus status) {
+        this.status = status;
     }
 
     public String getRoomNumber() {
@@ -28,12 +47,10 @@ public class Room extends Facilities {
         this.seatingCapacity = seatingCapacity;
     }
 
-	@Override
     public void informationDisplay() {
-        System.out.println("Room ID: " + getId());
-        System.out.println("Status: " + getStatus());
+        System.out.println("Room ID: " + id);
+        System.out.println("Status: " + status);
         System.out.println("Room Number: " + roomNumber);
         System.out.println("Seating Capacity: " + seatingCapacity);
     }
- 
- }
+}

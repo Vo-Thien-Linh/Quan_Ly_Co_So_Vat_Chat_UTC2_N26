@@ -1,22 +1,23 @@
 package Model;
- 
- import java.time.LocalDateTime;
-import java.util.Date;
 
+import java.time.LocalDateTime;
 
 public class IncidentHandling {
     private String idReport;
-    private User reportedBy; // Người báo cáo (Lecturer)
-    private String device;
-    private String room;
+    private Lecturer reportedBy;
+    private Device device;
+    private Room room;
     private String description;
     private LocalDateTime reportDate;
-    private User handledBy; // Người xử lý (Maintenance)
+    private Maintenance handledBy;
+    private IncidentStatus status;
 
-    // Constructor
-    public IncidentHandling() {}
+    public IncidentHandling() {
+        this.status = IncidentStatus.PENDING;
+    }
 
-    public IncidentHandling(String idReport, User reportedBy, String device, String room, String description, LocalDateTime reportDate, User handledBy) {
+    public IncidentHandling(String idReport, Lecturer reportedBy, Device device, Room room, String description,
+                    LocalDateTime reportDate, Maintenance handledBy, IncidentStatus status) {
         this.idReport = idReport;
         this.reportedBy = reportedBy;
         this.device = device;
@@ -24,9 +25,9 @@ public class IncidentHandling {
         this.description = description;
         this.reportDate = reportDate;
         this.handledBy = handledBy;
+        this.status = (status != null) ? status : IncidentStatus.PENDING;
     }
 
-    // Getters and Setters
     public String getIdReport() {
         return idReport;
     }
@@ -35,27 +36,27 @@ public class IncidentHandling {
         this.idReport = idReport;
     }
 
-    public User getReportedBy() {
+    public Lecturer getReportedBy() {
         return reportedBy;
     }
 
-    public void setReportedBy(User reportedBy) {
+    public void setReportedBy(Lecturer reportedBy) {
         this.reportedBy = reportedBy;
     }
 
-    public String getDevice() {
+    public Device getDevice() {
         return device;
     }
 
-    public void setDevice(String device) {
+    public void setDevice(Device device) {
         this.device = device;
     }
 
-    public String getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public void setRoom(String room) {
+    public void setRoom(Room room) {
         this.room = room;
     }
 
@@ -75,18 +76,19 @@ public class IncidentHandling {
         this.reportDate = reportDate;
     }
 
-    public User getHandledBy() {
+    public Maintenance getHandledBy() {
         return handledBy;
     }
 
-    public void setHandledBy(User handledBy) {
+    public void setHandledBy(Maintenance handledBy) {
         this.handledBy = handledBy;
     }
 
-
-    public void informationReportDisplay() {
-        System.out.println("Incident Report ID: " + idReport + ", Reported By: " + reportedBy.getUsername() +
-                ", Device: " + device + ", Room: " + room + ", Description: " + description +
-                ", Report Date: " + reportDate + ", Handled By: " + (handledBy != null ? handledBy.getUsername() : "Not handled yet"));
+    public IncidentStatus getStatus() {
+        return status;
     }
- }
+
+    public void setStatus(IncidentStatus status) {
+        this.status = status;
+    }
+}
