@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controller.UserController;
+import View.RoundedComponents.RoundedButton;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
@@ -22,6 +23,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.CardLayout;
 import java.awt.Button;
@@ -88,40 +90,70 @@ public class PageManager extends JFrame {
 		panel.setLayout(gbl_panel);
 		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(25, 25, 112));
+		panel_3.setBackground(new Color(38, 30, 89));
+		panel_3.setLayout(new GridBagLayout()); 
+
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
 		gbc_panel_3.fill = GridBagConstraints.BOTH;
 		gbc_panel_3.gridx = 0;
 		gbc_panel_3.gridy = 0;
 		panel.add(panel_3, gbc_panel_3);
 		
+		ImageIcon originalLogo = new ImageIcon(PageManager.class.getResource("/IMG/logo-utc (1).png"));
+		Image scaledLogo = originalLogo.getImage().getScaledInstance(110, 80, Image.SCALE_SMOOTH);
+		ImageIcon scaledLogoIcon = new ImageIcon(scaledLogo);
+
+		JLabel logoLabel = new JLabel();
+		logoLabel.setIcon(scaledLogoIcon);
+
+		GridBagConstraints gbc_logoLabel = new GridBagConstraints();
+		gbc_logoLabel.gridx = 0; 
+		gbc_logoLabel.gridy = 0;
+		gbc_logoLabel.insets = new Insets(0, 80, 0, 0);
+		gbc_logoLabel.anchor = GridBagConstraints.WEST;
+		panel_3.add(logoLabel, gbc_logoLabel);
+
 		JLabel lblNewLabel_2 = new JLabel("Phần Mềm Quản Lý Cơ Sở Vật Chất UTC2");
 		lblNewLabel_2.setForeground(new Color(255, 215, 0));
 		lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 30));
-		panel_3.add(lblNewLabel_2);
+		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+		gbc_lblNewLabel_2.gridx = 0;
+		gbc_lblNewLabel_2.gridy = 0;
+		gbc_lblNewLabel_2.weightx = 1.0;
+		gbc_lblNewLabel_2.anchor = GridBagConstraints.CENTER; 
+		gbc_lblNewLabel_2.insets = new Insets(20, 10, 20, 0); 
+		panel_3.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
+		RoundedButton btnNewButton = new RoundedButton("Đăng xuất", 10);
+		btnNewButton.setIcon(new ImageIcon(getClass().getResource("/IMG/logout (2).png")));
+		btnNewButton.setHorizontalTextPosition(JButton.RIGHT); 
+		btnNewButton.setVerticalTextPosition(JButton.CENTER);
+		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNewButton.setForeground(Color.white);
+		btnNewButton.setBackground(new Color(200, 35, 51));
+		btnNewButton.setFont(new Font("Arial", Font.BOLD, 20));
+		btnNewButton.setPreferredSize(new Dimension(170, 40));
+		btnNewButton.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		    	btnNewButton.setBackground(new Color(133, 23, 34)); 
+		    }
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		    	btnNewButton.setBackground(new Color(200, 35, 51));
+		    }
+		});
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(5, 5, 5, 10);
+		gbc_btnNewButton.gridx = 1;
+		gbc_btnNewButton.gridy = 0; 
+		panel_3.add(btnNewButton, gbc_btnNewButton);
+
         JPanel menuPanel = new JPanel();
-        menuPanel.setBackground(new Color(30, 30, 80) );
+        menuPanel.setBackground(new Color(25, 25, 112));
         menuPanel.setPreferredSize(new Dimension(280, 0));
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        
-        ImageIcon originalLogo = new ImageIcon(PageManager.class.getResource("/IMG/logo-utc (1).png"));
-        Image scaledLogo = originalLogo.getImage().getScaledInstance(95, 80, Image.SCALE_SMOOTH);
-        ImageIcon scaledLogoIcon = new ImageIcon(scaledLogo);
-        JLabel logoLabel = new JLabel();
-        logoLabel.setIcon(scaledLogoIcon);
-        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        JLabel textLabel = new JLabel("UTC2");
-        textLabel.setForeground(new Color(255, 215, 0)); 
-        textLabel.setFont(new Font("Arial", Font.BOLD, 20)); 
-        textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        menuPanel.add(logoLabel);
-        menuPanel.add(textLabel);
 
 
-        String[] menuItems = {"Quản lý phòng", "Quản lý thiết bị", "Quản lý người dùng",};
+        String[] menuItems = {"Quản lý phòng", "Quản lý thiết bị", "Quản lý người dùng"};
         
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
@@ -154,7 +186,7 @@ public class PageManager extends JFrame {
             JButton btn = new JButton(item, icon);
             btn.setAlignmentX(Component.CENTER_ALIGNMENT);
             btn.setMaximumSize(new Dimension(280, 60));
-            btn.setBackground(new Color(30, 30, 80));
+            btn.setBackground(new Color(25, 25, 112));
             btn.setForeground(Color.WHITE);
             btn.setFocusPainted(false);
             btn.setBorderPainted(false);
@@ -174,7 +206,7 @@ public class PageManager extends JFrame {
                 }
                 public void mouseExited(java.awt.event.MouseEvent evt) {
                     if (selectedButton != btn) {
-                        btn.setBackground(new Color(30, 30, 80));  
+                        btn.setBackground(new Color(25, 25, 112));  
                     }
                 }
             });
@@ -185,7 +217,7 @@ public class PageManager extends JFrame {
                     cardLayout.show(contentPanel, item);
                     
                     if (selectedButton != null) {
-                        selectedButton.setBackground(new Color(30, 30, 80));
+                        selectedButton.setBackground(new Color(25, 25, 112));
                     }
 
                     selectedButton = btn;
@@ -197,24 +229,21 @@ public class PageManager extends JFrame {
             menuPanel.add(btn);
         }
         
-        add(menuPanel, BorderLayout.WEST);
-        add(contentPanel, BorderLayout.CENTER);
+        getContentPane().add(menuPanel, BorderLayout.WEST);
+        getContentPane().add(contentPanel, BorderLayout.CENTER);
         
 		JPanel panel_8 = new JPanel();
 		panel_8.setBackground(new Color(100, 149, 237));
 		contentPane.add(panel_8, BorderLayout.SOUTH);
 		panel_8.setLayout(new BorderLayout(0, 0));
 		
-//		JButton btnNewButton = new JButton("Đăng xuất");
-//		panel_8.add(btnNewButton, BorderLayout.WEST);
-		
 		LoginView loginView = new LoginView();
 		UserController userController = new UserController(loginView , null);
-//		btnNewButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e){
-//                UserController.logout(PageManager.this);
-//            }
-//        });
+		btnNewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                UserController.logout(PageManager.this);
+            }
+        });
 	}
 }

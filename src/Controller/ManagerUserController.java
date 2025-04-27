@@ -38,7 +38,7 @@ public class ManagerUserController {
         return managerUserRepository.getAllUsers();
     }
     
-    public String addUserAndReturnID(String fullname, String username, String yearold, String email, String phoneNumber, String password, Status status, Role role) {;
+    public String addUserAndReturnID(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Status status, Role role) {;
 	    userRepository = new UserRepository();
 		if (userRepository.checkUsernameExists(username)) {
 			ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
@@ -56,7 +56,7 @@ public class ManagerUserController {
     	
 	    
 	    
-    	User admin = new Admin(fullname, username, yearold, email, phoneNumber, password, status, role);
+    	User admin = new Admin(fullname, username, thumbnail, yearold, email, phoneNumber, password, status, role);
     	managerUserRepository = new ManagerUserRepository();
         String userId = managerUserRepository.addUserAndReturnID(admin);
         return userId;

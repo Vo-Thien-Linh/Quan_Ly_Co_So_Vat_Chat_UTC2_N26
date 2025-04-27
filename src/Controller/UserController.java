@@ -25,7 +25,7 @@ public class UserController {
     }
     
 //    Tinh nang dang ky
-    public void register(String fullname, String username, String yearold, String email, String phoneNumber, String password, Role role) {
+    public void register(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Role role) {
     	userRepository = new UserRepository();
     	if (userRepository.checkUsernameExists(username)) {
     		ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
@@ -41,7 +41,7 @@ public class UserController {
             return;
         }
     	
-    	User admin = new Admin(fullname, username, yearold, email, phoneNumber, password, Status.ACTIVE, role);
+    	User admin = new Admin(fullname, username, thumbnail, yearold, email, phoneNumber, password, Status.ACTIVE, role);
 
         boolean isRegistered = userRepository.addUser(admin);
         if (isRegistered) {

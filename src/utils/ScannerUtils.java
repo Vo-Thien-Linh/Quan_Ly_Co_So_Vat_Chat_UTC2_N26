@@ -1,8 +1,13 @@
 package utils;
 
 import java.awt.Component;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class ScannerUtils {
@@ -53,5 +58,26 @@ public class ScannerUtils {
 
     public static boolean isNumber(String input) {
         return input != null && input.matches("\\d+");
+    }
+    
+    public static boolean isValidDate(String dateStr) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            dateFormat.setLenient(false); 
+            Date date = dateFormat.parse(dateStr); 
+
+            return true;
+
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    public static void handleDateValidation(String dateStr, JFrame panel) {
+        if (!isValidDate(dateStr)) {
+            JOptionPane.showMessageDialog(panel, "Ngày tháng năm sinh không hợp lệ! Vui lòng nhập theo định dạng dd/MM/yyyy.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } else {
+            System.out.println("Ngày sinh hợp lệ: " + dateStr);
+        }
     }
 }

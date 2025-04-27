@@ -3,9 +3,9 @@ package Model;
 public class Manager extends User {
      private String userId;
  
-     public Manager(String fullname, String username, String yearold, String email, String phoneNumber, String password, Status status, Role role,
+     public Manager(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Status status, Role role,
  			String userId) {
- 		super(fullname, username, yearold, email, phoneNumber, password, status, role);
+ 		super(fullname, username, thumbnail, yearold, email, phoneNumber, password, status, role);
  		this.userId = userId;
  	}
      

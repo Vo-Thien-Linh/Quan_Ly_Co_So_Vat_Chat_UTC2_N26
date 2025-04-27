@@ -17,7 +17,7 @@ import Model.User;
 public class ManagerUserRepository {
 	//Thêm mới người dùng 
 	public String addUserAndReturnID(User user) {
-		String query = "INSERT INTO users (fullname, username, yearold, email, phoneNumber, password, status, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO users (fullname, username, yearold, email, phoneNumber, password, status, role, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		String userId = null;
         try (Connection conn = DatabaseConnection.getConnection(); 
         	PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -29,6 +29,7 @@ public class ManagerUserRepository {
             stmt.setString(6, user.getPassword());
             stmt.setString(7, user.getStatus().name());
             stmt.setString(8, user.getRole().name());
+            stmt.setString(9, user.getThumbnail());
             
         
             int rowsInserted = stmt.executeUpdate();
@@ -62,6 +63,7 @@ public class ManagerUserRepository {
             	String userId = rs.getString("user_id");
                 String fullname = rs.getString("fullname");
                 String username = rs.getString("username");
+                String thumbnail = rs.getString("thumbnail");
                 String yearold = rs.getString("yearold");
                 String email = rs.getString("email");
                 String phoneNumber = rs.getString("phoneNumber");
@@ -83,7 +85,7 @@ public class ManagerUserRepository {
                     }
                 }
                 
-                users.add(new Manager(fullname, username, yearold, email, phoneNumber, password, status, role, userId));
+                users.add(new Manager(fullname, username, thumbnail, yearold, email, phoneNumber, password, status, role, userId));
             }
         } catch (Exception e) {
             e.printStackTrace();

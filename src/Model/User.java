@@ -4,6 +4,7 @@ public abstract class User {
 	private String user_id;
 	private String fullname;
 	private String username;
+	private String thumbnail;
 	private String yearold;
     private String email;
     private String phoneNumber;
@@ -12,9 +13,10 @@ public abstract class User {
     private Role role;
     private boolean deleted = false;
 
-    public User(String fullname, String username, String yearold, String email, String phoneNumber, String password, Status status, Role role) {
+    public User(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Status status, Role role) {
     	this.fullname = fullname;
         this.username = username;
+        this.thumbnail = thumbnail;
         this.yearold = yearold;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -34,6 +36,10 @@ public abstract class User {
 	public String getUsername() {
         return username;
     }
+	
+	public String getThumbnail() {
+		return thumbnail;
+	}
 	
 	public String getYearold() {
 		return yearold;

@@ -2,6 +2,9 @@ package Service;
 
 import Model.User;
 import Repository.UserRepository;
+import utils.PasswordEncryptionUtils;
+import utils.PasswordGeneratorUtils;
+import utils.ScannerUtils;
 
 public class UserService {
     private UserRepository userRepository = new UserRepository();
@@ -19,7 +22,7 @@ public class UserService {
         	return "MAINTENANCE";
         }
         
-        if(!user[0].equals(password)) {
+        if(!user[0].equals(PasswordEncryptionUtils.hashPassword(password))) {
         	return "UNSUCCESS";
         }
         
