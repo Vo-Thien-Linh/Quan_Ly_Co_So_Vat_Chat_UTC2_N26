@@ -10,11 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+
 import Config.DatabaseConnection;
 import Model.Admin;
-import Model.Role;
+import Model.RoleName;
 import Model.Status;
 import Model.User;
+import Model.Role;
 import Repository.ManagerUserRepository;
 import Repository.UserRepository;
 import Service.UserService;
@@ -23,8 +25,8 @@ import View.RegisterView;
 import utils.ScannerUtils;
 
 public class ManagerUserController {
-	private UserRepository userRepository;
-	private ManagerUserRepository managerUserRepository;
+	private UserRepository userRepository = new UserRepository();
+	private ManagerUserRepository managerUserRepository = new ManagerUserRepository();
     private LoginView loginView;
     private RegisterView registerView;
     
@@ -32,14 +34,16 @@ public class ManagerUserController {
         this.loginView = loginView;
         this.registerView = registerView;
     }
+    
+    public List<Role> getAllRoles() {
+        return managerUserRepository.getAllRoles();
+    }
 	
 	public List<User> getAllUsers() {
-    	managerUserRepository = new ManagerUserRepository();
         return managerUserRepository.getAllUsers();
     }
     
-    public String addUserAndReturnID(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Status status, Role role) {;
-	    userRepository = new UserRepository();
+    public String addUserAndReturnID(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Status status, Role role) {
 		if (userRepository.checkUsernameExists(username)) {
 			ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
 	        return null;
@@ -63,7 +67,6 @@ public class ManagerUserController {
     }
     
     public String edit(User manager) {
-    	managerUserRepository = new ManagerUserRepository();
 		if (managerUserRepository.isUsernameExists(manager.getUserId() ,manager.getUsername())) {
 			ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
 	        return null;
@@ -86,7 +89,6 @@ public class ManagerUserController {
     }
     
     public boolean delete(String userId, JFrame currentFrame){
-    	managerUserRepository = new ManagerUserRepository();
     	int choice = ScannerUtils.showConfirmMessage(currentFrame, "Bạn có chắc chắn muốn xóa?");
 		
 		if(choice == JOptionPane.YES_NO_OPTION) {

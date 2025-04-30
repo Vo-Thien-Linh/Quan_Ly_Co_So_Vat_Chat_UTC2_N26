@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -48,19 +49,24 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+//import com.cloudinary.provisioning.Account.Role;
+
 import Controller.ManagerUserController;
 import Controller.UserController;
 import Model.Admin;
 import Model.Manager;
-import Model.Role;
+import Model.RoleName;
 import Model.Status;
 import Model.User;
+import Model.Session;
+import Model.Role;
 import View.RoundedComponents.RoundedButton;
 import View.RoundedComponents.RoundedTextField;
 import utils.ScannerUtils;
 import utils.CloudinaryUploaderUtils;
 import utils.PasswordEncryptionUtils;
 import utils.PasswordGeneratorUtils;
+import utils.PermissionUtils;
 import utils.ScannerUtils;
 
 import java.awt.BorderLayout;
@@ -78,7 +84,7 @@ public class Panel_ManagerUser extends JPanel {
 	private RoundedTextField textField_3;
 	private RoundedTextField textField_4;
 	private RoundedTextField textField_5;
-	private ManagerUserController controller;
+	private ManagerUserController controller = new ManagerUserController(null, null);
 
 	/**
 	 * Create the panel.
@@ -92,7 +98,7 @@ public class Panel_ManagerUser extends JPanel {
 		add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{878, 0};
-		gbl_panel.rowHeights = new int[]{535, 13, 0};
+		gbl_panel.rowHeights = new int[]{407, 13, 0};
 		gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
@@ -106,10 +112,10 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_panel_2.gridy = 0;
 		panel.add(panel_2, gbc_panel_2);
 		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[]{279, 276, 0, 197, 394};
-		gbl_panel_2.rowHeights = new int[]{71, 55, 55, 53, 55, 50, 112, 0, 7, 50};
+		gbl_panel_2.columnWidths = new int[]{279, 276, 0, 218, 394};
+		gbl_panel_2.rowHeights = new int[]{71, 55, 55, 53, 55, 122, 50};
 		gbl_panel_2.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, 4.9E-324};
-		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_2.setLayout(gbl_panel_2);
 		
 		search = new RoundedTextField(10, 50);
@@ -167,40 +173,28 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_textField_1.gridx = 1;
 		gbc_textField_1.gridy = 1;
 		panel_2.add(textField_1, gbc_textField_1);
+
 		
-		JLabel lblStatus = new JLabel("Trạng thái: ");
-		lblStatus.setFont(new Font("Arial", Font.BOLD, 20));
-		lblStatus.setForeground(new Color(4, 42, 54));
-		GridBagConstraints gbc_lblStatus = new GridBagConstraints();
-		gbc_lblStatus.anchor = GridBagConstraints.WEST;
-		gbc_lblStatus.insets = new Insets(0, 0, 5, 5);
-		gbc_lblStatus.gridx = 2;
-		gbc_lblStatus.gridy = 1;
-		panel_2.add(lblStatus, gbc_lblStatus);
 		
-		JComboBox<String> comboBoxStatus = new JComboBox<>();
-		comboBoxStatus.setFont(new Font("Arial", Font.BOLD, 12));
-		comboBoxStatus.setPreferredSize(new Dimension(150, 30)); 
-
-		for (Status status : Status.values()) {
-		    if (status.name().equals("MAINTENANCE")) {
-		        comboBoxStatus.addItem("ĐANG BẢO TRÌ");
-		    } else if (status.name().equals("ACTIVE")) {
-		        comboBoxStatus.addItem("HOẠT ĐỘNG");
-		    } else {
-		        comboBoxStatus.addItem("DỪNG HOẠT ĐỘNG");
-		    }
-		}
-
-		// Set GridBagConstraints cho JComboBox
-		GridBagConstraints gbc_comboBoxStatus = new GridBagConstraints();
-		gbc_comboBoxStatus.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxStatus.anchor = GridBagConstraints.WEST;
-		gbc_comboBoxStatus.gridx = 3;
-		gbc_comboBoxStatus.gridy = 1;
-
-		// Thêm ComboBox vào panel
-		panel_2.add(comboBoxStatus, gbc_comboBoxStatus);
+		JLabel lblEmail = new JLabel("Email: ");
+		lblEmail.setFont(new Font("Arial", Font.BOLD, 20));
+		lblEmail.setForeground(new Color(4, 42, 54));
+		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
+		gbc_lblEmail.anchor = GridBagConstraints.WEST;
+		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEmail.gridx = 2;
+		gbc_lblEmail.gridy = 1;
+		panel_2.add(lblEmail, gbc_lblEmail);
+		
+		textField_5 = new RoundedTextField(10, 250);
+		textField_5.setFont(new Font("Arial", Font.PLAIN, 20));
+		textField_5.setColumns(10);
+		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
+		gbc_textField_5.anchor = GridBagConstraints.WEST;
+		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_5.gridx = 3;
+		gbc_textField_5.gridy = 1;
+		panel_2.add(textField_5, gbc_textField_5);
 
 		
 		
@@ -224,31 +218,38 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_textField_2.gridy = 2;
 		panel_2.add(textField_2, gbc_textField_2);
 		
-		JLabel lblVaiTr = new JLabel("Vai trò: ");
-		lblVaiTr.setFont(new Font("Arial", Font.BOLD, 20));
-		lblVaiTr.setForeground(new Color(4, 42, 54));
-		GridBagConstraints gbc_lblVaiTr = new GridBagConstraints();
-		gbc_lblVaiTr.anchor = GridBagConstraints.WEST;
-		gbc_lblVaiTr.insets = new Insets(0, 0, 5, 5);
-		gbc_lblVaiTr.gridx = 2;
-		gbc_lblVaiTr.gridy = 2;
-		panel_2.add(lblVaiTr, gbc_lblVaiTr);
 		
-		JComboBox<String> comboBoxRole = new JComboBox<>();
-		comboBoxRole.setFont(new Font("Arial", Font.BOLD, 12));
-		comboBoxRole.setPreferredSize(new Dimension(150, 30));
-		GridBagConstraints gbc_choice_2 = new GridBagConstraints();
-		gbc_choice_2.insets = new Insets(0, 0, 5, 5);
-		gbc_choice_2.anchor = GridBagConstraints.WEST;
-		gbc_choice_2.gridx = 3;
-		gbc_choice_2.gridy = 2;
-		panel_2.add(comboBoxRole, gbc_choice_2);
-		for (Role role : Role.values()) {
-			if(role.name() == "MAINTENANCE") {
-				comboBoxRole.addItem("BẢO TRÌ");
-			} else {
-				comboBoxRole.addItem("GIÁO VIÊN");
-			}
+		JLabel lblStatus = new JLabel("Trạng thái: ");
+		lblStatus.setFont(new Font("Arial", Font.BOLD, 20));
+		lblStatus.setForeground(new Color(4, 42, 54));
+		GridBagConstraints gbc_lblStatus = new GridBagConstraints();
+		gbc_lblStatus.anchor = GridBagConstraints.WEST;
+		gbc_lblStatus.insets = new Insets(0, 0, 5, 5);
+		gbc_lblStatus.gridx = 2;
+		gbc_lblStatus.gridy = 2;
+		panel_2.add(lblStatus, gbc_lblStatus);
+		
+		JComboBox<String> comboBoxStatus = new JComboBox<>();
+		comboBoxStatus.setFont(new Font("Arial", Font.BOLD, 12));
+		comboBoxStatus.setPreferredSize(new Dimension(150, 30)); 
+		
+		// Set GridBagConstraints cho JComboBox
+		GridBagConstraints gbc_comboBoxStatus = new GridBagConstraints();
+		gbc_comboBoxStatus.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxStatus.anchor = GridBagConstraints.WEST;
+		gbc_comboBoxStatus.gridx = 3;
+		gbc_comboBoxStatus.gridy = 2;
+		
+		// Thêm ComboBox vào panel
+		panel_2.add(comboBoxStatus, gbc_comboBoxStatus);
+		for (Status status : Status.values()) {
+		    if (status.name().equals("MAINTENANCE")) {
+		        comboBoxStatus.addItem("ĐANG BẢO TRÌ");
+		    } else if (status.name().equals("ACTIVE")) {
+		        comboBoxStatus.addItem("HOẠT ĐỘNG");
+		    } else {
+		        comboBoxStatus.addItem("DỪNG HOẠT ĐỘNG");
+		    }
 		}
 		
 		JLabel lblNgySinh = new JLabel("Ngày tháng năm sinh: ");
@@ -271,6 +272,30 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_textField_3.gridy = 3;
 		panel_2.add(textField_3, gbc_textField_3);
 		
+		JLabel lblVaiTr = new JLabel("Vai trò: ");
+		lblVaiTr.setFont(new Font("Arial", Font.BOLD, 20));
+		lblVaiTr.setForeground(new Color(4, 42, 54));
+		GridBagConstraints gbc_lblVaiTr = new GridBagConstraints();
+		gbc_lblVaiTr.anchor = GridBagConstraints.WEST;
+		gbc_lblVaiTr.insets = new Insets(0, 0, 5, 5);
+		gbc_lblVaiTr.gridx = 2;
+		gbc_lblVaiTr.gridy = 3;
+		panel_2.add(lblVaiTr, gbc_lblVaiTr);
+		
+		JComboBox<Role> comboBoxRole = new JComboBox<>();
+		comboBoxRole.setFont(new Font("Arial", Font.BOLD, 12));
+		comboBoxRole.setPreferredSize(new Dimension(150, 30));
+		GridBagConstraints gbc_choice_2 = new GridBagConstraints();
+		gbc_choice_2.insets = new Insets(0, 0, 5, 5);
+		gbc_choice_2.anchor = GridBagConstraints.WEST;
+		gbc_choice_2.gridx = 3;
+		gbc_choice_2.gridy = 3;
+		panel_2.add(comboBoxRole, gbc_choice_2);
+		List<Role> roles = controller.getAllRoles(); 
+		for (Role role : roles) {
+		    comboBoxRole.addItem(role);
+		}
+		
 		JLabel lblSinThoi = new JLabel("Số điện thoại: ");
 		lblSinThoi.setFont(new Font("Arial", Font.BOLD, 20));
 		lblSinThoi.setForeground(new Color(4, 42, 54));
@@ -291,36 +316,23 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_textField_4.gridy = 4;
 		panel_2.add(textField_4, gbc_textField_4);
 		
-		JLabel lblEmail = new JLabel("Email: ");
-		lblEmail.setFont(new Font("Arial", Font.BOLD, 20));
-		lblEmail.setForeground(new Color(4, 42, 54));
-		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
-		gbc_lblEmail.anchor = GridBagConstraints.WEST;
-		gbc_lblEmail.insets = new Insets(0, 50, 5, 5);
-		gbc_lblEmail.gridx = 0;
-		gbc_lblEmail.gridy = 5;
-		panel_2.add(lblEmail, gbc_lblEmail);
-		
-		textField_5 = new RoundedTextField(10, 250);
-		textField_5.setFont(new Font("Arial", Font.PLAIN, 20));
-		textField_5.setColumns(10);
-		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
-		gbc_textField_5.anchor = GridBagConstraints.WEST;
-		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_5.gridx = 1;
-		gbc_textField_5.gridy = 5;
-		panel_2.add(textField_5, gbc_textField_5);
+		JButton uploadButton = new JButton("Chọn ảnh");
+		GridBagConstraints gbc_uploadButton = new GridBagConstraints();
+		gbc_uploadButton.anchor = GridBagConstraints.EAST;
+		gbc_uploadButton.insets = new Insets(0, 0, 0, 5);
+		gbc_uploadButton.gridx = 0;
+		gbc_uploadButton.gridy = 5;
+		panel_2.add(uploadButton, gbc_uploadButton); 
 		
 		JLabel imageLabel = new JLabel();
-		imageLabel.setPreferredSize(new Dimension(150, 100));
+		imageLabel.setPreferredSize(new Dimension(120, 100));
 		imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		GridBagConstraints gbc_imageLabel = new GridBagConstraints();
-		gbc_imageLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_imageLabel.insets = new Insets(0, 0, 0, 5);
 		gbc_imageLabel.anchor = GridBagConstraints.WEST;
 		gbc_imageLabel.gridx = 1;
-		gbc_imageLabel.gridy = 6;
+		gbc_imageLabel.gridy = 5;
 		panel_2.add(imageLabel, gbc_imageLabel); 
-		JButton uploadButton = new JButton("Chọn ảnh");
 		uploadButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        JFileChooser fileChooser = new JFileChooser();
@@ -333,12 +345,6 @@ public class Panel_ManagerUser extends JPanel {
 		        }
 		    }
 		});
-		GridBagConstraints gbc_uploadButton = new GridBagConstraints();
-		gbc_uploadButton.anchor = GridBagConstraints.EAST;
-		gbc_uploadButton.insets = new Insets(0, 0, 5, 5);
-		gbc_uploadButton.gridx = 0;
-		gbc_uploadButton.gridy = 6;
-		panel_2.add(uploadButton, gbc_uploadButton); 
 
 		JPanel listPanel = new JPanel(new BorderLayout());
         String[] columns = {
@@ -429,6 +435,8 @@ public class Panel_ManagerUser extends JPanel {
 //        listPanel.setBounds(30, 110, 0, 500); 
         listPanel.add(scrollPane, BorderLayout.CENTER);
         
+        Boolean[] rights = PermissionUtils.getRights("Quản lý người dùng");
+        
         GridBagConstraints gbc_listPanel = new GridBagConstraints();
         gbc_listPanel.insets = new Insets(0, 5, 5, 5);
         gbc_listPanel.fill = GridBagConstraints.BOTH;
@@ -453,11 +461,13 @@ public class Panel_ManagerUser extends JPanel {
 		    	button.setBackground(new Color(149, 227, 249));
 		    }
 		});
+		
 		GridBagConstraints gbc_button = new GridBagConstraints();
 		gbc_button.insets = new Insets(5, 5, 5, 0);
 		gbc_button.gridx = 4;
 		gbc_button.gridy = 1; 
 		panel_2.add(button, gbc_button);
+		button.setVisible(rights[1]);
         
         RoundedButton button_1 = new RoundedButton("Sửa", 10);
         button_1.setIcon(new ImageIcon(getClass().getResource("/IMG/pen (1).png")));
@@ -482,6 +492,7 @@ public class Panel_ManagerUser extends JPanel {
         gbc_button_1.gridy = 2; 
         panel_2.add(button_1, gbc_button_1);
         button_1.setEnabled(false);
+        button_1.setVisible(rights[2]);
         
         RoundedButton button_2 = new RoundedButton("Xóa", 10);
 		button_2.setIcon(new ImageIcon(getClass().getResource("/IMG/trash (1).png")));
@@ -506,6 +517,7 @@ public class Panel_ManagerUser extends JPanel {
 		gbc_button_2.gridy = 3; 
 		panel_2.add(button_2, gbc_button_2);
     	button_2.setEnabled(false);
+    	button_2.setVisible(rights[3]);
     	
     	RoundedButton button_3 = new RoundedButton("Hủy bỏ", 10);
     	button_3.setIcon(new ImageIcon(getClass().getResource("/IMG/close.png")));
@@ -531,31 +543,8 @@ public class Panel_ManagerUser extends JPanel {
 		panel_2.add(button_3, gbc_button_3);
 		button_3.setEnabled(false);
 		
-		RoundedButton button_4 = new RoundedButton("Lưu", 10);
-		button_4.setIcon(new ImageIcon(getClass().getResource("/IMG/bookmark.png")));
-		button_4.setHorizontalTextPosition(JButton.RIGHT); 
-		button_4.setVerticalTextPosition(JButton.CENTER);
-		button_4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		button_4.setForeground(new Color(4, 42, 54));
-		button_4.setBackground(new Color(149, 227, 249));
-		button_4.setFont(new Font("Arial", Font.BOLD, 20));
-		button_4.setPreferredSize(new Dimension(150, 40));
-		button_4.addMouseListener(new java.awt.event.MouseAdapter() {
-		    public void mouseEntered(java.awt.event.MouseEvent evt) {
-		    	button_4.setBackground(new Color(19, 193, 244)); 
-		    }
-		    public void mouseExited(java.awt.event.MouseEvent evt) {
-		    	button_4.setBackground(new Color(149, 227, 249));
-		    }
-		});
-		GridBagConstraints gbc_button_4 = new GridBagConstraints();
-		gbc_button_4.insets = new Insets(5, 5, 5, 0);
-		gbc_button_4.gridx = 4;
-		gbc_button_4.gridy = 5; 
-		panel_2.add(button_4, gbc_button_4);
-		button_4.setEnabled(false);
-		controller = new ManagerUserController(null, null);
 		loadUserData();
+		
 		
 		
 //		Bắt sự kiện nút thêm
@@ -567,10 +556,14 @@ public class Panel_ManagerUser extends JPanel {
 		        String yearold = textField_3.getText();
 		        String phoneNumber = textField_4.getText();
 		        new PasswordGeneratorUtils();
-				String password = PasswordEncryptionUtils.hashPassword(PasswordGeneratorUtils.generateStrongPassword());
+				String password = PasswordGeneratorUtils.generateStrongPassword();
 		        String email = textField_5.getText(); 
 		        String statusString = (String) comboBoxStatus.getSelectedItem();
-		        String roleString = (String) comboBoxRole.getSelectedItem();
+		        Role role = (Role) comboBoxRole.getSelectedItem();
+		        
+		        System.out.println(password);
+		        
+		        password = PasswordEncryptionUtils.hashPassword(password);
 		        
 		        Status status = Status.ACTIVE;
 		        if(statusString.equals("DỪNG HOẠT ĐỘNG")) {
@@ -578,11 +571,7 @@ public class Panel_ManagerUser extends JPanel {
 		        } else if(statusString.equals("BẢO TRÌ")) {
 		        	status = Status.MAINTENANCE;
 		        }
-		        
-		        Role role = Role.LECTURER; 
-		        if (roleString.equals("BẢO TRÌ")) {
-		            role = Role.MAINTENANCE;	
-		        }
+		       
 		        
 		        if (ScannerUtils.isEmpty(fullname, username, yearold, phoneNumber, email)) {
 		        	ScannerUtils.showErrorMessage(Panel_ManagerUser.this, "Vui lòng điền đầy đủ thông tin!");
@@ -613,6 +602,7 @@ public class Panel_ManagerUser extends JPanel {
 		        	button_1.setEnabled(false);
 			    	button_2.setEnabled(false);
 			    	ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
+			    	imageLabel.setIcon(null);
 		            loadUserData();
 		            ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Thêm dữ liệu thành công!");
 		        }
@@ -632,7 +622,7 @@ public class Panel_ManagerUser extends JPanel {
 				String phoneNumber = textField_4.getText();
 				String email = textField_5.getText();
 				String statusString = (String) comboBoxStatus.getSelectedItem();
-		        String roleString = (String) comboBoxRole.getSelectedItem();
+				Role role = (Role) comboBoxRole.getSelectedItem();
 		        
 		        Status status = Status.ACTIVE;
 		        if(statusString.equals("DỪNG HOẠT ĐỘNG")) {
@@ -641,17 +631,32 @@ public class Panel_ManagerUser extends JPanel {
 		        	status = Status.MAINTENANCE;
 		        }
 				
-				Role role = Role.LECTURER; 
-		        if (roleString.equals("BẢO TRÌ")) {
-		            role = Role.MAINTENANCE;	
+		        
+		        String thumbnail = null;
+		        
+		        if (imageLabel.getIcon() != null) {
+		            ImageIcon imageIcon = (ImageIcon) imageLabel.getIcon();
+		            Image image = imageIcon.getImage();
+		            
+		            // Chuyển ảnh thành BufferedImage
+		            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+		            bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+		            File tempFile = new File("temp_image.jpg");
+		            try {
+		            	ImageIO.write(bufferedImage, "jpg", tempFile);
+		                thumbnail = CloudinaryUploaderUtils.uploadImage(tempFile);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 		        }
 				
-				User manager = new Manager(fullname, username, null, yearold, email, phoneNumber, null, status,  role, userId);
+				User manager = new Manager(fullname, username, thumbnail, yearold, email, phoneNumber, null, status,  role, userId);
 				String editSuccess = controller.edit(manager);
 				if(editSuccess == "SUCCESS") {
 					button.setEnabled(true);
 					button_1.setEnabled(false);
 			    	button_2.setEnabled(false);
+			    	imageLabel.setIcon(null);
 			    	ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
 					loadUserData();
 					ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Cập nhật thành công!");
@@ -675,6 +680,7 @@ public class Panel_ManagerUser extends JPanel {
 					button.setEnabled(true);
 					button_1.setEnabled(false);
 			    	button_2.setEnabled(false);
+			    	imageLabel.setIcon(null);
 					ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
 					loadUserData();
 					ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Xóa thành công!");
@@ -684,14 +690,17 @@ public class Panel_ManagerUser extends JPanel {
 			}
 		});
 		
-		table.addMouseListener(new MouseAdapter() {
+		
+		MouseListener rowClickListener = new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		    	button.setEnabled(false);
 		    	button_1.setEnabled(true);
 		    	button_2.setEnabled(true);
+		    	button_3.setEnabled(true);
 		        int selectedRow = table.getSelectedRow(); 
 		        if (selectedRow >= 0) {
+		        	Object imagePath =  table.getValueAt(selectedRow, 1);
 		            String fullname = table.getValueAt(selectedRow, 2).toString();
 		            String username = table.getValueAt(selectedRow, 3).toString();
 		            String yearold = table.getValueAt(selectedRow, 4).toString();
@@ -699,6 +708,16 @@ public class Panel_ManagerUser extends JPanel {
 		            String email = table.getValueAt(selectedRow, 6).toString();
 		            String status = table.getValueAt(selectedRow, 7).toString();
 		            String role = table.getValueAt(selectedRow, 8).toString();
+		            
+		            if (imagePath instanceof ImageIcon) {
+		                ImageIcon icon = (ImageIcon) imagePath; 
+		                Image image = icon.getImage().getScaledInstance(
+		                        imageLabel.getWidth(), 
+		                        imageLabel.getHeight(), 
+		                        Image.SCALE_SMOOTH
+		                );
+		                imageLabel.setIcon(new ImageIcon(image));
+		            }
 		            
 		            textField_1.setText(fullname);
 		            textField_2.setText(username);
@@ -714,25 +733,42 @@ public class Panel_ManagerUser extends JPanel {
 		            }
 		            
 		            for (int i = 0; i < comboBoxRole.getItemCount(); i++) {
-		                if (role.equals(comboBoxRole.getItemAt(i))) {
-		                	comboBoxRole.setSelectedIndex(i);
-		                    break; 
+		                Role item = comboBoxRole.getItemAt(i);
+		                if (item.toString().equals(role)) {
+		                    comboBoxRole.setSelectedIndex(i);
+		                    break;
 		                }
 		            }
 		        }
 		    }
+		};
+		table.addMouseListener(rowClickListener);
+		
+		//Bắt sự kiện nút hủy
+		button_3.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				button.setEnabled(true);
+				button_1.setEnabled(false);
+				button_2.setEnabled(false);
+		    	button_3.setEnabled(false);
+		    	ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
+		    	table.clearSelection();
+		    	imageLabel.setIcon(null);
+			}
 		});
 		
 	}
 	
 	//Hàm load lại dữ liệu
 	public void loadUserData() {
+		System.out.println(Session.getUserId());
         List<User> users = controller.getAllUsers();
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
         for (User user : users) {
-        	String roleDisplay = user.getRole().name();
         	String statusDisplay = user.getStatus().name();
         	
         	if(user.getStatus().name() == "ACTIVE") {
@@ -743,11 +779,6 @@ public class Panel_ManagerUser extends JPanel {
         		statusDisplay = "ĐANG BẢO TRÌ";
         	}
 
-            if (user.getRole() == Role.LECTURER) {
-                roleDisplay = "GIÁO VIÊN";
-            } else if(user.getRole() == Role.MAINTENANCE) {
-            	roleDisplay = "BẢO TRÌ";
-            }
             
             try {
 	            URL imageUrl = new URL(user.getThumbnail());
@@ -764,7 +795,7 @@ public class Panel_ManagerUser extends JPanel {
 	                user.getPhoneNumber(),
 	                user.getEmail(),
 	                statusDisplay,
-	                roleDisplay
+	                user.getRole().toString()
 	            });
             } catch (MalformedURLException e) {
                 e.printStackTrace();

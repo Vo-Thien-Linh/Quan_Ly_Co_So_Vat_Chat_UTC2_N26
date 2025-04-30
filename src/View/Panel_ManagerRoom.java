@@ -36,6 +36,7 @@ import java.awt.event.ActionEvent;
 
 import View.RoundedComponents.RoundedButton;
 import View.RoundedComponents.RoundedTextField;
+import utils.PermissionUtils;
 
 public class Panel_ManagerRoom extends JPanel {
 
@@ -137,6 +138,8 @@ public class Panel_ManagerRoom extends JPanel {
         gbc_textField.fill = GridBagConstraints.HORIZONTAL;
         panel_2.add(textField, gbc_textField);
         
+        Boolean[] rights = PermissionUtils.getRights("Quản lý phòng");
+        
         RoundedButton button = new RoundedButton("Thêm", 10);
         button.setIcon(new ImageIcon(getClass().getResource("/IMG/add.png")));
         button.setHorizontalTextPosition(JButton.RIGHT); 
@@ -159,6 +162,7 @@ public class Panel_ManagerRoom extends JPanel {
         gbc_button.gridx = 2;
         gbc_button.gridy = 2; 
         panel_2.add(button, gbc_button);
+        button.setVisible(rights[1]);
         
         RoundedButton button_3 = new RoundedButton("Duyệt đơn mượn", 10);
         button_3.setIcon(new ImageIcon(getClass().getResource("/IMG/approve.png")));
@@ -228,6 +232,7 @@ public class Panel_ManagerRoom extends JPanel {
         gbc_button_1.gridx = 2;
         gbc_button_1.gridy = 3; 
         panel_2.add(button_1, gbc_button_1);
+        button_1.setVisible(rights[2]);
         
         
         
@@ -274,6 +279,7 @@ public class Panel_ManagerRoom extends JPanel {
 		gbc_button_2.gridx = 2;
 		gbc_button_2.gridy = 4; 
 		panel_2.add(button_2, gbc_button_2);
+		button_2.setVisible(rights[3]);
 		
 		RoundedButton button_4 = new RoundedButton("Xuất đơn mượn", 10);
 		button_4.setIcon(new ImageIcon(getClass().getResource("/IMG/export (1).png")));

@@ -4,20 +4,26 @@ import Service.UserService;
 import View.LoginView;
 import View.PageManager;
 import View.RegisterView;
+import utils.PermissionUtils;
 import utils.ScannerUtils;
 import Model.Admin;
-import Model.Role;
+import Model.RoleName;
 import Model.Status;
 import Model.User;
 import Repository.UserRepository;
 
+import java.util.Map;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import com.cloudinary.provisioning.Account.Role;
 
 public class UserController {
 	private UserRepository userRepository;
     private LoginView loginView;
     private RegisterView registerView;
+    private PermissionController permissionController = new PermissionController();
     
     public UserController(LoginView loginView, RegisterView registerView) {
         this.loginView = loginView;
@@ -25,33 +31,33 @@ public class UserController {
     }
     
 //    Tinh nang dang ky
-    public void register(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Role role) {
-    	userRepository = new UserRepository();
-    	if (userRepository.checkUsernameExists(username)) {
-    		ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
-            return;
-        }
-        if (userRepository.checkEmailExists(email)) {
-        	ScannerUtils.showErrorMessage(registerView, "Email đã được sử dụng!");
-            return;
-        }
-        
-        if(userRepository.checkNumberPhoneExists(phoneNumber)) {
-        	ScannerUtils.showErrorMessage(registerView, "Số điện thoại đã được sử dụng!");
-            return;
-        }
-    	
-    	User admin = new Admin(fullname, username, thumbnail, yearold, email, phoneNumber, password, Status.ACTIVE, role);
-
-        boolean isRegistered = userRepository.addUser(admin);
-        if (isRegistered) {
-        	ScannerUtils.showSuccessMessage(registerView, "Đăng ký thành công!");
-            new LoginView().setVisible(true);
-            registerView.dispose();
-        } else {
-        	ScannerUtils.showErrorMessage(registerView, "Đăng ký không thành công!");
-        }
-    }
+//    public void register(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Role role) {
+//    	userRepository = new UserRepository();
+//    	if (userRepository.checkUsernameExists(username)) {
+//    		ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
+//            return;
+//        }
+//        if (userRepository.checkEmailExists(email)) {
+//        	ScannerUtils.showErrorMessage(registerView, "Email đã được sử dụng!");
+//            return;
+//        }
+//        
+//        if(userRepository.checkNumberPhoneExists(phoneNumber)) {
+//        	ScannerUtils.showErrorMessage(registerView, "Số điện thoại đã được sử dụng!");
+//            return;
+//        }
+//    	
+//    	User admin = new Admin(fullname, username, thumbnail, yearold, email, phoneNumber, password, Status.ACTIVE, role);
+//
+//        boolean isRegistered = userRepository.addUser(admin);
+//        if (isRegistered) {
+//        	ScannerUtils.showSuccessMessage(registerView, "Đăng ký thành công!");
+//            new LoginView().setVisible(true);
+//            registerView.dispose();
+//        } else {
+//        	ScannerUtils.showErrorMessage(registerView, "Đăng ký không thành công!");
+//        }
+//    }
 
 //    Tinh nang dang nhap
     public void login(String username, String password) {
@@ -59,6 +65,9 @@ public class UserController {
         String success = userService.login(username, password);
 
         if (success == "SUCCESS") {
+        	ScannerUtils.showSuccessMessage(loginView, "Đăng nhập thành công!");
+        	Map<String, Boolean[]> permissionMap = permissionController.getPermissionsByUserId();
+            PermissionUtils.setPermissionMap(permissionMap);
         	loginView.setVisible(false);
         	
         	PageManager pageManager = new PageManager();
@@ -90,4 +99,8 @@ public class UserController {
 		}
     }
     
+    public User getInforUser(String userId) {
+    	userRepository = new UserRepository();
+    	return userRepository.getInforUser(userId);
+    }
 }

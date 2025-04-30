@@ -1,7 +1,7 @@
 package View;
 
 
-import Model.Role;
+import Model.RoleName;
 import utils.PasswordEncryptionUtils;
 import utils.ScannerUtils;
 import Controller.*;
@@ -110,7 +110,7 @@ public class RegisterView extends JFrame{
         contentPanel.add(lblRole);
         
         roleComboBox = new JComboBox<>();
-        for (Role role : Role.values()) {
+        for (RoleName role : RoleName.values()) {
 			if(role.name() == "MAINTENANCE") {
 				roleComboBox.addItem("BẢO TRÌ");
 			} else {
