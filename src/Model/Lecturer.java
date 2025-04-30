@@ -4,8 +4,8 @@ package Model;
 public class Lecturer extends User {
     private String faculty;
     
-    public Lecturer(String fullname, String username, String yearold, String email, String phoneNumber, String password, Status status, Role role, String faculty) {
-        super(fullname, username, yearold, email, phoneNumber, password, status, role);
+    public Lecturer(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Status status, Role role, String faculty) {
+        super(fullname, username, thumbnail, yearold, email, phoneNumber, password, status, role);
         this.faculty = faculty;
     }
 

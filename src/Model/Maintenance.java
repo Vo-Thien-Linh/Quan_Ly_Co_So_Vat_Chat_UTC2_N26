@@ -3,8 +3,8 @@ package Model;
 public class Maintenance extends User {
     private String department;
 
-    public Maintenance(String fullname, String username, String yearold, String email, String phoneNumber, String password, Status status, Role role, String department) {
-        super(fullname, username, yearold, email, phoneNumber, password, status, role);
+    public Maintenance(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Status status, Role role, String department) {
+        super(fullname, username, thumbnail, yearold, email, phoneNumber, password, status, role);
         this.department = department;
     }
 

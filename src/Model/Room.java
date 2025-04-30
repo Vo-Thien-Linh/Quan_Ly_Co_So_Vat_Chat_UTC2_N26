@@ -7,7 +7,12 @@ public class Room {
     private int seatingCapacity;
 
     public Room() {}
-
+    
+    public Room(String id, String roomNumber) {
+    	this.id = id;
+        this.roomNumber = roomNumber;
+    }
+    
     public Room(String id, RoomStatus status, String roomNumber, int seatingCapacity) {
         this.id = id;
         this.status = status;
@@ -52,5 +57,10 @@ public class Room {
         System.out.println("Status: " + status);
         System.out.println("Room Number: " + roomNumber);
         System.out.println("Seating Capacity: " + seatingCapacity);
+    }
+    
+    @Override
+    public String toString() {
+    	return roomNumber;
     }
 }

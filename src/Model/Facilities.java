@@ -1,16 +1,23 @@
 package Model;
 
+import java.time.LocalDate;
+
 public abstract class Facilities {
     private String id;
-    private String status;
-
-    public Facilities() {}
-
-    public Facilities(String id, String status) {
-        this.id = id;
-        this.status = status;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
+    
+    public Facilities() {
+        this.createdAt = LocalDate.now();  
+        this.updatedAt = LocalDate.now(); 
     }
 
+    public Facilities(String id, LocalDate createdAt, LocalDate updatedAt) {
+    	this.id = id;
+        this.createdAt = (createdAt != null ? createdAt : LocalDate.now());  
+        this.updatedAt = (updatedAt != null ? updatedAt : LocalDate.now()); 
+    }
+    
     public String getId() {
         return id;
     }
@@ -19,13 +26,21 @@ public abstract class Facilities {
         this.id = id;
     }
 
-    public String getStatus() {
-        return status;
+    public LocalDate getCreatedAt() {
+        return createdAt;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
     }
 
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDate updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
     public abstract void informationDisplay();
 }

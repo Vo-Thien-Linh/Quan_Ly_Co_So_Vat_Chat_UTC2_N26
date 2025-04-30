@@ -1,18 +1,34 @@
 package utils;
 
 import java.awt.Component;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class ScannerUtils {
-	public static boolean isEmpty(String... fields) {
-        for (String field : fields) {
-            if (field == null || field.trim().isEmpty()) {
-                return true;
-            }
+	public static boolean isEmpty(Object... fields) {
+	    for (Object field : fields) {
+	        if (field == null) {
+	            return true;
+	        }
+
+	        if (field instanceof String && ((String) field).trim().isEmpty()) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	public static void clearForm(JTextField... fields) {
+		for (JTextField field : fields) {
+            field.setText("");
         }
-        return false;
-    }
+	}
 	
 	public static void showErrorMessage(Component parent, String message) {
         JOptionPane.showMessageDialog(parent, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -42,5 +58,26 @@ public class ScannerUtils {
 
     public static boolean isNumber(String input) {
         return input != null && input.matches("\\d+");
+    }
+    
+    public static boolean isValidDate(String dateStr) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            dateFormat.setLenient(false); 
+            Date date = dateFormat.parse(dateStr); 
+
+            return true;
+
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    public static void handleDateValidation(String dateStr, JFrame panel) {
+        if (!isValidDate(dateStr)) {
+            JOptionPane.showMessageDialog(panel, "Ngày tháng năm sinh không hợp lệ! Vui lòng nhập theo định dạng dd/MM/yyyy.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } else {
+            System.out.println("Ngày sinh hợp lệ: " + dateStr);
+        }
     }
 }

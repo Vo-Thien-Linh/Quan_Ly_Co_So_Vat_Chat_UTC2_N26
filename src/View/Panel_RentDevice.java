@@ -97,6 +97,6 @@ public class Panel_RentDevice extends JPanel {
 
 	}
 
-	}
-
 }
+
+
