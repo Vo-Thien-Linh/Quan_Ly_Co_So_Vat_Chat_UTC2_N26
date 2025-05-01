@@ -1,9 +1,8 @@
 package Repository;
 
 import Config.DatabaseConnection;
-import Model.DeviceBorrowRequest;
 import Model.BorrowingRequestStatus;
-
+import Model.DeviceBorrowRequest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

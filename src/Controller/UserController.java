@@ -3,7 +3,6 @@ package Controller;
 import Service.UserService;
 import View.LoginView;
 import View.PageManager;
-import View.RegisterView;
 import utils.PermissionUtils;
 import utils.ScannerUtils;
 import Model.Admin;
@@ -20,44 +19,13 @@ import javax.swing.JOptionPane;
 import com.cloudinary.provisioning.Account.Role;
 
 public class UserController {
-	private UserRepository userRepository;
+	private UserRepository userRepository = new UserRepository();
     private LoginView loginView;
-    private RegisterView registerView;
     private PermissionController permissionController = new PermissionController();
     
-    public UserController(LoginView loginView, RegisterView registerView) {
+    public UserController(LoginView loginView) {
         this.loginView = loginView;
-        this.registerView = registerView;
     }
-    
-//    Tinh nang dang ky
-//    public void register(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Role role) {
-//    	userRepository = new UserRepository();
-//    	if (userRepository.checkUsernameExists(username)) {
-//    		ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
-//            return;
-//        }
-//        if (userRepository.checkEmailExists(email)) {
-//        	ScannerUtils.showErrorMessage(registerView, "Email đã được sử dụng!");
-//            return;
-//        }
-//        
-//        if(userRepository.checkNumberPhoneExists(phoneNumber)) {
-//        	ScannerUtils.showErrorMessage(registerView, "Số điện thoại đã được sử dụng!");
-//            return;
-//        }
-//    	
-//    	User admin = new Admin(fullname, username, thumbnail, yearold, email, phoneNumber, password, Status.ACTIVE, role);
-//
-//        boolean isRegistered = userRepository.addUser(admin);
-//        if (isRegistered) {
-//        	ScannerUtils.showSuccessMessage(registerView, "Đăng ký thành công!");
-//            new LoginView().setVisible(true);
-//            registerView.dispose();
-//        } else {
-//        	ScannerUtils.showErrorMessage(registerView, "Đăng ký không thành công!");
-//        }
-//    }
 
 //    Tinh nang dang nhap
     public void login(String username, String password) {
@@ -83,11 +51,6 @@ public class UserController {
         }
     }
     
-    public void showRegister() {
-        new RegisterView().setVisible(true);
-        loginView.dispose(); 
-    }
-    
     
     //Tinh nang dang xuat
     public static void logout(JFrame currentFrame) {
@@ -99,8 +62,16 @@ public class UserController {
 		}
     }
     
+//    tinh nang quen mat khau
+    public boolean forgotPassword(String email) {
+		return userRepository.forgotPassword(email);
+	}
+    
+    public boolean changePassword(String pasword, String email) {
+		return userRepository.changePassword(pasword, email);
+	}
+    
     public User getInforUser(String userId) {
-    	userRepository = new UserRepository();
     	return userRepository.getInforUser(userId);
     }
 }

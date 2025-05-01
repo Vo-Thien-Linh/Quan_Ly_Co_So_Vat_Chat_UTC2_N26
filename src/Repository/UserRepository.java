@@ -141,4 +141,40 @@ public class UserRepository {
         }
         return null;
     }
+    
+    public boolean forgotPassword(String email) {
+    	String query = "SELECT * FROM users WHERE email = ? AND deleted = false";
+		try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+	        stmt.setString(1, email);
+	        try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+	}
+    
+    public Boolean changePassword(String password, String email) {
+    	String query = "UPDATE users SET password = ? WHERE email = ?";
+		try(Connection conn = DatabaseConnection.getConnection(); 
+			PreparedStatement stmt = conn.prepareStatement(query)) {
+			
+			stmt.setString(1, password);
+			stmt.setString(2, email);
+			
+			int result = stmt .executeUpdate();
+			if(result > 0) {
+				return true;
+			} else {
+				return false;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+    }
 }

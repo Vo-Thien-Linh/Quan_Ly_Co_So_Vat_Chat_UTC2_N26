@@ -91,29 +91,12 @@ public class LoginView extends JFrame {
 		});
 
 		contentPanel.add(btnLogin);
-		
-		// Nút Đăng ký
-        JButton btnRegister = new JButton("Đăng ký");
-        btnRegister.setBackground(new Color(70, 130, 180));
-        btnRegister.setForeground(Color.WHITE);
-        btnRegister.setFont(new Font("Dialog", Font.BOLD, 18));
-        btnRegister.setBounds(135, 445, 140, 50); 
-        btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnRegister.setBackground(new Color(50, 90, 150)); 
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnRegister.setBackground(new Color(70, 130, 180)); 
-            }
-        });
-        contentPanel.add(btnRegister);
         
         JButton btnForgotPassword = new JButton("Quên mật khẩu");
         btnForgotPassword.setBackground(new Color(70, 130, 180)); 
         btnForgotPassword.setForeground(Color.WHITE);
         btnForgotPassword.setFont(new Font("Dialog", Font.BOLD, 18));
-        btnForgotPassword.setBounds(290, 445, 170, 50);
+        btnForgotPassword.setBounds(135, 445, 325, 73);
         btnForgotPassword.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnForgotPassword.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -129,7 +112,7 @@ public class LoginView extends JFrame {
 		btn_backgound2.setEnabled(false);
 		btn_backgound2.setFont(new Font("Dialog", Font.BOLD, 25));
 		btn_backgound2.setBackground(new Color(240, 240, 240));
-		btn_backgound2.setBounds(115, 90, 360, 420);
+		btn_backgound2.setBounds(115, 90, 360, 450);
 		contentPanel.add(btn_backgound2);
 		
 		ImageIcon icon = new ImageIcon(LoginView.class.getResource("/IMG/logo-utc.png"));
@@ -158,7 +141,8 @@ public class LoginView extends JFrame {
 		contentPanel.add(lbl_backgrond);	
 		setLocationRelativeTo(null);
 
-        UserController userController = new UserController(this, null);
+        UserController userController = new UserController(this);
+//        bắt sự kiện nút đăng nhập
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -174,12 +158,15 @@ public class LoginView extends JFrame {
             }
         });
         
-        btnRegister.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	userController.showRegister();
-            }
-        });
+//        bắt sự kiện nút quên mật khẩu
+        btnForgotPassword.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new ForgotPasswordView().setVisible(true);
+			}
+		});
     }
     
     private void displayPassword() {

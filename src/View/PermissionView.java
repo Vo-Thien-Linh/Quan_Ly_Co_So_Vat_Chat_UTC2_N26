@@ -44,6 +44,14 @@ public class PermissionView extends JPanel {
             {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
             {"", "Bảo trì", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
             
+            {"Mượn phòng", "Quản trị viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Bảo trì", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            
+            {"Mượn thiết bị", "Quản trị viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Bảo trì", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            
             {"Phân quyền", "Quản trị viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
             {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
             {"", "Bảo trì", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},

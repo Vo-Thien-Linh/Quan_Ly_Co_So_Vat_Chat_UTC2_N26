@@ -21,18 +21,17 @@ import Repository.ManagerUserRepository;
 import Repository.UserRepository;
 import Service.UserService;
 import View.LoginView;
-import View.RegisterView;
+import View.Panel_ManagerUser;
 import utils.ScannerUtils;
 
 public class ManagerUserController {
 	private UserRepository userRepository = new UserRepository();
 	private ManagerUserRepository managerUserRepository = new ManagerUserRepository();
     private LoginView loginView;
-    private RegisterView registerView;
+    private Panel_ManagerUser panelManageUser;
     
-    public ManagerUserController(LoginView loginView, RegisterView registerView) {
+    public ManagerUserController(LoginView loginView) {
         this.loginView = loginView;
-        this.registerView = registerView;
     }
     
     public List<Role> getAllRoles() {
@@ -45,16 +44,16 @@ public class ManagerUserController {
     
     public String addUserAndReturnID(String fullname, String username, String thumbnail, String yearold, String email, String phoneNumber, String password, Status status, Role role) {
 		if (userRepository.checkUsernameExists(username)) {
-			ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
+			ScannerUtils.showErrorMessage(panelManageUser, "Tên đăng nhập đã tồn tại!");
 	        return null;
 	    }
 	    if (userRepository.checkEmailExists(email)) {
-	    	ScannerUtils.showErrorMessage(registerView, "Email đã được sử dụng!");
+	    	ScannerUtils.showErrorMessage(panelManageUser, "Email đã được sử dụng!");
 	    	return null;
 	    }
 	    
 	    if(userRepository.checkNumberPhoneExists(phoneNumber)) {
-	    	ScannerUtils.showErrorMessage(registerView, "Số điện thoại đã được sử dụng!");
+	    	ScannerUtils.showErrorMessage(panelManageUser, "Số điện thoại đã được sử dụng!");
 	    	return null;
 	    }
     	
@@ -68,17 +67,17 @@ public class ManagerUserController {
     
     public String edit(User manager) {
 		if (managerUserRepository.isUsernameExists(manager.getUserId() ,manager.getUsername())) {
-			ScannerUtils.showErrorMessage(registerView, "Tên đăng nhập đã tồn tại!");
+			ScannerUtils.showErrorMessage(panelManageUser, "Tên đăng nhập đã tồn tại!");
 	        return null;
 	    }
 		
 		if(managerUserRepository.isNumberPhoneExists(manager.getUserId(), manager.getPhoneNumber())) {
-		    	ScannerUtils.showErrorMessage(registerView, "Số điện thoại đã được sử dụng!");
+		    	ScannerUtils.showErrorMessage(panelManageUser, "Số điện thoại đã được sử dụng!");
 		    	return null;
 		 }
 		 
 	    if (managerUserRepository.isEmailExists(manager.getUserId(), manager.getEmail())) {
-	    	ScannerUtils.showErrorMessage(registerView, "Email đã được sử dụng!");
+	    	ScannerUtils.showErrorMessage(panelManageUser, "Email đã được sử dụng!");
 	    	return null;
 	    }
 	    
@@ -98,4 +97,8 @@ public class ManagerUserController {
 		
 		return false;
     }
+
+    public List<User> searchUsers(String[] keyword) {
+		return managerUserRepository.searchUsers(keyword);
+	}
 }

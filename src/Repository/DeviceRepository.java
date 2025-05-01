@@ -5,8 +5,6 @@ import Model.Device;
 import Model.DeviceStatus;
 import Model.Room;
 import Model.RoomStatus;
-
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

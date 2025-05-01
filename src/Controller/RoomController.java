@@ -34,7 +34,7 @@ public class RoomController {
     public List<Room> getAllRooms() throws SQLException {
         return roomRepository.getAllRooms();
     }
-
+    
     public boolean updateRequestStatus(String idRequest, BorrowingRequestStatus status) throws SQLException {
         return requestRepository.updateRequestStatus(idRequest, status);
     }

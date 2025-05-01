@@ -63,29 +63,9 @@ public class PageManager extends JFrame {
     private JPanel contentPanel;
     private JButton selectedButton = null;
     private LoginView loginView;
-    private RegisterView registerView;
-    private UserController controller = new UserController(loginView, registerView);
+    private UserController controller = new UserController(loginView);
     private User inforUser;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PageManager frame = new PageManager();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public PageManager() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PageManager.class.getResource("/IMG/logo-utc.png")));
 		setTitle("Quản lý cơ sở vật chất UTC2 - Quản lý");
@@ -223,7 +203,7 @@ public class PageManager extends JFrame {
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
 
-        String[] menuItems = {"Quản lý phòng", "Quản lý thiết bị", "Quản lý người dùng", "Phân quyền"};
+        String[] menuItems = {"Quản lý phòng", "Quản lý thiết bị", "Quản lý người dùng", "Phân quyền", "Mượn phòng", "Mượn thiết bị"};
         
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
@@ -232,6 +212,8 @@ public class PageManager extends JFrame {
 		Panel_ManagerDevice panelManagerDevice = new Panel_ManagerDevice();
 		Panel_ManagerUser panelManagerUser = new Panel_ManagerUser();
 		PermissionView permissionView = new PermissionView();
+		Panel_RentDevice panelRentDevice = new Panel_RentDevice();
+		Panel_RentRoom panelRentRoom = new Panel_RentRoom();
 		
         for (String item : menuItems) {
         	Boolean[] rights = PermissionUtils.getRights(item);
@@ -245,14 +227,18 @@ public class PageManager extends JFrame {
         		contentPanel.add(panelManagerDevice, item);
         	} else if(item == "Quản lý người dùng"){
         		contentPanel.add(panelManagerUser, item);
-        	} else {
+        	} else if(item == "Phân quyền"){
         		contentPanel.add(permissionView, item);
+        	} else if(item == "Mượn phòng") {
+        		contentPanel.add(panelRentRoom, item);
+        	} else {
+        		contentPanel.add(panelRentDevice, item);
         	}
         }
         
         boolean isFirst = true;
         
-        String[] iconPaths = {"/IMG/room.png", "/IMG/settings.png", "/IMG/profile.png", "/IMG/key.png"};
+        String[] iconPaths = {"/IMG/room.png", "/IMG/settings.png", "/IMG/profile.png", "/IMG/key.png", "/IMG/key (1).png", "/IMG/mobile.png"};
         for (int i = 0; i < menuItems.length; i++) {
             String item = menuItems[i];
             Boolean[] rights = PermissionUtils.getRights(item);
@@ -320,7 +306,7 @@ public class PageManager extends JFrame {
 		panel_8.setLayout(new BorderLayout(0, 0));
 		
 		LoginView loginView = new LoginView();
-		UserController userController = new UserController(loginView , null);
+		UserController userController = new UserController(loginView);
 		
 		//Bắt sự kiện nút đăng xuất
 		btnNewButton.addActionListener(new ActionListener() {
