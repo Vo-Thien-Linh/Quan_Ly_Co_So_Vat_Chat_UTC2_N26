@@ -1,16 +1,15 @@
 package Model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class RoomBorrowRequest {
     private String idRequest;
     private String lecturerUser;
+    private String fullname;
     private String roomId;
-    private Timestamp requestDate;
-    private Timestamp dueDate;
+    private Date requestDate;
+    private Date dueDate;
     private BorrowingRequestStatus borrowingRequest;
-
-    public RoomBorrowRequest() {}
 
     public String getIdRequest() {
         return idRequest;
@@ -28,6 +27,14 @@ public class RoomBorrowRequest {
         this.lecturerUser = lecturerUser;
     }
 
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
     public String getRoomId() {
         return roomId;
     }
@@ -36,19 +43,19 @@ public class RoomBorrowRequest {
         this.roomId = roomId;
     }
 
-    public Timestamp getRequestDate() {
+    public Date getRequestDate() {
         return requestDate;
     }
 
-    public void setRequestDate(Timestamp requestDate) {
+    public void setRequestDate(Date requestDate) {
         this.requestDate = requestDate;
     }
 
-    public Timestamp getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Timestamp dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
