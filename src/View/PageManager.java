@@ -324,7 +324,22 @@ public class PageManager extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				User inforUser = controller.getInforUser(Session.getUserId());
-				buttonName.setText(inforUser.getFullname());
+				
+				String rolestr = "Hoạt động";
+				if(inforUser.getStatus().name().equals("INACTIVE")) {
+					rolestr = "Không hoạt động";
+				} else if(inforUser.getStatus().name().equals("MAINTENANCE")) {
+					rolestr = "Đang bảo trì";
+				}
+				new UserInfoView(
+					    inforUser.getFullname(),
+					    inforUser.getYearold(),
+					    inforUser.getEmail(),
+					    inforUser.getPhoneNumber(),
+					    rolestr,
+					    inforUser.getRole()
+					).setVisible(true);
+
 			}
 		});
 	}

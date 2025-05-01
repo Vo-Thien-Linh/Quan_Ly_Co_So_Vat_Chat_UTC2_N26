@@ -1,14 +1,17 @@
 package View;
 
 import javax.swing.JPanel;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.GridBagConstraints;
 import javax.swing.JScrollPane;
 import java.awt.Insets;
@@ -16,7 +19,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -34,6 +41,7 @@ import java.awt.Font;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 
 import Controller.ManagerDeviceController;
 import Model.Device;
@@ -42,6 +50,7 @@ import Model.Room;
 import Model.User;
 import View.RoundedComponents.RoundedButton;
 import View.RoundedComponents.RoundedTextField;
+import utils.CloudinaryUploaderUtils;
 import utils.PermissionUtils;
 import utils.ScannerUtils;
 import java.awt.Color;
@@ -72,7 +81,7 @@ public class Panel_ManagerDevice extends JPanel {
 		add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{890, 0};
-		gbl_panel.rowHeights = new int[]{376, 0, 0};
+		gbl_panel.rowHeights = new int[]{455, 0, 0};
 		gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
@@ -208,6 +217,36 @@ public class Panel_ManagerDevice extends JPanel {
 		gbc_textField_3.gridy = 4;
 		panel_2.add(textField_3, gbc_textField_3);
 		
+		JButton uploadButton = new JButton("Chọn ảnh");
+		GridBagConstraints gbc_uploadButton = new GridBagConstraints();
+		gbc_uploadButton.anchor = GridBagConstraints.EAST;
+		gbc_uploadButton.insets = new Insets(0, 0, 0, 5);
+		gbc_uploadButton.gridx = 0;
+		gbc_uploadButton.gridy = 5;
+		panel_2.add(uploadButton, gbc_uploadButton); 
+		
+		JLabel imageLabel = new JLabel();
+		imageLabel.setPreferredSize(new Dimension(120, 100));
+		imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		GridBagConstraints gbc_imageLabel = new GridBagConstraints();
+		gbc_imageLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_imageLabel.anchor = GridBagConstraints.WEST;
+		gbc_imageLabel.gridx = 1;
+		gbc_imageLabel.gridy = 5;
+		panel_2.add(imageLabel, gbc_imageLabel); 
+		uploadButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        JFileChooser fileChooser = new JFileChooser();
+		        int option = fileChooser.showOpenDialog(null);
+		        if(option == JFileChooser.APPROVE_OPTION){
+		            File file = fileChooser.getSelectedFile();
+		            ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
+		            Image image = imageIcon.getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
+		            imageLabel.setIcon(new ImageIcon(image));
+		        }
+		    }
+		});
+		
 		JLabel lblNewLabel_4 = new JLabel("Giá: ");
 		lblNewLabel_4.setFont(new Font("Arial", Font.BOLD, 20));
 		lblNewLabel_4.setForeground(new Color(4, 42, 54));
@@ -302,7 +341,7 @@ public class Panel_ManagerDevice extends JPanel {
 		
 		JPanel listPanel = new JPanel(new BorderLayout());
         String[] columns = {
-        		"Mã thiết bị", "Tên thiết bị", "Loại thiết bị", "Ngày mua" , "Nhà cung cấp",  "Giá", "Trạng thái", "Phòng", "Số lượng"
+        		"Mã thiết bị", "Hình ảnh", "Tên thiết bị", "Loại thiết bị", "Ngày mua" , "Nhà cung cấp",  "Giá", "Trạng thái", "Phòng", "Số lượng"
         };
 
         DefaultTableModel model = new DefaultTableModel(null, columns) {
@@ -414,10 +453,9 @@ public class Panel_ManagerDevice extends JPanel {
 		    }
 		});
         GridBagConstraints gbc_button = new GridBagConstraints();
-        gbc_button.anchor = GridBagConstraints.EAST;
         gbc_button.insets = new Insets(5, 5, 5, 5);
-        gbc_button.gridx = 0;
-        gbc_button.gridy = 5; 
+        gbc_button.gridx = 4;
+        gbc_button.gridy = 1; 
         panel_2.add(button, gbc_button);
         button.setVisible(rights[1]);
         
@@ -440,9 +478,10 @@ public class Panel_ManagerDevice extends JPanel {
         });
         GridBagConstraints gbc_button_1 = new GridBagConstraints();
         gbc_button_1.insets = new Insets(5, 5, 5, 5);
-        gbc_button_1.gridx = 1;
-        gbc_button_1.gridy = 5; 
+        gbc_button_1.gridx = 4;
+        gbc_button_1.gridy = 2; 
         panel_2.add(button_1, gbc_button_1);
+        button_1.setEnabled(false);
         button_1.setVisible(rights[2]);
         
         RoundedButton button_2 = new RoundedButton("Xóa", 10);
@@ -463,35 +502,59 @@ public class Panel_ManagerDevice extends JPanel {
 		    }
 		});
 		GridBagConstraints gbc_button_2 = new GridBagConstraints();
-		gbc_button_2.anchor = GridBagConstraints.WEST;
 		gbc_button_2.insets = new Insets(5, 5, 5, 5);
-		gbc_button_2.gridx = 2;
-		gbc_button_2.gridy = 5; 
+		gbc_button_2.gridx = 4;
+		gbc_button_2.gridy = 3; 
 		panel_2.add(button_2, gbc_button_2);
+		button_2.setEnabled(false);
 		button_2.setVisible(rights[3]);
 		
-		RoundedButton button_3 = new RoundedButton("Duyệt đơn mượn", 10);
-        button_3.setIcon(new ImageIcon(getClass().getResource("/IMG/approve.png")));
-        button_3.setHorizontalTextPosition(JButton.RIGHT); 
-        button_3.setVerticalTextPosition(JButton.CENTER);
-        button_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button_3.setForeground(new Color(4, 42, 54));
-        button_3.setBackground(new Color(149, 227, 249));
-        button_3.setFont(new Font("Arial", Font.BOLD, 20));
-        button_3.setPreferredSize(new Dimension(250, 50));
-        button_3.addMouseListener(new java.awt.event.MouseAdapter() {
+		RoundedButton button_3 = new RoundedButton("Hủy bỏ", 10);
+    	button_3.setIcon(new ImageIcon(getClass().getResource("/IMG/close.png")));
+    	button_3.setHorizontalTextPosition(JButton.RIGHT); 
+    	button_3.setVerticalTextPosition(JButton.CENTER);
+    	button_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    	button_3.setForeground(new Color(4, 42, 54));
+    	button_3.setBackground(new Color(149, 227, 249));
+    	button_3.setFont(new Font("Arial", Font.BOLD, 20));
+    	button_3.setPreferredSize(new Dimension(150, 40));
+    	button_3.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		    	button_3.setBackground(new Color(19, 193, 244)); 
+		    }
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		    	button_3.setBackground(new Color(149, 227, 249));
+		    }
+		});
+		GridBagConstraints gbc_button_3 = new GridBagConstraints();
+		gbc_button_3.insets = new Insets(5, 5, 5, 0);
+		gbc_button_3.gridx = 4;
+		gbc_button_3.gridy = 4; 
+		panel_2.add(button_3, gbc_button_3);
+		button_3.setEnabled(false);
+		
+		RoundedButton button_5 = new RoundedButton("Duyệt đơn mượn", 10);
+        button_5.setIcon(new ImageIcon(getClass().getResource("/IMG/approve.png")));
+        button_5.setHorizontalTextPosition(JButton.RIGHT); 
+        button_5.setVerticalTextPosition(JButton.CENTER);
+        button_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button_5.setForeground(new Color(4, 42, 54));
+        button_5.setBackground(new Color(149, 227, 249));
+        button_5.setFont(new Font("Arial", Font.BOLD, 20));
+        button_5.setPreferredSize(new Dimension(250, 50));
+        button_5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-            	button_3.setBackground(new Color(19, 193, 244)); 
+            	button_5.setBackground(new Color(19, 193, 244)); 
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-            	button_3.setBackground(new Color(149, 227, 249));
+            	button_5.setBackground(new Color(149, 227, 249));
             }
         });
-        GridBagConstraints gbc_button_3 = new GridBagConstraints();
-        gbc_button_3.insets = new Insets(5, 5, 5, 0);
-        gbc_button_3.gridx = 3;
-        gbc_button_3.gridy = 5; 
-        panel_2.add(button_3, gbc_button_3);
+        GridBagConstraints gbc_button_5 = new GridBagConstraints();
+        gbc_button_5.insets = new Insets(5, 5, 5, 0);
+        gbc_button_5.gridx = 3;
+        gbc_button_5.gridy = 5; 
+        panel_2.add(button_5, gbc_button_5);
 		
 		RoundedButton button_4 = new RoundedButton("Xuất đơn mượn", 10);
 		button_4.setIcon(new ImageIcon(getClass().getResource("/IMG/export (1).png")));
@@ -515,96 +578,7 @@ public class Panel_ManagerDevice extends JPanel {
 		gbc_button_4.gridx = 4;
 		gbc_button_4.gridy = 5; 
 		panel_2.add(button_4, gbc_button_4);
-        
-//		JScrollPane scrollPane = new JScrollPane();
-//		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-//		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-//		gbc_scrollPane.gridx = 0;
-//		gbc_scrollPane.gridy = 1;
-//		panel.add(scrollPane, gbc_scrollPane);
-//		
-//		table = new JTable();
-//		table.setModel(new DefaultTableModel(
-//			new Object[][] {
-//				{null, null, null, null, null},
-//			},
-//			new String[] {
-//				"Mã thiết bị", "Tên thiết bị", "Loại thiết bị", "Ngày mua" , "Nhà cung cấp",  "Giá", "Trạng thái", "Phòng", "Số lượng",
-//			}
-//		));
-//		scrollPane.setViewportView(table);
-//		
-//		JPanel panel_1 = new JPanel();
-//		add(panel_1);
-//		GridBagLayout gbl_panel_1 = new GridBagLayout();
-//		gbl_panel_1.columnWidths = new int[]{0, 0};
-//		gbl_panel_1.rowHeights = new int[]{85, 85, 85, 85, 85, 0, 0};
-//		gbl_panel_1.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-//		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-//		panel_1.setLayout(gbl_panel_1);
 		
-//		Boolean[] rights = PermissionUtils.getRights("Quản lý thiết bị");
-//		Button button = new Button("Thêm");
-//		button.setForeground(new Color(34, 139, 34));
-//		button.setBackground(new Color(144, 238, 144));
-//		button.setFont(new Font("Arial", Font.PLAIN, 20));
-//		GridBagConstraints gbc_button = new GridBagConstraints();
-//		gbc_button.fill = GridBagConstraints.BOTH;
-//		gbc_button.insets = new Insets(0, 0, 5, 0);
-//		gbc_button.gridx = 0;
-//		gbc_button.gridy = 0;
-//		panel_1.add(button, gbc_button);
-//		button.setVisible(rights[1]);
-//		
-//		Button button_2 = new Button("Sửa");
-//		button_2.setForeground(new Color(255, 215, 0));
-//		button_2.setBackground(new Color(255, 250, 205));
-//		button_2.setFont(new Font("Arial", Font.PLAIN, 20));
-//		GridBagConstraints gbc_button_2 = new GridBagConstraints();
-//		gbc_button_2.insets = new Insets(0, 0, 5, 0);
-//		gbc_button_2.fill = GridBagConstraints.BOTH;
-//		gbc_button_2.gridx = 0;
-//		gbc_button_2.gridy = 1;
-//		panel_1.add(button_2, gbc_button_2);
-//		button_2.setEnabled(false);
-//		button_2.setVisible(rights[2]);
-//		
-//		Button button_1 = new Button("Xóa");
-//		button_1.setForeground(new Color(178, 34, 34));
-//		button_1.setBackground(new Color(250, 128, 114));
-//		button_1.setFont(new Font("Arial", Font.PLAIN, 20));
-//		GridBagConstraints gbc_button_1 = new GridBagConstraints();
-//		gbc_button_1.fill = GridBagConstraints.BOTH;
-//		gbc_button_1.insets = new Insets(0, 0, 5, 0);
-//		gbc_button_1.gridx = 0;
-//		gbc_button_1.gridy = 2;
-//		panel_1.add(button_1, gbc_button_1);
-//		button_1.setEnabled(false);
-//		button_2.setVisible(rights[3]);
-//		
-//		Button button_3 = new Button("Duyệt đơn mượn thiết bị");
-//		button_3.setBackground(new Color(135, 206, 250));
-//		button_3.setForeground(new Color(0, 0, 205));
-//		button_3.setFont(new Font("Arial", Font.PLAIN, 20));
-//		GridBagConstraints gbc_button_3 = new GridBagConstraints();
-//		gbc_button_3.fill = GridBagConstraints.BOTH;
-//		gbc_button_3.insets = new Insets(0, 0, 5, 0);
-//		gbc_button_3.gridx = 0;
-//		gbc_button_3.gridy = 3;
-//		panel_1.add(button_3, gbc_button_3);
-//		button_3.setEnabled(false);
-//		
-//		Button button_4 = new Button("Xuất hóa đơn");
-//		button_4.setForeground(new Color(255, 255, 0));
-//		button_4.setBackground(new Color(0, 100, 0));
-//		button_4.setFont(new Font("Arial", Font.PLAIN, 20));
-//		GridBagConstraints gbc_button_4 = new GridBagConstraints();
-//		gbc_button_4.insets = new Insets(0, 0, 5, 0);
-//		gbc_button_4.fill = GridBagConstraints.BOTH;
-//		gbc_button_4.gridx = 0;
-//		gbc_button_4.gridy = 4;
-//		panel_1.add(button_4, gbc_button_4);
-//		button_4.setEnabled(false);
 		List<Device> devices = controller.getAllDevices();
 		loadDeviceData(devices);
 		
@@ -682,8 +656,26 @@ public class Panel_ManagerDevice extends JPanel {
 		            return;
 		        }
 		        
+		        String thumbnail = null;
 		        
-		        Device device = new Device(null, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity);
+		        if (imageLabel.getIcon() != null) {
+		            ImageIcon imageIcon = (ImageIcon) imageLabel.getIcon();
+		            Image image = imageIcon.getImage();
+		            
+		            // Chuyển ảnh thành BufferedImage
+		            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+		            bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+		            File tempFile = new File("temp_image.jpg");
+		            try {
+		            	ImageIO.write(bufferedImage, "jpg", tempFile);
+		                thumbnail = CloudinaryUploaderUtils.uploadImage(tempFile);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+		        }
+		        
+		        
+		        Device device = new Device(null, thumbnail, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity);
 		        Boolean deviceId = controller.addDeviceAndReturnId(device);
 		        if(deviceId) {
 		        	button.setEnabled(true);
@@ -691,6 +683,7 @@ public class Panel_ManagerDevice extends JPanel {
 		        	button_2.setEnabled(false);
 		        	button_3.setEnabled(false);
 		        	button_4.setEnabled(false);
+		        	imageLabel.setIcon(null);
 		        	List<Device> devices = controller.getAllDevices();
 		        	loadDeviceData(devices);
 		        	ScannerUtils.clearForm(textField, textField_1, textField_2, textField_3, textField_4, textField_5);
@@ -747,7 +740,25 @@ public class Panel_ManagerDevice extends JPanel {
 		            return;
 		        }
 		        
-		        Device device = new Device(deviceId, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity);
+		        String thumbnail = null;
+		        
+		        if (imageLabel.getIcon() != null) {
+		            ImageIcon imageIcon = (ImageIcon) imageLabel.getIcon();
+		            Image image = imageIcon.getImage();
+		            
+		            // Chuyển ảnh thành BufferedImage
+		            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+		            bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+		            File tempFile = new File("temp_image.jpg");
+		            try {
+		            	ImageIO.write(bufferedImage, "jpg", tempFile);
+		                thumbnail = CloudinaryUploaderUtils.uploadImage(tempFile);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+		        }
+		        
+		        Device device = new Device(deviceId, thumbnail, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity);
 		        PageManager pageManager = new PageManager();
 		        Boolean editSuccess = controller.edit(device, pageManager);
 		        if(editSuccess) {
@@ -756,6 +767,7 @@ public class Panel_ManagerDevice extends JPanel {
 		        	button_2.setEnabled(false);
 		        	button_3.setEnabled(false);
 		        	button_4.setEnabled(false);
+		        	imageLabel.setIcon(null);
 		        	List<Device> devices = controller.getAllDevices();
 		        	loadDeviceData(devices);
 		        	ScannerUtils.clearForm(textField, textField_1, textField_2, textField_3, textField_4, textField_5);
@@ -781,6 +793,7 @@ public class Panel_ManagerDevice extends JPanel {
 		        	button_2.setEnabled(false);
 		        	button_3.setEnabled(false);
 		        	button_4.setEnabled(false);
+		        	imageLabel.setIcon(null);
 		        	List<Device> devices = controller.getAllDevices();
 		        	loadDeviceData(devices);
 		        	ScannerUtils.clearForm(textField, textField_1, textField_2, textField_3, textField_4, textField_5);
@@ -790,6 +803,22 @@ public class Panel_ManagerDevice extends JPanel {
 				}
 			}
 		});
+		
+		//Bắt sự kiện nút hủy
+		button_3.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				button.setEnabled(true);
+				button_1.setEnabled(false);
+				button_2.setEnabled(false);
+		    	button_3.setEnabled(false);
+		    	ScannerUtils.clearForm(textField, textField_1, textField_2, textField_3, textField_4, textField_5);
+		    	table.clearSelection();
+		    	imageLabel.setIcon(null);
+			}
+		});
+		
 		// Bắt sự kiện khi click vào bảng và hiển thị dữ liệu dòng được chọn vào các ô input
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -801,14 +830,25 @@ public class Panel_ManagerDevice extends JPanel {
 				button_4.setEnabled(true);
 				int selectedRow = table.getSelectedRow();
 				if(selectedRow >= 0) {
-					String deviceName =  table.getValueAt(selectedRow, 1).toString();
-					String deviceType = table.getValueAt(selectedRow, 2).toString();
-					String purchaseDate = table.getValueAt(selectedRow, 3).toString();
-					String supplier = table.getValueAt(selectedRow, 4).toString();
-					String price = table.getValueAt(selectedRow, 5).toString().replace(".", "").replace("VNĐ", "");
-					String status = table.getValueAt(selectedRow, 6).toString();
-					String roomNumber = table.getValueAt(selectedRow, 7).toString();
-					String quantity = table.getValueAt(selectedRow, 8).toString();
+					Object imagePath =  table.getValueAt(selectedRow, 1);
+					String deviceName =  table.getValueAt(selectedRow, 2).toString();
+					String deviceType = table.getValueAt(selectedRow, 3).toString();
+					String purchaseDate = table.getValueAt(selectedRow, 4).toString();
+					String supplier = table.getValueAt(selectedRow, 5).toString();
+					String price = table.getValueAt(selectedRow, 6).toString().replace(".", "").replace("VNĐ", "");
+					String status = table.getValueAt(selectedRow, 7).toString();
+					String roomNumber = table.getValueAt(selectedRow, 8).toString();
+					String quantity = table.getValueAt(selectedRow, 9).toString();
+					
+					if (imagePath instanceof ImageIcon) {
+		                ImageIcon icon = (ImageIcon) imagePath; 
+		                Image image = icon.getImage().getScaledInstance(
+		                        imageLabel.getWidth(), 
+		                        imageLabel.getHeight(), 
+		                        Image.SCALE_SMOOTH
+		                );
+		                imageLabel.setIcon(new ImageIcon(image));
+		            }
 					
 					textField.setText(deviceName);
 					textField_1.setText(deviceType);
@@ -874,17 +914,28 @@ public class Panel_ManagerDevice extends JPanel {
         	NumberFormat priceFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
         	String formattedPrice = priceFormat.format(price) + "VNĐ";
         	
-        	model.addRow(new Object[]{
-                device.getId(),
-                device.getDeviceName(),
-                device.getDeviceType(),
-                formatterPurchaseDate,
-                device.getSupplier(),
-                formattedPrice,
-                statusDisplay,
-                device.getRoom(),
-                device.getQuantity()
-            });
+        	 try {
+ 	            URL imageUrl = new URL(device.getThumbnail());
+ 	            ImageIcon imageIcon = new ImageIcon(imageUrl);
+ 	            Image image = imageIcon.getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH);
+ 	            imageIcon = new ImageIcon(image);
+	        	model.addRow(new Object[]{
+	                device.getId(),
+	                imageIcon,
+	                device.getDeviceName(),
+	                device.getDeviceType(),
+	                formatterPurchaseDate,
+	                device.getSupplier(),
+	                formattedPrice,
+	                statusDisplay,
+	                device.getRoom(),
+	                device.getQuantity()
+	            });
+        	 } catch (MalformedURLException e) {
+                 e.printStackTrace();
+             }
         }
+        TableColumn imageColumn = table.getColumnModel().getColumn(1); 
+        imageColumn.setCellRenderer(new ImageRenderer());
 	}
 }

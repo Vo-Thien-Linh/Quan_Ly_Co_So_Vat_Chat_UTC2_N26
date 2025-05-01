@@ -83,6 +83,7 @@ public class DeviceRepository {
 
                 Device device = new Device(
                     rs.getString("id"),
+                    "",
                     rs.getString("device_name"),
                     rs.getString("device_type"),
                     rs.getDate("purchase_date") != null ? rs.getDate("purchase_date").toLocalDate() : null,
@@ -122,6 +123,7 @@ public class DeviceRepository {
 
                     return new Device(
                         rs.getString("id"),
+                        "",
                         rs.getString("device_name"),
                         rs.getString("device_type"),
                         rs.getDate("purchase_date") != null ? rs.getDate("purchase_date").toLocalDate() : null,

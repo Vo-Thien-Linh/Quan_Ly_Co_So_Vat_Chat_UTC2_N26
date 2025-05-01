@@ -42,7 +42,7 @@ public class ManagerDeviceRepository {
 	}
 	
 	public static Boolean addDeviceAndReturnId(Device device) {
-		String query = "INSERT INTO devices (device_name, device_type, purchase_date, supplier, price, status, room_id, quantity, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO devices (device_name, device_type, purchase_date, supplier, price, status, room_id, quantity, created_at, updated_at, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try(Connection conn = DatabaseConnection.getConnection();
 		         PreparedStatement stmt = conn.prepareStatement(query)){
 			
@@ -56,6 +56,7 @@ public class ManagerDeviceRepository {
 			stmt.setInt(8, device.getQuantity());
 			stmt.setDate(9, Date.valueOf(device.getCreatedAt()));
 			stmt.setDate(10, Date.valueOf(device.getUpdatedAt()));
+			stmt.setString(11, device.getThumbnail());
 			
 			int resultSet = stmt.executeUpdate();
 			if(resultSet > 0) {
@@ -95,6 +96,7 @@ public class ManagerDeviceRepository {
 			ResultSet result = stmt.executeQuery();
 			while(result.next()) {
 				String deviceId = result.getString("id");
+				String thumbnail = result.getString("thumbnail");
 				String deviceName = result.getString("device_name");
 				String deviceType = result.getString("device_type");
 				LocalDate purchaseDate = result.getDate("purchase_date").toLocalDate();
@@ -108,7 +110,7 @@ public class ManagerDeviceRepository {
 				
 				 Room room = findById(conn, roomId);
 				
-				devices.add(new Device(deviceId, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity));
+				devices.add(new Device(deviceId, thumbnail, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -117,7 +119,7 @@ public class ManagerDeviceRepository {
 	}
 	
 	public static boolean edit(Device device) {
-		String query = "UPDATE devices SET device_name = ?, device_type = ?, purchase_date = ?, supplier = ?, price = ?, status = ?, room_id = ?, quantity = ?, updated_at = ? WHERE id = ? AND deleted = false";
+		String query = "UPDATE devices SET device_name = ?, device_type = ?, purchase_date = ?, supplier = ?, price = ?, status = ?, room_id = ?, quantity = ?, updated_at = ?, thumbnail = ? WHERE id = ? AND deleted = false";
 		try(Connection conn = DatabaseConnection.getConnection();
 			PreparedStatement stmt = conn.prepareStatement(query)) {
 			
@@ -130,7 +132,8 @@ public class ManagerDeviceRepository {
 			stmt.setString(7, device.getRoom().getId());
 			stmt.setInt(8, device.getQuantity());
 			stmt.setDate(9, Date.valueOf(device.getUpdatedAt()));
-			stmt.setString(10, device.getId());
+			stmt.setString(10, device.getThumbnail());
+			stmt.setString(11, device.getId());
 			
 			int result = stmt.executeUpdate();
 			if(result > 0) {
@@ -180,6 +183,7 @@ public class ManagerDeviceRepository {
 		    ResultSet result = stmt.executeQuery();
 		    while(result.next()) {
 				String deviceId = result.getString("id");
+				String thumbnail = result.getString("thumbnail");
 				String deviceName = result.getString("device_name");
 				String deviceType = result.getString("device_type");
 				LocalDate purchaseDate = result.getDate("purchase_date").toLocalDate();
@@ -193,7 +197,7 @@ public class ManagerDeviceRepository {
 				
 				 Room room = findById(conn, roomId);
 				
-				 listDevices.add(new Device(deviceId, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity));
+				 listDevices.add(new Device(deviceId, thumbnail, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity));
 			}
 		    
 		} catch (SQLException e) {

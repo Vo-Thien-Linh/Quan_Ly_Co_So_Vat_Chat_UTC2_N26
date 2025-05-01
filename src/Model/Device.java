@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Device extends Facilities {
+	private String thumbnail;
 	private String deviceName;
     private String deviceType;
     private LocalDate purchaseDate;
@@ -14,8 +15,9 @@ public class Device extends Facilities {
     private int quantity; 
     private boolean deleted;
 
-    public Device(String id, String deviceName, String deviceType, LocalDate purchaseDate, String supplier, BigDecimal price, DeviceStatus status, Room room, int quantity) {
+    public Device(String id, String thumbnail, String deviceName, String deviceType, LocalDate purchaseDate, String supplier, BigDecimal price, DeviceStatus status, Room room, int quantity) {
         super(id, null, null);
+        this.thumbnail = thumbnail;
         this.deviceName = deviceName;
         this.deviceType = deviceType;
         this.purchaseDate = purchaseDate;
@@ -31,6 +33,10 @@ public class Device extends Facilities {
         this.quantity = quantity;
         setUpdatedAt(LocalDate.now());
     }
+    
+    public String getThumbnail() {
+		return thumbnail;
+	}
     
     public String getDeviceName() {
 		return deviceName;
