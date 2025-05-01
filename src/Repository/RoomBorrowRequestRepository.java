@@ -11,6 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomBorrowRequestRepository {
+	//
+	public void addRequest(RoomBorrowRequest request) throws SQLException {
+        String sql = """
+            INSERT INTO borrowing_room_request (id_request, lecturer_user, room_id, request_date, due_date, borrowing_request)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, request.getIdRequest());
+            stmt.setString(2, request.getLecturerUser());
+            stmt.setString(3, request.getRoomId());
+            stmt.setTimestamp(4, new java.sql.Timestamp(request.getRequestDate().getTime()));
+            stmt.setTimestamp(5, new java.sql.Timestamp(request.getDueDate().getTime()));
+            stmt.setString(6, request.getBorrowingRequest().name());
+            stmt.executeUpdate();
+        }
+    }
     public List<RoomBorrowRequest> getPendingRequests() throws SQLException {
         List<RoomBorrowRequest> requests = new ArrayList<>();
         String sql = """
@@ -89,5 +106,20 @@ public class RoomBorrowRequestRepository {
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         }
+    }
+ // Thêm yêu cầu mượn phòng với kiểm tra dữ liệu hợp lệ trước
+    public void addRequestWithValidation(RoomBorrowRequest request) throws SQLException {
+        // Kiểm tra các giá trị đầu vào để tránh lỗi null
+        if (request.getLecturerUser() == null || request.getRoomId() == null ||
+            request.getRequestDate() == null || request.getDueDate() == null ||
+            request.getBorrowingRequest() == null) {
+            throw new IllegalArgumentException("Thông tin yêu cầu mượn phòng không đầy đủ.");
+        }
+
+        // Không gán id_request để trigger tự động tạo
+        request.setIdRequest(null);
+
+        // Gọi phương thức addRequest hiện có
+        addRequest(request);
     }
 }
