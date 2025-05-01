@@ -12,6 +12,7 @@ import java.util.List;
 
 public class RoomRepository {
     public void addRoom(Room room) throws SQLException {
+
         String sql = "INSERT INTO room (status, room_number, seating_capacity) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

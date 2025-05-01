@@ -14,9 +14,15 @@ import java.util.List;
 import Config.DatabaseConnection;
 import Model.Device;
 import Model.DeviceStatus;
+import Model.Manager;
+import Model.Role;
+import Model.RoleName;
 import Model.Room;
+import Model.Status;
+import Model.User;
 
 public class ManagerDeviceRepository {
+	
 	public static ArrayList<Room> getAllRooms(){
 		ArrayList<Room> rooms = new ArrayList<>();
 		String query = "SELECT room_id, room_number FROM room WHERE status = 'AVAILABLE'";
@@ -157,5 +163,42 @@ public class ManagerDeviceRepository {
 		}
 		
 		return false;
+	}
+
+//	Tìm kiếm người dùng
+	public List<Device> searchUsers(String[] keyword){
+	    List<Device> listDevices = new ArrayList<>();
+	    StringBuilder sql = new StringBuilder("SELECT * FROM devices WHERE deleted = false");
+	    for (String kw : keyword) {
+	        sql.append(" AND LOWER(device_name) LIKE ?");
+	    }
+	    try(Connection conn = DatabaseConnection.getConnection();
+	    	PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+	    	for (int i = 0; i < keyword.length; i++) {
+	    	    stmt.setString(i + 1, "%" + keyword[i] + "%");
+	    	}
+		    ResultSet result = stmt.executeQuery();
+		    while(result.next()) {
+				String deviceId = result.getString("id");
+				String deviceName = result.getString("device_name");
+				String deviceType = result.getString("device_type");
+				LocalDate purchaseDate = result.getDate("purchase_date").toLocalDate();
+				String supplier = result.getString("supplier");
+				BigDecimal price = result.getBigDecimal("price");
+				String statusStr = result.getString("status");
+				String roomId = result.getString("room_id");
+				int quantity = result.getInt("quantity");
+				
+				DeviceStatus status = DeviceStatus.valueOf(statusStr);
+				
+				 Room room = findById(conn, roomId);
+				
+				 listDevices.add(new Device(deviceId, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity));
+			}
+		    
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	    return listDevices;
 	}
 }

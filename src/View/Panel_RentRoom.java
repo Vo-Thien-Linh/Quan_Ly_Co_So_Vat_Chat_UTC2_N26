@@ -94,7 +94,7 @@ public class Panel_RentRoom extends JPanel {
 
         // Tạo ô tìm kiếm
         search = new RoundedTextField(10, 50);
-        search.setPlaceholder("Nhập mã hoặc số phòng");
+        search.setPlaceholder("Nhập số phòng");
         search.setFont(new Font("Arial", Font.PLAIN, 20));
         search.setColumns(10);
         GridBagConstraints gbc_search = new GridBagConstraints();

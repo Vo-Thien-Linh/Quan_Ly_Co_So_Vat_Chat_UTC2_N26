@@ -16,6 +16,7 @@ import Model.Status;
 import Model.User;
 
 public class ManagerUserRepository {
+	
 	public List<Role> getAllRoles() {
 	    List<Role> roles = new ArrayList<>();
 	    String query = "SELECT role_id, role_name FROM roles";
@@ -225,4 +226,46 @@ public class ManagerUserRepository {
 		
 		return false;
 	}
+
+//	Tìm kiếm người dùng
+	public List<User> searchUsers(String[] keyword){
+	    List<User> listUsers = new ArrayList<>();
+	    StringBuilder sql = new StringBuilder("SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.role_id WHERE u.deleted = false");
+	    for (String kw : keyword) {
+	        sql.append(" AND LOWER(u.fullname) LIKE ?");
+	    }
+	    try(Connection conn = DatabaseConnection.getConnection();
+	    	PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+	    	for (int i = 0; i < keyword.length; i++) {
+	    	    stmt.setString(i + 1, "%" + keyword[i] + "%");
+	    	}
+		    ResultSet rs = stmt.executeQuery();
+		    while (rs.next()) {
+		    	String userId = rs.getString("user_id");
+                String fullname = rs.getString("fullname");
+                String username = rs.getString("username");
+                String thumbnail = rs.getString("thumbnail");
+                String yearold = rs.getString("yearold");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phoneNumber");
+                String password = rs.getString("password");
+                String statusString = rs.getString("status");
+                String roleString = rs.getString("role_name");
+                
+                Status status;
+                status = Status.valueOf(statusString);
+                
+                RoleName roleName = RoleName.valueOf(roleString);
+                Role role = new Role();
+		        role.setRoleName(roleName);
+                
+		        listUsers.add(new Manager(fullname, username, thumbnail, yearold, email, phoneNumber, password, status, role, userId));
+		    }
+		    
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	    return listUsers;
+	}
+
 }

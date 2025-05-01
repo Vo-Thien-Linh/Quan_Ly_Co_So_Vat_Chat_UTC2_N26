@@ -84,7 +84,7 @@ public class Panel_ManagerUser extends JPanel {
 	private RoundedTextField textField_3;
 	private RoundedTextField textField_4;
 	private RoundedTextField textField_5;
-	private ManagerUserController controller = new ManagerUserController(null, null);
+	private ManagerUserController controller = new ManagerUserController(null);
 
 	/**
 	 * Create the panel.
@@ -119,7 +119,7 @@ public class Panel_ManagerUser extends JPanel {
 		panel_2.setLayout(gbl_panel_2);
 		
 		search = new RoundedTextField(10, 50);
-        search.setPlaceholder("Nhập mã/Tên");
+        search.setPlaceholder("Nhập Tên");
         search.setFont(new Font("Arial", Font.PLAIN, 20));
         search.setColumns(10);
         GridBagConstraints gbc_search = new GridBagConstraints();
@@ -543,8 +543,25 @@ public class Panel_ManagerUser extends JPanel {
 		panel_2.add(button_3, gbc_button_3);
 		button_3.setEnabled(false);
 		
-		loadUserData();
+		List<User> users = controller.getAllUsers();
+		loadUserData(users);
 		
+		
+//		Bắt sự kiện nút tìm kiếm
+		search_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String[] keywords = search.getText().trim().toLowerCase().split("\\s+");
+				try {
+			        List<User> list = controller.searchUsers(keywords);
+			        loadUserData(list);
+			    } catch (Exception ex) {
+			        ScannerUtils.showErrorMessage(Panel_ManagerUser.this, "Lỗi tìm kiếm: " + ex.getMessage());
+			    }
+				
+			}
+		});
 		
 		
 //		Bắt sự kiện nút thêm
@@ -603,8 +620,11 @@ public class Panel_ManagerUser extends JPanel {
 			    	button_2.setEnabled(false);
 			    	ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
 			    	imageLabel.setIcon(null);
-		            loadUserData();
+			    	List<User> users = controller.getAllUsers();
+		            loadUserData(users);
 		            ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Thêm dữ liệu thành công!");
+		        } else {
+		        	ScannerUtils.showErrorMessage(Panel_ManagerUser.this, "Thêm dữ liệu không thành công!");
 		        }
 		    }
 		});
@@ -658,7 +678,8 @@ public class Panel_ManagerUser extends JPanel {
 			    	button_2.setEnabled(false);
 			    	imageLabel.setIcon(null);
 			    	ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
-					loadUserData();
+			    	List<User> users = controller.getAllUsers();
+					loadUserData(users);
 					ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Cập nhật thành công!");
 				} else if(editSuccess == "UNSUCCESS"){
 					ScannerUtils.showErrorMessage(Panel_ManagerUser.this, "Cập nhật không thành công!");
@@ -682,7 +703,8 @@ public class Panel_ManagerUser extends JPanel {
 			    	button_2.setEnabled(false);
 			    	imageLabel.setIcon(null);
 					ScannerUtils.clearForm(textField_1, textField_2, textField_3, textField_4, textField_5);
-					loadUserData();
+					List<User> users = controller.getAllUsers();
+					loadUserData(users);
 					ScannerUtils.showSuccessMessage(Panel_ManagerUser.this, "Xóa thành công!");
 				} else {
 					ScannerUtils.showErrorMessage(Panel_ManagerUser.this, "Xóa không thành công!");
@@ -762,9 +784,7 @@ public class Panel_ManagerUser extends JPanel {
 	}
 	
 	//Hàm load lại dữ liệu
-	public void loadUserData() {
-		System.out.println(Session.getUserId());
-        List<User> users = controller.getAllUsers();
+	public void loadUserData(List<User> users) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 

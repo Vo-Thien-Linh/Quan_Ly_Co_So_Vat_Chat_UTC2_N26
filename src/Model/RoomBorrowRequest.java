@@ -26,7 +26,7 @@ public class RoomBorrowRequest {
     public void setLecturerUser(String lecturerUser) {
         this.lecturerUser = lecturerUser;
     }
-
+    
     public String getFullname() {
         return fullname;
     }

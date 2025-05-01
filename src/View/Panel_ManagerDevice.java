@@ -39,6 +39,7 @@ import Controller.ManagerDeviceController;
 import Model.Device;
 import Model.DeviceStatus;
 import Model.Room;
+import Model.User;
 import View.RoundedComponents.RoundedButton;
 import View.RoundedComponents.RoundedTextField;
 import utils.PermissionUtils;
@@ -92,7 +93,7 @@ public class Panel_ManagerDevice extends JPanel {
 		panel_2.setLayout(gbl_panel_2);
 		
 		search = new RoundedTextField(10, 50);
-        search.setPlaceholder("Nhập mã/Tên");
+        search.setPlaceholder("Nhập Tên");
         search.setFont(new Font("Arial", Font.PLAIN, 20));
         search.setColumns(10);
         GridBagConstraints gbc_search = new GridBagConstraints();
@@ -604,7 +605,24 @@ public class Panel_ManagerDevice extends JPanel {
 //		gbc_button_4.gridy = 4;
 //		panel_1.add(button_4, gbc_button_4);
 //		button_4.setEnabled(false);
-		loadDeviceData();
+		List<Device> devices = controller.getAllDevices();
+		loadDeviceData(devices);
+		
+//		Bắt sự kiện nút tìm kiếm
+		search_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String[] keywords = search.getText().trim().toLowerCase().split("\\s+");
+				try {
+			        List<Device> list = controller.searchDevices(keywords);
+			        loadDeviceData(list);
+			    } catch (Exception ex) {
+			        ScannerUtils.showErrorMessage(Panel_ManagerDevice.this, "Lỗi tìm kiếm: " + ex.getMessage());
+			    }
+				
+			}
+		});
 		
 //		Bắt sự kiện nút thêm
 		button.addActionListener(new ActionListener() {
@@ -673,7 +691,8 @@ public class Panel_ManagerDevice extends JPanel {
 		        	button_2.setEnabled(false);
 		        	button_3.setEnabled(false);
 		        	button_4.setEnabled(false);
-		        	loadDeviceData();
+		        	List<Device> devices = controller.getAllDevices();
+		        	loadDeviceData(devices);
 		        	ScannerUtils.clearForm(textField, textField_1, textField_2, textField_3, textField_4, textField_5);
 		        	ScannerUtils.showSuccessMessage(Panel_ManagerDevice.this, "Thêm dữ liệu thành công!");
 		        } else {
@@ -683,7 +702,7 @@ public class Panel_ManagerDevice extends JPanel {
 		});
 		
 //		Bắt sự kiện nút sửa
-		button_2.addActionListener(new ActionListener() {
+		button_1.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -729,14 +748,16 @@ public class Panel_ManagerDevice extends JPanel {
 		        }
 		        
 		        Device device = new Device(deviceId, deviceName, deviceType, purchaseDate, supplier, price, status, room, quantity);
-		        Boolean editSuccess = controller.edit(device);
+		        PageManager pageManager = new PageManager();
+		        Boolean editSuccess = controller.edit(device, pageManager);
 		        if(editSuccess) {
 		        	button.setEnabled(true);
 		        	button_1.setEnabled(false);
 		        	button_2.setEnabled(false);
 		        	button_3.setEnabled(false);
 		        	button_4.setEnabled(false);
-		        	loadDeviceData();
+		        	List<Device> devices = controller.getAllDevices();
+		        	loadDeviceData(devices);
 		        	ScannerUtils.clearForm(textField, textField_1, textField_2, textField_3, textField_4, textField_5);
 		        	ScannerUtils.showSuccessMessage(Panel_ManagerDevice.this, "Chỉnh sửa thành công!");
 		        } else {
@@ -746,21 +767,22 @@ public class Panel_ManagerDevice extends JPanel {
 		});
 		
 //		Bắt sự kiện nút xóa
-		button_1.addActionListener(new ActionListener() {
+		button_2.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = table.getSelectedRow(); 
 				String deviceId = table.getValueAt(selectedRow, 0).toString();
-				
-				Boolean deleteSuccess = controller.delete(deviceId);
+				PageManager pageManager = new PageManager();
+				Boolean deleteSuccess = controller.delete(deviceId, pageManager);
 				if(deleteSuccess) {
 					button.setEnabled(true);
 		        	button_1.setEnabled(false);
 		        	button_2.setEnabled(false);
 		        	button_3.setEnabled(false);
 		        	button_4.setEnabled(false);
-		        	loadDeviceData();
+		        	List<Device> devices = controller.getAllDevices();
+		        	loadDeviceData(devices);
 		        	ScannerUtils.clearForm(textField, textField_1, textField_2, textField_3, textField_4, textField_5);
 					ScannerUtils.showSuccessMessage(Panel_ManagerDevice.this, "Xóa dữ liệu thành công!");
 				} else {
@@ -825,8 +847,7 @@ public class Panel_ManagerDevice extends JPanel {
 	    }
 	}
 	
-	public void loadDeviceData() {
-		List<Device> devices = controller.getAllDevices();
+	public void loadDeviceData(List<Device> devices) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         

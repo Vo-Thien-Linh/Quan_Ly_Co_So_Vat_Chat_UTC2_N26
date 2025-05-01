@@ -40,11 +40,11 @@ public class Panel_ManagerRoom extends JPanel {
             return;
         }
 
-        setBackground(new Color(100, 149, 237));
+        setBackground(new Color(238, 238, 238));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(100, 149, 237));
+        panel.setBackground(new Color(238, 238, 238));
         add(panel);
         GridBagLayout gbl_panel = new GridBagLayout();
         gbl_panel.columnWidths = new int[]{880, 0};
@@ -54,7 +54,7 @@ public class Panel_ManagerRoom extends JPanel {
         panel.setLayout(gbl_panel);
 
         JPanel panel_2 = new JPanel();
-        panel_2.setBackground(new Color(100, 149, 237));
+        panel_2.setBackground(new Color(238, 238, 238));
         GridBagConstraints gbc_panel_2 = new GridBagConstraints();
         gbc_panel_2.insets = new Insets(0, 0, 5, 0);
         gbc_panel_2.fill = GridBagConstraints.BOTH;
@@ -62,7 +62,7 @@ public class Panel_ManagerRoom extends JPanel {
         gbc_panel_2.gridy = 0;
         panel.add(panel_2, gbc_panel_2);
         GridBagLayout gbl_panel_2 = new GridBagLayout();
-        gbl_panel_2.columnWidths = new int[]{217, 343, 302, 279};
+        gbl_panel_2.columnWidths = new int[]{274, 343, 302, 279};
         gbl_panel_2.rowHeights = new int[]{0, 93, 60, 60, 60, 60, 7, 60};
         gbl_panel_2.columnWeights = new double[]{1.0, 1.0, 4.9E-324, 0.0};
         gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -106,7 +106,7 @@ public class Panel_ManagerRoom extends JPanel {
 
         JLabel lblNewLabel = new JLabel("ID Phòng: ");
         lblNewLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        lblNewLabel.setForeground(Color.WHITE);
+        lblNewLabel.setForeground(Color.black);
         GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
         gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
         gbc_lblNewLabel.gridx = 0;
@@ -131,7 +131,7 @@ public class Panel_ManagerRoom extends JPanel {
         button.setHorizontalTextPosition(JButton.RIGHT);
         button.setVerticalTextPosition(JButton.CENTER);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button.setForeground(Color.WHITE);
+        button.setForeground(new Color(4, 42, 54));
         button.setBackground(new Color(19, 193, 244));
         button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setPreferredSize(new Dimension(150, 50));
@@ -155,7 +155,7 @@ public class Panel_ManagerRoom extends JPanel {
         button_3.setHorizontalTextPosition(JButton.RIGHT);
         button_3.setVerticalTextPosition(JButton.CENTER);
         button_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button_3.setForeground(Color.WHITE);
+        button_3.setForeground(new Color(4, 42, 54));
         button_3.setBackground(new Color(19, 193, 244));
         button_3.setFont(new Font("Arial", Font.BOLD, 16));
         button_3.setPreferredSize(new Dimension(250, 50));
@@ -175,7 +175,7 @@ public class Panel_ManagerRoom extends JPanel {
 
         JLabel lblNewLabel_1 = new JLabel("Số Phòng: ");
         lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 16));
-        lblNewLabel_1.setForeground(Color.WHITE);
+        lblNewLabel_1.setForeground(Color.black);
         GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
         gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
         gbc_lblNewLabel_1.gridx = 0;
@@ -199,7 +199,7 @@ public class Panel_ManagerRoom extends JPanel {
         button_1.setHorizontalTextPosition(JButton.RIGHT);
         button_1.setVerticalTextPosition(JButton.CENTER);
         button_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button_1.setForeground(Color.WHITE);
+        button_1.setForeground(Color.black);
         button_1.setBackground(new Color(19, 193, 244));
         button_1.setFont(new Font("Arial", Font.BOLD, 16));
         button_1.setPreferredSize(new Dimension(150, 40));
@@ -220,7 +220,7 @@ public class Panel_ManagerRoom extends JPanel {
 
         JLabel lblNewLabel_2_1 = new JLabel("Sức chứa: ");
         lblNewLabel_2_1.setFont(new Font("Arial", Font.BOLD, 16));
-        lblNewLabel_2_1.setForeground(Color.WHITE);
+        lblNewLabel_2_1.setForeground(Color.black);
         GridBagConstraints gbc_lblNewLabel_2_1 = new GridBagConstraints();
         gbc_lblNewLabel_2_1.insets = new Insets(0, 0, 5, 5);
         gbc_lblNewLabel_2_1.gridx = 0;
@@ -244,7 +244,7 @@ public class Panel_ManagerRoom extends JPanel {
         button_2.setHorizontalTextPosition(JButton.RIGHT);
         button_2.setVerticalTextPosition(JButton.CENTER);
         button_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button_2.setForeground(Color.WHITE);
+        button_2.setForeground(Color.black);
         button_2.setBackground(new Color(19, 193, 244));
         button_2.setFont(new Font("Arial", Font.BOLD, 16));
         button_2.setPreferredSize(new Dimension(150, 40));
@@ -268,7 +268,7 @@ public class Panel_ManagerRoom extends JPanel {
         button_4.setHorizontalTextPosition(JButton.RIGHT);
         button_4.setVerticalTextPosition(JButton.CENTER);
         button_4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button_4.setForeground(Color.WHITE);
+        button_4.setForeground(Color.black);
         button_4.setBackground(new Color(19, 193, 244));
         button_4.setFont(new Font("Arial", Font.BOLD, 16));
         button_4.setPreferredSize(new Dimension(250, 50));
@@ -288,7 +288,7 @@ public class Panel_ManagerRoom extends JPanel {
 
         JLabel lblNewLabel_2 = new JLabel("Trạng thái: ");
         lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 16));
-        lblNewLabel_2.setForeground(Color.WHITE);
+        lblNewLabel_2.setForeground(new Color(4, 42, 54));
         GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
         gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
         gbc_lblNewLabel_2.gridx = 0;
@@ -453,7 +453,7 @@ public class Panel_ManagerRoom extends JPanel {
                 dialog.setTitle("Duyệt đơn mượn phòng");
                 dialog.setSize(800, 400);
                 dialog.setLocationRelativeTo(this);
-                dialog.setLayout(new BorderLayout());
+                dialog.getContentPane().setLayout(new BorderLayout());
 
                 DefaultTableModel dialogTableModel = new DefaultTableModel(
                     new Object[][] {},
@@ -478,7 +478,7 @@ public class Panel_ManagerRoom extends JPanel {
                     });
                 }
                 JScrollPane scrollPaneDialog = new JScrollPane(dialogTable);
-                dialog.add(scrollPaneDialog, BorderLayout.CENTER);
+                dialog.getContentPane().add(scrollPaneDialog, BorderLayout.CENTER);
 
                 JPanel buttonPanel = new JPanel();
                 JButton approveButton = new JButton("Duyệt");
@@ -487,7 +487,7 @@ public class Panel_ManagerRoom extends JPanel {
                 buttonPanel.add(approveButton);
                 buttonPanel.add(rejectButton);
                 buttonPanel.add(closeButton);
-                dialog.add(buttonPanel, BorderLayout.SOUTH);
+                dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
                 approveButton.addActionListener(evt -> {
                     if (dialogTable.getSelectedRow() != -1) {

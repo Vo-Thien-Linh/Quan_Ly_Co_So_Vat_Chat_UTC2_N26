@@ -44,7 +44,7 @@ public class PageLecture extends JFrame {
     private JPanel contentPanel;
     private JButton selectedButton = null;
     private LoginView loginView;
-    private UserController controller = new UserController(loginView, null);
+    private UserController controller = new UserController(loginView);
     private User inforUser;
 
     /**
@@ -283,15 +283,17 @@ public class PageLecture extends JFrame {
 
         getContentPane().add(menuPanel, BorderLayout.WEST);
         getContentPane().add(contentPanel, BorderLayout.CENTER);
-
-        // Footer
-        JPanel panel_8 = new JPanel();
-        panel_8.setBackground(new Color(100, 149, 237));
-        contentPane.add(panel_8, BorderLayout.SOUTH);
-        panel_8.setLayout(new BorderLayout(0, 0));
-
-        // Sự kiện nút đăng xuất
-        btnNewButton.addActionListener(new ActionListener() {
+        
+		JPanel panel_8 = new JPanel();
+		panel_8.setBackground(new Color(100, 149, 237));
+		contentPane.add(panel_8, BorderLayout.SOUTH);
+		panel_8.setLayout(new BorderLayout(0, 0));
+		
+		LoginView loginView = new LoginView();
+		UserController userController = new UserController(loginView);
+		
+		//Bắt sự kiện nút đăng xuất
+		btnNewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Session.clear();
