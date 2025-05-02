@@ -3,15 +3,19 @@ package View;
 import Controller.RefundFacilityController;
 import Model.DeviceBorrowRequest;
 import Model.RoomBorrowRequest;
+import Model.Session;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,8 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -43,16 +45,25 @@ public class Panel_RefundFacilities extends JPanel {
     private static final long serialVersionUID = 1L;
     private RoundedTextField search;
     private RoundedTextField textField;
+    private RoundedTextField borrowDateField;
+    private RoundedTextField returnDateField;
     private JTable table;
     private RefundFacilityController controller;
     private DefaultTableModel tableModel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    private String currentUserId = "MTL0001"; // Giả định user hiện tại, thay bằng logic lấy từ session
+    private String currentUserId;
 
     /**
      * Create the panel.
      */
     public Panel_RefundFacilities() {
+        // Lấy thông tin user hiện tại từ Session
+        currentUserId = Session.getUserId();
+        if (currentUserId == null) {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin user hiện tại. Vui lòng đăng nhập lại.");
+            return;
+        }
+
         // Khởi tạo controller
         controller = new RefundFacilityController();
 
@@ -79,9 +90,9 @@ public class Panel_RefundFacilities extends JPanel {
         panel.add(panel_2, gbc_panel_2);
         GridBagLayout gbl_panel_2 = new GridBagLayout();
         gbl_panel_2.columnWidths = new int[]{217, 343, 302, 279};
-        gbl_panel_2.rowHeights = new int[]{0, 93, 60, 60, 60, 60, 7, 60};
+        gbl_panel_2.rowHeights = new int[]{0, 93, 60, 60, 60, 60, 60, 7, 60};
         gbl_panel_2.columnWeights = new double[]{1.0, 1.0, 4.9E-324, 0.0};
-        gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel_2.setLayout(gbl_panel_2);
 
         // Tạo ô tìm kiếm
@@ -143,53 +154,128 @@ public class Panel_RefundFacilities extends JPanel {
         gbc_textField.fill = GridBagConstraints.HORIZONTAL;
         panel_2.add(textField, gbc_textField);
 
-        // Nút Xác nhận trả
-        RoundedButton button_3 = new RoundedButton("Xác nhận trả", 10);
-        button_3.setIcon(new ImageIcon(getClass().getResource("/IMG/approve.png")));
-        button_3.setHorizontalTextPosition(JButton.RIGHT);
-        button_3.setVerticalTextPosition(JButton.CENTER);
-        button_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button_3.setForeground(new Color(4, 42, 54));
-        button_3.setBackground(new Color(149, 227, 249));
-        button_3.setFont(new Font("Arial", Font.BOLD, 20));
-        button_3.setPreferredSize(new Dimension(250, 50));
-        button_3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button_3.setBackground(new Color(19, 193, 244));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button_3.setBackground(new Color(149, 227, 249));
-            }
-        });
-        GridBagConstraints gbc_button_3 = new GridBagConstraints();
-        gbc_button_3.insets = new Insets(5, 5, 5, 5);
-        gbc_button_3.gridx = 2;
-        gbc_button_3.gridy = 2;
-        panel_2.add(button_3, gbc_button_3);
+        // Nhãn và ô nhập Ngày mượn
+        JLabel lblBorrowDate = new JLabel("Ngày mượn:");
+        lblBorrowDate.setFont(new Font("Arial", Font.BOLD, 20));
+        lblBorrowDate.setForeground(new Color(4, 42, 54));
+        GridBagConstraints gbc_lblBorrowDate = new GridBagConstraints();
+        gbc_lblBorrowDate.insets = new Insets(0, 0, 5, 5);
+        gbc_lblBorrowDate.gridx = 0;
+        gbc_lblBorrowDate.gridy = 3;
+        panel_2.add(lblBorrowDate, gbc_lblBorrowDate);
 
-        // Nút Làm mới
-        RoundedButton refreshButton = new RoundedButton("Làm mới", 10);
-        refreshButton.setIcon(new ImageIcon(getClass().getResource("/IMG/refresh.png")));
-        refreshButton.setHorizontalTextPosition(JButton.RIGHT);
-        refreshButton.setVerticalTextPosition(JButton.CENTER);
-        refreshButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        refreshButton.setForeground(new Color(4, 42, 54));
-        refreshButton.setBackground(new Color(149, 227, 249));
-        refreshButton.setFont(new Font("Arial", Font.BOLD, 20));
-        refreshButton.setPreferredSize(new Dimension(250, 50));
-        refreshButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                refreshButton.setBackground(new Color(19, 193, 244));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+        borrowDateField = new RoundedTextField(10, 50);
+        borrowDateField.setFont(new Font("Arial", Font.PLAIN, 20));
+        borrowDateField.setColumns(10);
+        borrowDateField.setEditable(false); // Không cho phép chỉnh sửa ngày mượn
+        GridBagConstraints gbc_borrowDateField = new GridBagConstraints();
+        gbc_borrowDateField.insets = new Insets(0, 0, 5, 70);
+        gbc_borrowDateField.gridx = 1;
+        gbc_borrowDateField.gridy = 3;
+        gbc_borrowDateField.weightx = 1.0;
+        gbc_borrowDateField.fill = GridBagConstraints.HORIZONTAL;
+        panel_2.add(borrowDateField, gbc_borrowDateField);
+        
+                // Nút Xác nhận trả
+                RoundedButton button_3 = new RoundedButton("Xác nhận trả", 10);
+                button_3.setIcon(new ImageIcon(getClass().getResource("/IMG/approve.png")));
+                button_3.setHorizontalTextPosition(JButton.RIGHT);
+                button_3.setVerticalTextPosition(JButton.CENTER);
+                button_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                button_3.setForeground(new Color(4, 42, 54));
+                button_3.setBackground(new Color(149, 227, 249));
+                button_3.setFont(new Font("Arial", Font.BOLD, 20));
+                button_3.setPreferredSize(new Dimension(250, 50));
+                button_3.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseEntered(java.awt.event.MouseEvent evt) {
+                        button_3.setBackground(new Color(19, 193, 244));
+                    }
+                    public void mouseExited(java.awt.event.MouseEvent evt) {
+                        button_3.setBackground(new Color(149, 227, 249));
+                    }
+                });
+                GridBagConstraints gbc_button_3 = new GridBagConstraints();
+                gbc_button_3.insets = new Insets(5, 5, 5, 5);
+                gbc_button_3.gridx = 2;
+                gbc_button_3.gridy = 3;
+                panel_2.add(button_3, gbc_button_3);
+                
+                        // Thêm sự kiện cho nút Xác nhận trả
+                        button_3.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                try {
+                                    String idRequest = textField.getText().trim();
+                                    if (idRequest.isEmpty()) {
+                                        JOptionPane.showMessageDialog(null, "Vui lòng nhập ID đơn mượn.");
+                                        return;
+                                    }
+                
+                                    controller.refundFacility(idRequest, currentUserId);
+                                    JOptionPane.showMessageDialog(null, "Trả đơn mượn thành công!");
+                                    textField.setText("");
+                                    borrowDateField.setText("");
+                                    returnDateField.setText("");
+                                    refreshTable();
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
+                                }
+                            }
+                        });
+
+        // Nhãn và ô nhập Ngày trả
+        JLabel lblReturnDate = new JLabel("Ngày trả:");
+        lblReturnDate.setFont(new Font("Arial", Font.BOLD, 20));
+        lblReturnDate.setForeground(new Color(4, 42, 54));
+        GridBagConstraints gbc_lblReturnDate = new GridBagConstraints();
+        gbc_lblReturnDate.insets = new Insets(0, 0, 5, 5);
+        gbc_lblReturnDate.gridx = 0;
+        gbc_lblReturnDate.gridy = 4;
+        panel_2.add(lblReturnDate, gbc_lblReturnDate);
+
+        returnDateField = new RoundedTextField(10, 50);
+        returnDateField.setFont(new Font("Arial", Font.PLAIN, 20));
+        returnDateField.setColumns(10);
+        returnDateField.setEditable(false); // Không cho phép chỉnh sửa ngày trả (chỉ hiển thị)
+        GridBagConstraints gbc_returnDateField = new GridBagConstraints();
+        gbc_returnDateField.insets = new Insets(0, 0, 5, 70);
+        gbc_returnDateField.gridx = 1;
+        gbc_returnDateField.gridy = 4;
+        gbc_returnDateField.weightx = 1.0;
+        gbc_returnDateField.fill = GridBagConstraints.HORIZONTAL;
+        panel_2.add(returnDateField, gbc_returnDateField);
+        
+                // Nút Làm mới
+                RoundedButton refreshButton = new RoundedButton("Làm mới", 10);
+                refreshButton.setIcon(new ImageIcon(getClass().getResource("/IMG/refresh.png")));
+                refreshButton.setHorizontalTextPosition(JButton.RIGHT);
+                refreshButton.setVerticalTextPosition(JButton.CENTER);
+                refreshButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                refreshButton.setForeground(new Color(4, 42, 54));
                 refreshButton.setBackground(new Color(149, 227, 249));
-            }
-        });
-        GridBagConstraints gbc_refreshButton = new GridBagConstraints();
-        gbc_refreshButton.insets = new Insets(5, 5, 5, 5);
-        gbc_refreshButton.gridx = 2;
-        gbc_refreshButton.gridy = 4;
-        panel_2.add(refreshButton, gbc_refreshButton);
+                refreshButton.setFont(new Font("Arial", Font.BOLD, 20));
+                refreshButton.setPreferredSize(new Dimension(250, 50));
+                refreshButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseEntered(java.awt.event.MouseEvent evt) {
+                        refreshButton.setBackground(new Color(19, 193, 244));
+                    }
+                    public void mouseExited(java.awt.event.MouseEvent evt) {
+                        refreshButton.setBackground(new Color(149, 227, 249));
+                    }
+                });
+                GridBagConstraints gbc_refreshButton = new GridBagConstraints();
+                gbc_refreshButton.insets = new Insets(5, 5, 5, 5);
+                gbc_refreshButton.gridx = 2;
+                gbc_refreshButton.gridy = 4;
+                panel_2.add(refreshButton, gbc_refreshButton);
+                
+                        // Thêm sự kiện cho nút Làm mới
+                        refreshButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                refreshTable();
+                            }
+                        });
 
         // Bảng hiển thị danh sách đơn mượn
         JPanel listPanel = new JPanel(new BorderLayout());
@@ -217,6 +303,23 @@ public class Panel_RefundFacilities extends JPanel {
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setFocusable(false);
         table.setForeground(new Color(6, 46, 75));
+
+        // Thêm sự kiện nhấn vào bảng để hiển thị thông tin lên các trường phía trên
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    String idRequest = tableModel.getValueAt(selectedRow, 1).toString();
+                    String borrowDate = tableModel.getValueAt(selectedRow, 5) != null ? tableModel.getValueAt(selectedRow, 5).toString() : "";
+                    String returnDate = tableModel.getValueAt(selectedRow, 6) != null ? tableModel.getValueAt(selectedRow, 6).toString() : "";
+
+                    textField.setText(idRequest);
+                    borrowDateField.setText(borrowDate);
+                    returnDateField.setText(returnDate);
+                }
+            }
+        });
 
         DefaultTableCellRenderer noFocusRenderer = new DefaultTableCellRenderer() {
             @Override
@@ -284,25 +387,6 @@ public class Panel_RefundFacilities extends JPanel {
         gbc_listPanel.gridy = 1;
         panel.add(listPanel, gbc_listPanel);
 
-        // Thêm sự kiện cho nút Xác nhận trả
-        button_3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    String idRequest = textField.getText().trim();
-                    if (idRequest.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Vui lòng nhập ID đơn mượn.");
-                        return;
-                    }
-                    controller.refundFacility(idRequest, currentUserId);
-                    JOptionPane.showMessageDialog(null, "Trả đơn mượn thành công!");
-                    refreshTable();
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
-                }
-            }
-        });
-
         // Thêm sự kiện cho nút Tìm kiếm
         search_1.addActionListener(new ActionListener() {
             @Override
@@ -357,19 +441,11 @@ public class Panel_RefundFacilities extends JPanel {
             }
         });
 
-        // Thêm sự kiện cho nút Làm mới
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refreshTable();
-            }
-        });
-
         // Load dữ liệu ban đầu
         refreshTable();
     }
 
-    private void refreshTable() {
+    public void refreshTable() {
         try {
             tableModel.setRowCount(0); // Xóa dữ liệu cũ
             List<Object> allRequests = controller.getRequestsByUser(currentUserId);
@@ -403,5 +479,10 @@ public class Panel_RefundFacilities extends JPanel {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Lỗi: " + e.getMessage());
         }
+    }
+
+    // Phương thức công khai để làm mới bảng từ bên ngoài
+    public void updateTable() {
+        refreshTable();
     }
 }

@@ -6,8 +6,11 @@ import Repository.RoomBorrowRequestRepository;
 import Service.LectureService;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
@@ -16,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -29,8 +31,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -51,6 +51,7 @@ public class Panel_RentRoom extends JPanel {
     private RoomBorrowRequestRepository requestRepository;
     private LectureService lectureService;
     private DefaultTableModel tableModel;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     /**
      * Create the panel.
@@ -187,7 +188,7 @@ public class Panel_RentRoom extends JPanel {
 
         textField_1 = new RoundedTextField(10, 50);
         textField_1.setFont(new Font("Arial", Font.PLAIN, 20));
-        textField_1.setPlaceholder("dd-MM-yyyy, ví dụ: 01-12-2023"); // Thêm placeholder
+        textField_1.setPlaceholder("dd-MM-yyyy HH:mm:ss");
         GridBagConstraints gbc_textField_1 = new GridBagConstraints();
         gbc_textField_1.anchor = GridBagConstraints.WEST;
         gbc_textField_1.insets = new Insets(0, 0, 5, 70);
@@ -210,7 +211,7 @@ public class Panel_RentRoom extends JPanel {
 
         textField_2 = new RoundedTextField(10, 50);
         textField_2.setFont(new Font("Arial", Font.PLAIN, 20));
-        textField_2.setPlaceholder("dd-MM-yyyy, ví dụ: 01-12-2023"); // Thêm placeholder
+        textField_2.setPlaceholder("dd-MM-yyyy HH:mm:ss");
         GridBagConstraints gbc_textField_2 = new GridBagConstraints();
         gbc_textField_2.insets = new Insets(0, 0, 5, 70);
         gbc_textField_2.anchor = GridBagConstraints.WEST;
@@ -373,8 +374,6 @@ public class Panel_RentRoom extends JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ các trường.");
             return false;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false); // Đảm bảo ngày tháng hợp lệ
         try {
             Date requestDate = dateFormat.parse(textField_1.getText());
             Date dueDate = dateFormat.parse(textField_2.getText());
@@ -383,7 +382,7 @@ public class Panel_RentRoom extends JPanel {
                 return false;
             }
         } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ (dd-MM-yyyy). Ví dụ: 01-12-2023.");
+            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ (dd-MM-yyyy HH:mm:ss).");
             return false;
         }
         return true;
@@ -450,8 +449,6 @@ public class Panel_RentRoom extends JPanel {
         }
 
         String roomId = textField.getText();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false);
         try {
             Date requestDate = dateFormat.parse(textField_1.getText());
             Date dueDate = dateFormat.parse(textField_2.getText());
@@ -460,7 +457,10 @@ public class Panel_RentRoom extends JPanel {
             if (success) {
                 JOptionPane.showMessageDialog(this, "Yêu cầu mượn phòng đã được gửi thành công! Vui lòng chờ duyệt.");
                 clearFields();
-                refreshTable(); // Cập nhật bảng sau khi mượn
+                refreshTable();
+                // TODO: Thông báo cho Panel_RefundFacilities làm mới bảng
+                // Ví dụ: Nếu bạn có một tham chiếu đến Panel_RefundFacilities, bạn có thể gọi
+                // refundFacilitiesPanel.updateTable();
             } else {
                 JOptionPane.showMessageDialog(this, "Không thể mượn phòng. Phòng không tồn tại hoặc không sẵn sàng.");
             }
