@@ -203,7 +203,7 @@ public class PageManager extends JFrame {
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
 
-        String[] menuItems = {"Quản lý phòng", "Quản lý thiết bị", "Quản lý người dùng", "Phân quyền", "Mượn phòng", "Mượn thiết bị"};
+        String[] menuItems = {"Quản lý phòng", "Quản lý thiết bị", "Quản lý người dùng", "Phân quyền", "Mượn phòng", "Mượn thiết bị", "Trả cơ sở vật chất", "Báo cáo sự cố", "Xử lý sự cố"};
         
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
@@ -214,6 +214,9 @@ public class PageManager extends JFrame {
 		PermissionView permissionView = new PermissionView();
 		Panel_RentDevice panelRentDevice = new Panel_RentDevice();
 		Panel_RentRoom panelRentRoom = new Panel_RentRoom();
+		Panel_RefundFacilities panelRefundFacilities = new Panel_RefundFacilities();
+		Panel_ReportIncident panelReport = new Panel_ReportIncident();
+		Panel_HandlingIncident panelHandling = new Panel_HandlingIncident();
 		
         for (String item : menuItems) {
         	Boolean[] rights = PermissionUtils.getRights(item);
@@ -231,14 +234,21 @@ public class PageManager extends JFrame {
         		contentPanel.add(permissionView, item);
         	} else if(item == "Mượn phòng") {
         		contentPanel.add(panelRentRoom, item);
-        	} else {
+        	} else if(item == "Mượn thiết bị"){
         		contentPanel.add(panelRentDevice, item);
+        	} else if(item == "Trả cơ sở vật chất") {
+        		contentPanel.add(panelRefundFacilities, item);
+        	} else if (item == "Báo cáo sự cố"){
+        		contentPanel.add(panelReport, item);
+        	} else if (item == "Xử lý sự cố"){
+        		contentPanel.add(panelHandling);
         	}
+        	
         }
         
         boolean isFirst = true;
         
-        String[] iconPaths = {"/IMG/room.png", "/IMG/settings.png", "/IMG/profile.png", "/IMG/key.png", "/IMG/key (1).png", "/IMG/mobile.png"};
+        String[] iconPaths = {"/IMG/room.png", "/IMG/settings.png", "/IMG/profile.png", "/IMG/key.png", "/IMG/key (1).png", "/IMG/mobile.png", "/IMG/key (1).png", "/IMG/mobile.png", "/IMG/mobile.png"};
         for (int i = 0; i < menuItems.length; i++) {
             String item = menuItems[i];
             Boolean[] rights = PermissionUtils.getRights(item);

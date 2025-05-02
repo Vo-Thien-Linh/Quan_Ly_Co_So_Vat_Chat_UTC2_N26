@@ -1,22 +1,20 @@
 package View;
 
-import Model.Room;
-import Model.RoomStatus;
-import Repository.RoomBorrowRequestRepository;
-import Service.LectureService;
+import Controller.IncidentController;
+import Model.Incident;
+import java.util.List;
+import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.util.Date;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -26,7 +24,6 @@ import java.awt.Insets;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -41,28 +38,23 @@ import javax.swing.JScrollPane;
 import View.RoundedComponents.RoundedButton;
 import View.RoundedComponents.RoundedTextField;
 
-public class Panel_RentRoom extends JPanel {
+public class Panel_ReportIncident extends JPanel {
     private static final long serialVersionUID = 1L;
     private RoundedTextField search;
     private RoundedTextField textField;
-    private RoundedTextField textField_1;
-    private RoundedTextField textField_2;
+    private RoundedTextField idField; // Trường mới để nhập ID phòng hoặc thiết bị
     private JTable table;
-    private RoomBorrowRequestRepository requestRepository;
-    private LectureService lectureService;
+    private IncidentController controller;
     private DefaultTableModel tableModel;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private String currentUserId = "MTL0001"; // Giả định user hiện tại, thay bằng logic lấy từ session
 
     /**
      * Create the panel.
      */
-    public Panel_RentRoom() {
-        // Khởi tạo các đối tượng cần thiết: repository và service
-        requestRepository = new RoomBorrowRequestRepository();
-        try {
-            lectureService = new LectureService();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi khởi tạo dịch vụ: " + e.getMessage());
-        }
+    public Panel_ReportIncident() {
+        // Khởi tạo controller
+        controller = new IncidentController();
 
         setBackground(new Color(242, 242, 242));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -94,12 +86,12 @@ public class Panel_RentRoom extends JPanel {
 
         // Tạo ô tìm kiếm
         search = new RoundedTextField(10, 50);
-        search.setPlaceholder("Nhập số phòng");
+        search.setPlaceholder("Nhập ID phòng, ID thiết bị");
         search.setFont(new Font("Arial", Font.PLAIN, 20));
         search.setColumns(10);
         GridBagConstraints gbc_search = new GridBagConstraints();
         gbc_search.anchor = GridBagConstraints.NORTHEAST;
-        gbc_search.insets = new Insets(10, 0, 5, 0);
+        gbc_search.insets = new Insets(10, 0, 5, 5);
         gbc_search.gridx = 0;
         gbc_search.gridy = 1;
         gbc_search.weightx = 1.0;
@@ -130,8 +122,8 @@ public class Panel_RentRoom extends JPanel {
         gbc_search_1.gridy = 1;
         panel_2.add(search_1, gbc_search_1);
 
-        // Nhãn và ô nhập ID Phòng
-        JLabel lblNewLabel = new JLabel("ID Phòng: ");
+        // Nhãn và ô nhập Ghi chú
+        JLabel lblNewLabel = new JLabel("Ghi chú:");
         lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
         lblNewLabel.setForeground(new Color(4, 42, 54));
         GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -150,78 +142,96 @@ public class Panel_RentRoom extends JPanel {
         gbc_textField.weightx = 1.0;
         gbc_textField.fill = GridBagConstraints.HORIZONTAL;
         panel_2.add(textField, gbc_textField);
-
-        // Nút Xác nhận mượn
-        RoundedButton button_3 = new RoundedButton("Xác nhận mượn", 10);
-        button_3.setIcon(new ImageIcon(getClass().getResource("/IMG/approve.png")));
-        button_3.setHorizontalTextPosition(JButton.RIGHT);
-        button_3.setVerticalTextPosition(JButton.CENTER);
-        button_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button_3.setForeground(new Color(4, 42, 54));
-        button_3.setBackground(new Color(149, 227, 249));
-        button_3.setFont(new Font("Arial", Font.BOLD, 20));
-        button_3.setPreferredSize(new Dimension(250, 50));
-        button_3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button_3.setBackground(new Color(19, 193, 244));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+        
+                // Nút Gửi ghi chú
+                RoundedButton button_3 = new RoundedButton("Gửi ghi chú", 10);
+                button_3.setIcon(new ImageIcon(getClass().getResource("/IMG/approve.png")));
+                button_3.setHorizontalTextPosition(JButton.RIGHT);
+                button_3.setVerticalTextPosition(JButton.CENTER);
+                button_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                button_3.setForeground(new Color(4, 42, 54));
                 button_3.setBackground(new Color(149, 227, 249));
-            }
-        });
-        GridBagConstraints gbc_button_3 = new GridBagConstraints();
-        gbc_button_3.insets = new Insets(5, 5, 5, 0);
-        gbc_button_3.gridx = 3;
-        gbc_button_3.gridy = 2;
-        panel_2.add(button_3, gbc_button_3);
+                button_3.setFont(new Font("Arial", Font.BOLD, 20));
+                button_3.setPreferredSize(new Dimension(250, 50));
+                button_3.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseEntered(java.awt.event.MouseEvent evt) {
+                        button_3.setBackground(new Color(19, 193, 244));
+                    }
+                    public void mouseExited(java.awt.event.MouseEvent evt) {
+                        button_3.setBackground(new Color(149, 227, 249));
+                    }
+                });
+                GridBagConstraints gbc_button_3 = new GridBagConstraints();
+                gbc_button_3.insets = new Insets(5, 5, 5, 5);
+                gbc_button_3.gridx = 2;
+                gbc_button_3.gridy = 2;
+                panel_2.add(button_3, gbc_button_3);
+                
+                        // Thêm sự kiện cho nút Gửi ghi chú
+                        button_3.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                try {
+                                    String description = textField.getText().trim();
+                                    String idText = idField.getText().trim(); // Lấy từ trường mới
+                                    if (description.isEmpty()) {
+                                        JOptionPane.showMessageDialog(null, "Vui lòng nhập ghi chú.");
+                                        return;
+                                    }
+                                    if (idText.isEmpty()) {
+                                        JOptionPane.showMessageDialog(null, "Vui lòng nhập ID phòng hoặc ID thiết bị.");
+                                        return;
+                                    }
+                
+                                    String deviceId = null;
+                                    String roomId = null;
+                                    if (idText.startsWith("D")) {
+                                        deviceId = idText;
+                                    } else if (idText.startsWith("R")) {
+                                        roomId = idText;
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "ID không hợp lệ. ID phòng bắt đầu bằng 'R', ID thiết bị bắt đầu bằng 'D'.");
+                                        return;
+                                    }
+                
+                                    // Giả định người báo cáo (có thể lấy từ session, tạm hard-code)
+                                    String reportedBy = "MTL0001"; // Thay bằng ID người dùng thực tế
+                                    controller.reportIncident(reportedBy, deviceId, roomId, description);
+                                    JOptionPane.showMessageDialog(null, "Gửi báo cáo sự cố thành công!");
+                                    textField.setText(""); // Xóa ghi chú sau khi gửi
+                                    idField.setText(""); // Xóa trường ID sau khi gửi
+                                    refreshTable();
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Lỗi khi gửi báo cáo: " + ex.getMessage());
+                                } catch (IllegalArgumentException ex) {
+                                    JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
+                                }
+                            }
+                        });
 
-        // Nhãn và ô nhập Ngày mượn
-        JLabel lblNewLabel_1 = new JLabel("Ngày mượn:");
-        lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 20));
-        lblNewLabel_1.setForeground(new Color(4, 42, 54));
-        GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-        gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-        gbc_lblNewLabel_1.gridx = 0;
-        gbc_lblNewLabel_1.gridy = 3;
-        panel_2.add(lblNewLabel_1, gbc_lblNewLabel_1);
+        // Nhãn và ô nhập ID Phòng/Thiết bị (trường mới)
+        JLabel lblIdField = new JLabel("ID Phòng/Thiết bị:");
+        lblIdField.setFont(new Font("Arial", Font.BOLD, 20));
+        lblIdField.setForeground(new Color(4, 42, 54));
+        GridBagConstraints gbc_lblIdField = new GridBagConstraints();
+        gbc_lblIdField.insets = new Insets(0, 0, 5, 5);
+        gbc_lblIdField.gridx = 0;
+        gbc_lblIdField.gridy = 3;
+        panel_2.add(lblIdField, gbc_lblIdField);
 
-        textField_1 = new RoundedTextField(10, 50);
-        textField_1.setFont(new Font("Arial", Font.PLAIN, 20));
-        textField_1.setPlaceholder("dd-MM-yyyy, ví dụ: 01-12-2023"); // Thêm placeholder
-        GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-        gbc_textField_1.anchor = GridBagConstraints.WEST;
-        gbc_textField_1.insets = new Insets(0, 0, 5, 70);
-        gbc_textField_1.gridx = 1;
-        gbc_textField_1.gridy = 3;
-        gbc_textField_1.weightx = 1.0;
-        gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-        panel_2.add(textField_1, gbc_textField_1);
-        textField_1.setColumns(10);
+        idField = new RoundedTextField(10, 50);
+        idField.setFont(new Font("Arial", Font.PLAIN, 20));
+        idField.setColumns(10);
+        idField.setPlaceholder("Nhập ID phòng hoặc ID thiết bị");
+        GridBagConstraints gbc_idField = new GridBagConstraints();
+        gbc_idField.insets = new Insets(0, 0, 5, 70);
+        gbc_idField.gridx = 1;
+        gbc_idField.gridy = 3;
+        gbc_idField.weightx = 1.0;
+        gbc_idField.fill = GridBagConstraints.HORIZONTAL;
+        panel_2.add(idField, gbc_idField);
 
-        // Nhãn và ô nhập Ngày trả
-        JLabel lblNewLabel_2_1 = new JLabel("Ngày trả:");
-        lblNewLabel_2_1.setFont(new Font("Arial", Font.BOLD, 20));
-        lblNewLabel_2_1.setForeground(new Color(4, 42, 54));
-        GridBagConstraints gbc_lblNewLabel_2_1 = new GridBagConstraints();
-        gbc_lblNewLabel_2_1.insets = new Insets(0, 0, 5, 5);
-        gbc_lblNewLabel_2_1.gridx = 0;
-        gbc_lblNewLabel_2_1.gridy = 4;
-        panel_2.add(lblNewLabel_2_1, gbc_lblNewLabel_2_1);
-
-        textField_2 = new RoundedTextField(10, 50);
-        textField_2.setFont(new Font("Arial", Font.PLAIN, 20));
-        textField_2.setPlaceholder("dd-MM-yyyy, ví dụ: 01-12-2023"); // Thêm placeholder
-        GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-        gbc_textField_2.insets = new Insets(0, 0, 5, 70);
-        gbc_textField_2.anchor = GridBagConstraints.WEST;
-        gbc_textField_2.gridx = 1;
-        gbc_textField_2.gridy = 4;
-        gbc_textField_2.weightx = 1.0;
-        gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-        panel_2.add(textField_2, gbc_textField_2);
-        textField_2.setColumns(10);
-
-        // Nút Làm mới bảng
+        // Nút Làm mới
         RoundedButton refreshButton = new RoundedButton("Làm mới", 10);
         refreshButton.setIcon(new ImageIcon(getClass().getResource("/IMG/refresh.png")));
         refreshButton.setHorizontalTextPosition(JButton.RIGHT);
@@ -240,15 +250,15 @@ public class Panel_RentRoom extends JPanel {
             }
         });
         GridBagConstraints gbc_refreshButton = new GridBagConstraints();
-        gbc_refreshButton.insets = new Insets(5, 5, 5, 0);
-        gbc_refreshButton.gridx = 3;
+        gbc_refreshButton.insets = new Insets(5, 5, 5, 5);
+        gbc_refreshButton.gridx = 2;
         gbc_refreshButton.gridy = 4;
         panel_2.add(refreshButton, gbc_refreshButton);
 
-        // Bảng hiển thị danh sách phòng
+        // Bảng hiển thị danh sách sự cố
         JPanel listPanel = new JPanel(new BorderLayout());
         String[] columns = {
-            "ID Phòng", "Số Phòng", "Sức chứa", "Trạng thái"
+            "ID Báo cáo", "Người báo cáo", "ID Phòng", "ID Thiết bị", "Ghi chú", "Ngày báo cáo", "Trạng thái"
         };
 
         tableModel = new DefaultTableModel(null, columns) {
@@ -338,138 +348,82 @@ public class Panel_RentRoom extends JPanel {
         gbc_listPanel.gridy = 1;
         panel.add(listPanel, gbc_listPanel);
 
-        // Load dữ liệu ban đầu vào bảng
+        // Thêm sự kiện cho nút Tìm kiếm
+        search_1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String searchText = search.getText().trim();
+                    if (searchText.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập ID phòng hoặc ID thiết bị để tìm kiếm.");
+                        return;
+                    }
+                    List<Incident> incidents;
+                    if (searchText.startsWith("D")) {
+                        incidents = controller.searchByDeviceId(searchText);
+                    } else if (searchText.startsWith("R")) {
+                        incidents = controller.searchByRoomId(searchText);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "ID không hợp lệ. ID phòng bắt đầu bằng 'R', ID thiết bị bắt đầu bằng 'D'.");
+                        return;
+                    }
+                    if (incidents.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy sự cố với ID: " + searchText);
+                        return;
+                    }
+                    updateTable(incidents);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Lỗi khi tìm kiếm: " + ex.getMessage());
+                }
+            }
+        });
+
+        // Thêm sự kiện cho nút Làm mới
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshTable();
+            }
+        });
+
+        // Load dữ liệu ban đầu
         refreshTable();
-
-        // Xử lý sự kiện khi chọn một hàng trong bảng
-        table.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
-                int selectedRow = table.getSelectedRow();
-                textField.setText(" ");
-                textField_1.setText("");
-                textField_2.setText("");
-            }
-        });
-
-        // Xử lý nút Tìm kiếm: Tìm phòng theo mã hoặc số phòng
-        search_1.addActionListener(e -> {
-            searchRooms();
-        });
-
-        // Xử lý nút Xác nhận mượn: Tạo yêu cầu mượn phòng
-        button_3.addActionListener(e -> {
-            createRoomBorrowRequest();
-        });
-
-        // Xử lý nút Làm mới: Tải lại danh sách phòng
-        refreshButton.addActionListener(e -> {
-            refreshTable();
-        });
     }
 
-    // Kiểm tra dữ liệu nhập vào có hợp lệ không
-    private boolean validateInput() {
-        if (textField.getText().isEmpty() || textField_1.getText().isEmpty() || textField_2.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ các trường.");
-            return false;
+    private void updateTable(List<Incident> incidents) {
+        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+        if (incidents == null || incidents.isEmpty()) {
+            return;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false); // Đảm bảo ngày tháng hợp lệ
-        try {
-            Date requestDate = dateFormat.parse(textField_1.getText());
-            Date dueDate = dateFormat.parse(textField_2.getText());
-            if (!dueDate.after(requestDate)) {
-                JOptionPane.showMessageDialog(this, "Ngày trả phải sau ngày mượn.");
-                return false;
-            }
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ (dd-MM-yyyy). Ví dụ: 01-12-2023.");
-            return false;
+        for (Incident incident : incidents) {
+            tableModel.addRow(new Object[]{
+                incident.getIdReport(),
+                incident.getReportedBy(),
+                incident.getRoomId(),
+                incident.getDeviceId(),
+                incident.getDescription(),
+                incident.getReportDate() != null ? dateFormat.format(incident.getReportDate()) : null,
+                incident.getStatus()
+            });
         }
-        return true;
     }
 
-    // Xóa các trường nhập liệu sau khi thực hiện hành động
-    private void clearFields() {
-        textField.setText("");
-        textField_1.setText("");
-        textField_2.setText("");
-        search.setText("");
-    }
-
-    // Tải lại dữ liệu phòng từ cơ sở dữ liệu và hiển thị lên bảng
     public void refreshTable() {
         try {
             tableModel.setRowCount(0); // Xóa dữ liệu cũ
-            for (Room room : lectureService.getAllRooms()) {
+            for (Incident incident : controller.getAllIncidents()) {
                 tableModel.addRow(new Object[]{
-                    room.getId(),
-                    room.getRoomNumber(),
-                    room.getSeatingCapacity(),
-                    room.getStatus().toString()
+                    incident.getIdReport(),
+                    incident.getReportedBy(),
+                    incident.getRoomId(),
+                    incident.getDeviceId(),
+                    incident.getDescription(),
+                    incident.getReportDate() != null ? dateFormat.format(incident.getReportDate()) : null,
+                    incident.getStatus()
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi tải danh sách phòng: " + e.getMessage());
-        }
-    }
-
-    // Tìm kiếm phòng theo mã hoặc số phòng
-    private void searchRooms() {
-        String keyword = search.getText().trim().toLowerCase();
-        if (keyword.isEmpty()) {
-            refreshTable(); // Nếu không có từ khóa, hiển thị toàn bộ danh sách
-            return;
-        }
-
-        try {
-            tableModel.setRowCount(0); // Xóa dữ liệu cũ
-            for (Room room : lectureService.getAllRooms()) {
-                if (room.getId().toLowerCase().contains(keyword) || 
-                    room.getRoomNumber().toLowerCase().contains(keyword)) {
-                    tableModel.addRow(new Object[]{
-                        room.getId(),
-                        room.getRoomNumber(),
-                        room.getSeatingCapacity(),
-                        room.getStatus().toString()
-                    });
-                }
-            }
-            if (tableModel.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy phòng phù hợp.");
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm phòng: " + e.getMessage());
-        }
-    }
-
-    // Tạo yêu cầu mượn phòng: Gửi yêu cầu mượn phòng đến LectureService
-    private void createRoomBorrowRequest() {
-        if (!validateInput()) {
-            return;
-        }
-
-        String roomId = textField.getText();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false);
-        try {
-            Date requestDate = dateFormat.parse(textField_1.getText());
-            Date dueDate = dateFormat.parse(textField_2.getText());
-
-            boolean success = lectureService.borrowRoom(roomId, requestDate, dueDate);
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Yêu cầu mượn phòng đã được gửi thành công! Vui lòng chờ duyệt.");
-                clearFields();
-                refreshTable(); // Cập nhật bảng sau khi mượn
-            } else {
-                JOptionPane.showMessageDialog(this, "Không thể mượn phòng. Phòng không tồn tại hoặc không sẵn sàng.");
-            }
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi định dạng ngày: " + e.getMessage());
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi gửi yêu cầu mượn: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Lỗi khi tải danh sách sự cố: " + e.getMessage());
         }
     }
 }
