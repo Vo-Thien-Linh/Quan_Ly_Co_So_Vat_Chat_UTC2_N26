@@ -6,8 +6,11 @@ import Repository.DeviceRepository;
 import Service.LectureService;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
@@ -16,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -29,8 +31,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -52,6 +52,7 @@ public class Panel_RentDevice extends JPanel {
     private DeviceRepository deviceRepository;
     private LectureService lectureService;
     private DefaultTableModel tableModel;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     /**
      * Create the panel.
@@ -210,7 +211,7 @@ public class Panel_RentDevice extends JPanel {
 
         textField_2 = new RoundedTextField(10, 50);
         textField_2.setFont(new Font("Arial", Font.PLAIN, 20));
-        textField_2.setPlaceholder("dd-MM-yyyy, ví dụ: 01-12-2023"); // Thêm placeholder
+        textField_2.setPlaceholder("dd-MM-yyyy HH:mm:ss, ví dụ: 01-12-2023 14:30:00");
         GridBagConstraints gbc_textField_2 = new GridBagConstraints();
         gbc_textField_2.insets = new Insets(0, 0, 5, 70);
         gbc_textField_2.anchor = GridBagConstraints.WEST;
@@ -233,7 +234,7 @@ public class Panel_RentDevice extends JPanel {
 
         textField_3 = new RoundedTextField(10, 50);
         textField_3.setFont(new Font("Arial", Font.PLAIN, 20));
-        textField_3.setPlaceholder("dd-MM-yyyy, ví dụ: 01-12-2023"); // Thêm placeholder
+        textField_3.setPlaceholder("dd-MM-yyyy HH:mm:ss, ví dụ: 01-12-2023 14:30:00");
         GridBagConstraints gbc_textField_3 = new GridBagConstraints();
         gbc_textField_3.insets = new Insets(0, 0, 5, 70);
         gbc_textField_3.anchor = GridBagConstraints.WEST;
@@ -374,17 +375,14 @@ public class Panel_RentDevice extends JPanel {
                 textField_3.setText("");
             }
         });
-
         // Xử lý nút Tìm kiếm: Tìm thiết bị theo mã hoặc tên
         search_1.addActionListener(e -> {
             searchDevices();
         });
-
         // Xử lý nút Xác nhận mượn: Tạo yêu cầu mượn thiết bị
         button_3.addActionListener(e -> {
             createDeviceBorrowRequest();
         });
-
         // Xử lý nút Làm mới: Tải lại danh sách thiết bị
         refreshButton.addActionListener(e -> {
             refreshTable();
@@ -418,8 +416,6 @@ public class Panel_RentDevice extends JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra số lượng thiết bị: " + e.getMessage());
             return false;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false); // Đảm bảo ngày tháng hợp lệ
         try {
             Date requestDate = dateFormat.parse(textField_2.getText());
             Date dueDate = dateFormat.parse(textField_3.getText());
@@ -428,7 +424,7 @@ public class Panel_RentDevice extends JPanel {
                 return false;
             }
         } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ (dd-MM-yyyy). Ví dụ: 01-12-2023.");
+            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ (dd-MM-yyyy HH:mm:ss). Ví dụ: 01-12-2023 14:30:00.");
             return false;
         }
         return true;
@@ -464,7 +460,7 @@ public class Panel_RentDevice extends JPanel {
     private void searchDevices() {
         String keyword = search.getText().trim().toLowerCase();
         if (keyword.isEmpty()) {
-            refreshTable(); // Nếu không có từ khóa, hiển thị toàn bộ danh sách
+            refreshTable();
             return;
         }
 
@@ -497,8 +493,6 @@ public class Panel_RentDevice extends JPanel {
 
         String deviceId = textField.getText();
         int quantity = Integer.parseInt(textField_1.getText()); // Lấy số lượng
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false);
         try {
             Date requestDate = dateFormat.parse(textField_2.getText());
             Date dueDate = dateFormat.parse(textField_3.getText());
