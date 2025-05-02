@@ -51,6 +51,18 @@ public class PermissionView extends JPanel {
             {"Mượn thiết bị", "Quản trị viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
             {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
             {"", "Bảo trì", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+
+            {"Trả cơ sở vật chất", "Quản trị viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Bảo trì", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            
+            {"Báo cáo sự cố", "Quản trị viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Bảo trì", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+
+            {"Xử lý sự cố", "Quản trị viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
+            {"", "Bảo trì", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
             
             {"Phân quyền", "Quản trị viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},
             {"", "Giáo viên", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE},

@@ -53,25 +53,27 @@ public class DeviceBorrowRequestRepository {
         return requests;
     }
 
-    public List<DeviceBorrowRequest> getAllRequests() throws SQLException {
+    public List<DeviceBorrowRequest> getRequestsByUser(String userId) throws SQLException {
         List<DeviceBorrowRequest> requests = new ArrayList<>();
         String sql = """
             SELECT br.id_request, br.lecturer_user, br.device_id, br.request_date, br.due_date, br.borrowing_request
             FROM device_borrow_requests br
+            WHERE br.lecturer_user = ?
         """;
-
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                DeviceBorrowRequest request = new DeviceBorrowRequest();
-                request.setIdRequest(rs.getString("id_request"));
-                request.setLecturerUser(rs.getString("lecturer_user"));
-                request.setDeviceId(rs.getString("device_id"));
-                request.setRequestDate(rs.getTimestamp("request_date"));
-                request.setDueDate(rs.getTimestamp("due_date"));
-                request.setBorrowingRequest(BorrowingRequestStatus.valueOf(rs.getString("borrowing_request")));
-                requests.add(request);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    DeviceBorrowRequest request = new DeviceBorrowRequest();
+                    request.setIdRequest(rs.getString("id_request"));
+                    request.setLecturerUser(rs.getString("lecturer_user"));
+                    request.setDeviceId(rs.getString("device_id"));
+                    request.setRequestDate(rs.getTimestamp("request_date"));
+                    request.setDueDate(rs.getTimestamp("due_date"));
+                    request.setBorrowingRequest(BorrowingRequestStatus.valueOf(rs.getString("borrowing_request")));
+                    requests.add(request);
+                }
             }
         }
         return requests;
@@ -100,5 +102,31 @@ public class DeviceBorrowRequestRepository {
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         }
+    }
+
+    public List<DeviceBorrowRequest> findByRequestId(String idRequest) throws SQLException {
+        List<DeviceBorrowRequest> requests = new ArrayList<>();
+        String sql = """
+            SELECT br.id_request, br.lecturer_user, br.device_id, br.request_date, br.due_date, br.borrowing_request
+            FROM device_borrow_requests br
+            WHERE br.id_request = ?
+        """;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, idRequest);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    DeviceBorrowRequest request = new DeviceBorrowRequest();
+                    request.setIdRequest(rs.getString("id_request"));
+                    request.setLecturerUser(rs.getString("lecturer_user"));
+                    request.setDeviceId(rs.getString("device_id"));
+                    request.setRequestDate(rs.getTimestamp("request_date"));
+                    request.setDueDate(rs.getTimestamp("due_date"));
+                    request.setBorrowingRequest(BorrowingRequestStatus.valueOf(rs.getString("borrowing_request")));
+                    requests.add(request);
+                }
+            }
+        }
+        return requests;
     }
 }

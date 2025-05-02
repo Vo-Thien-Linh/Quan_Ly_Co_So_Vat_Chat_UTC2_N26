@@ -197,7 +197,6 @@ public class Panel_RentDevice extends JPanel {
         gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
         panel_2.add(textField_1, gbc_textField_1);
         textField_1.setColumns(10);
-        panel_2.add(textField_1, gbc_textField_1);
 
         // Nhãn và ô nhập Ngày mượn
         JLabel lblNewLabel_2_1 = new JLabel("Ngày mượn:");
@@ -211,6 +210,7 @@ public class Panel_RentDevice extends JPanel {
 
         textField_2 = new RoundedTextField(10, 50);
         textField_2.setFont(new Font("Arial", Font.PLAIN, 20));
+        textField_2.setPlaceholder("dd-MM-yyyy, ví dụ: 01-12-2023"); // Thêm placeholder
         GridBagConstraints gbc_textField_2 = new GridBagConstraints();
         gbc_textField_2.insets = new Insets(0, 0, 5, 70);
         gbc_textField_2.anchor = GridBagConstraints.WEST;
@@ -220,6 +220,29 @@ public class Panel_RentDevice extends JPanel {
         gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
         panel_2.add(textField_2, gbc_textField_2);
         textField_2.setColumns(10);
+
+        // Nhãn và ô nhập Ngày trả
+        JLabel lblNewLabel_2 = new JLabel("Ngày trả:");
+        lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 20));
+        lblNewLabel_2.setForeground(new Color(4, 42, 54));
+        GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+        gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
+        gbc_lblNewLabel_2.gridx = 0;
+        gbc_lblNewLabel_2.gridy = 5;
+        panel_2.add(lblNewLabel_2, gbc_lblNewLabel_2);
+
+        textField_3 = new RoundedTextField(10, 50);
+        textField_3.setFont(new Font("Arial", Font.PLAIN, 20));
+        textField_3.setPlaceholder("dd-MM-yyyy, ví dụ: 01-12-2023"); // Thêm placeholder
+        GridBagConstraints gbc_textField_3 = new GridBagConstraints();
+        gbc_textField_3.insets = new Insets(0, 0, 5, 70);
+        gbc_textField_3.anchor = GridBagConstraints.WEST;
+        gbc_textField_3.gridx = 1;
+        gbc_textField_3.gridy = 5;
+        gbc_textField_3.weightx = 1.0;
+        gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
+        panel_2.add(textField_3, gbc_textField_3);
+        textField_3.setColumns(10);
 
         // Nút Làm mới bảng
         RoundedButton refreshButton = new RoundedButton("Làm mới", 10);
@@ -244,28 +267,6 @@ public class Panel_RentDevice extends JPanel {
         gbc_refreshButton.gridx = 3;
         gbc_refreshButton.gridy = 4;
         panel_2.add(refreshButton, gbc_refreshButton);
-
-        // Nhãn và ô nhập Ngày trả
-        JLabel lblNewLabel_2 = new JLabel("Ngày trả:");
-        lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 20));
-        lblNewLabel_2.setForeground(new Color(4, 42, 54));
-        GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-        gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-        gbc_lblNewLabel_2.gridx = 0;
-        gbc_lblNewLabel_2.gridy = 5;
-        panel_2.add(lblNewLabel_2, gbc_lblNewLabel_2);
-
-        textField_3 = new RoundedTextField(10, 50);
-        textField_3.setFont(new Font("Arial", Font.PLAIN, 20));
-        textField_3.setColumns(10);
-        GridBagConstraints gbc_textField_3 = new GridBagConstraints();
-        gbc_textField_3.insets = new Insets(0, 0, 5, 70);
-        gbc_textField_3.anchor = GridBagConstraints.WEST;
-        gbc_textField_3.gridx = 1;
-        gbc_textField_3.gridy = 5;
-        gbc_textField_3.weightx = 1.0;
-        gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
-        panel_2.add(textField_3, gbc_textField_3);
 
         // Bảng hiển thị danh sách thiết bị
         JPanel listPanel = new JPanel(new BorderLayout());
@@ -417,7 +418,8 @@ public class Panel_RentDevice extends JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra số lượng thiết bị: " + e.getMessage());
             return false;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dateFormat.setLenient(false); // Đảm bảo ngày tháng hợp lệ
         try {
             Date requestDate = dateFormat.parse(textField_2.getText());
             Date dueDate = dateFormat.parse(textField_3.getText());
@@ -426,7 +428,7 @@ public class Panel_RentDevice extends JPanel {
                 return false;
             }
         } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ (yyyy-MM-dd HH:mm:ss).");
+            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ (dd-MM-yyyy). Ví dụ: 01-12-2023.");
             return false;
         }
         return true;
@@ -494,11 +496,14 @@ public class Panel_RentDevice extends JPanel {
         }
 
         String deviceId = textField.getText();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        int quantity = Integer.parseInt(textField_1.getText()); // Lấy số lượng
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dateFormat.setLenient(false);
         try {
             Date requestDate = dateFormat.parse(textField_2.getText());
             Date dueDate = dateFormat.parse(textField_3.getText());
 
+            // Gọi phương thức borrowDevice với số lượng
             boolean success = lectureService.borrowDevice(deviceId, requestDate, dueDate);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Yêu cầu mượn thiết bị đã được gửi thành công! Vui lòng chờ duyệt.");
