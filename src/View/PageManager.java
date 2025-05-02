@@ -68,7 +68,7 @@ public class PageManager extends JFrame {
 
 	public PageManager() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PageManager.class.getResource("/IMG/logo-utc.png")));
-		setTitle("Quản lý cơ sở vật chất UTC2 - Quản lý");
+		setTitle("Quản lý cơ sở vật chất UTC2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1213, 685);
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 

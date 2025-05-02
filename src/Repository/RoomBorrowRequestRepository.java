@@ -94,7 +94,7 @@ public class RoomBorrowRequestRepository {
                 }
             }
         }
-        return null; // Trả về null nếu không tìm thấy
+        return null; 
     }
 
     public boolean updateRequestStatus(String idRequest, BorrowingRequestStatus status) throws SQLException {
@@ -109,17 +109,13 @@ public class RoomBorrowRequestRepository {
     }
 
     public void addRequestWithValidation(RoomBorrowRequest request) throws SQLException {
-        // Kiểm tra các giá trị đầu vào để tránh lỗi null
         if (request.getLecturerUser() == null || request.getRoomId() == null ||
             request.getRequestDate() == null || request.getDueDate() == null ||
             request.getBorrowingRequest() == null) {
             throw new IllegalArgumentException("Thông tin yêu cầu mượn phòng không đầy đủ.");
         }
-
         // Không gán id_request để trigger tự động tạo
         request.setIdRequest(null);
-
-        // Gọi phương thức addRequest hiện có
         addRequest(request);
     }
 

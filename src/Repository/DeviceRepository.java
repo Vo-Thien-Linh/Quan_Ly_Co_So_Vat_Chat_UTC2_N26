@@ -28,7 +28,7 @@ public class DeviceRepository {
             stmt.setString(6, device.getStatus().name());
             stmt.setString(7, device.getRoom() != null ? device.getRoom().getId() : null);
             stmt.setInt(8, device.getQuantity());
-            stmt.setBoolean(9, false); // deleted = false khi thêm mới
+            stmt.setBoolean(9, false);
             stmt.executeUpdate();
         }
     }
