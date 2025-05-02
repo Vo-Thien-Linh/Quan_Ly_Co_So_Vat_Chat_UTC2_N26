@@ -54,21 +54,14 @@ public class Panel_HandlingIncident extends JPanel {
     private String currentUserId;
     private boolean isMaintenanceRole;
 
-    /**
-     * Create the panel.
-     */
     public Panel_HandlingIncident() {
-        // Lấy thông tin user hiện tại từ Session
         currentUserId = Session.getUserId();
         String role = Session.getRole();
         isMaintenanceRole = role != null && role.equals("MAINTENANCE");
-
         if (currentUserId == null) {
             JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin user hiện tại. Vui lòng đăng nhập lại.");
             return;
         }
-
-        // Khởi tạo controller
         controller = new IncidentController();
 
         setBackground(new Color(242, 242, 242));
@@ -99,7 +92,6 @@ public class Panel_HandlingIncident extends JPanel {
         gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel_2.setLayout(gbl_panel_2);
 
-        // Tạo ô tìm kiếm
         search = new RoundedTextField(10, 50);
         search.setPlaceholder("Nhập ID phòng, ID thiết bị để tìm kiếm");
         search.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -112,7 +104,6 @@ public class Panel_HandlingIncident extends JPanel {
         gbc_search.weightx = 1.0;
         panel_2.add(search, gbc_search);
 
-        // Nút tìm kiếm
         RoundedButton search_1 = new RoundedButton("", 10);
         search_1.setIcon(new ImageIcon(getClass().getResource("/IMG/search.png")));
         search_1.setHorizontalTextPosition(JButton.RIGHT);
@@ -137,7 +128,6 @@ public class Panel_HandlingIncident extends JPanel {
         gbc_search_1.gridy = 1;
         panel_2.add(search_1, gbc_search_1);
 
-        // Nhãn và ô nhập ID Báo cáo (dùng cho xử lý sự cố)
         JLabel lblIdField = new JLabel("ID Báo cáo:");
         lblIdField.setFont(new Font("Arial", Font.BOLD, 20));
         lblIdField.setForeground(new Color(4, 42, 54));
@@ -150,7 +140,7 @@ public class Panel_HandlingIncident extends JPanel {
         idField = new RoundedTextField(10, 50);
         idField.setFont(new Font("Arial", Font.PLAIN, 20));
         idField.setColumns(10);
-        idField.setEditable(false); // Không cho phép chỉnh sửa ID Báo cáo
+        idField.setEditable(false); 
         GridBagConstraints gbc_idField = new GridBagConstraints();
         gbc_idField.insets = new Insets(0, 0, 5, 70);
         gbc_idField.gridx = 1;
@@ -159,7 +149,6 @@ public class Panel_HandlingIncident extends JPanel {
         gbc_idField.fill = GridBagConstraints.HORIZONTAL;
         panel_2.add(idField, gbc_idField);
 
-        // Nhãn và ô nhập Ghi chú xử lý (chỉ hiển thị cho vai trò MAINTENANCE)
         JLabel lblHandlingNote = new JLabel("Ghi chú xử lý:");
         lblHandlingNote.setFont(new Font("Arial", Font.BOLD, 20));
         lblHandlingNote.setForeground(new Color(4, 42, 54));
@@ -182,13 +171,11 @@ public class Panel_HandlingIncident extends JPanel {
         gbc_handlingNoteField.fill = GridBagConstraints.HORIZONTAL;
         panel_2.add(handlingNoteField, gbc_handlingNoteField);
 
-        // Nhãn và JComboBox chọn trạng thái xử lý (chỉ hiển thị cho vai trò MAINTENANCE)
         JLabel lblStatus = new JLabel("Trạng thái:");
         lblStatus.setFont(new Font("Arial", Font.BOLD, 20));
         lblStatus.setForeground(new Color(4, 42, 54));
         lblStatus.setVisible(isMaintenanceRole);
         
-                // Nút Gửi thông báo xử lý (chỉ hiển thị cho vai trò MAINTENANCE)
                 RoundedButton handleButton = new RoundedButton("Gửi thông báo xử lý", 10);
                 handleButton.setIcon(new ImageIcon(getClass().getResource("/IMG/approve.png")));
                 handleButton.setHorizontalTextPosition(JButton.RIGHT);
@@ -196,7 +183,7 @@ public class Panel_HandlingIncident extends JPanel {
                 handleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 handleButton.setForeground(new Color(4, 42, 54));
                 handleButton.setBackground(new Color(149, 227, 249));
-                handleButton.setFont(new Font("Arial", Font.BOLD, 20));
+                handleButton.setFont(new Font("Arial", Font.BOLD, 18));
                 handleButton.setPreferredSize(new Dimension(250, 50));
                 handleButton.setVisible(isMaintenanceRole);
                 handleButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -245,13 +232,12 @@ public class Panel_HandlingIncident extends JPanel {
                                     String roomId = incident.getRoomId();
                 
                                     String handledBy = currentUserId;
-                                    // Thay thế ghi chú hiện tại bằng ghi chú mới
                                     String newDescription = handlingNote;
                                     controller.handleIncident(deviceId, roomId, newDescription, handledBy, selectedStatus);
                                     JOptionPane.showMessageDialog(null, "Cập nhật thông tin sự cố thành công!");
-                                    handlingNoteField.setText(""); // Xóa ghi chú xử lý sau khi gửi
-                                    idField.setText(""); // Xóa trường ID sau khi gửi
-                                    statusComboBox.setSelectedIndex(0); // Đặt lại trạng thái về mặc định
+                                    handlingNoteField.setText(""); 
+                                    idField.setText(""); 
+                                    statusComboBox.setSelectedIndex(0);
                                     refreshTable();
                                 } catch (SQLException ex) {
                                     JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin sự cố: " + ex.getMessage());
@@ -278,7 +264,6 @@ public class Panel_HandlingIncident extends JPanel {
         gbc_statusComboBox.fill = GridBagConstraints.HORIZONTAL;
         panel_2.add(statusComboBox, gbc_statusComboBox);
         
-                // Nút Làm mới
                 RoundedButton refreshButton = new RoundedButton("Làm mới", 10);
                 refreshButton.setIcon(new ImageIcon(getClass().getResource("/IMG/refresh.png")));
                 refreshButton.setHorizontalTextPosition(JButton.RIGHT);
@@ -301,8 +286,6 @@ public class Panel_HandlingIncident extends JPanel {
                 gbc_refreshButton.gridx = 2;
                 gbc_refreshButton.gridy = 4;
                 panel_2.add(refreshButton, gbc_refreshButton);
-                
-                        // Thêm sự kiện cho nút Làm mới
                         refreshButton.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -341,7 +324,7 @@ public class Panel_HandlingIncident extends JPanel {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (!isMaintenanceRole) return; // Chỉ cho phép MAINTENANCE tương tác
+                if (!isMaintenanceRole) return; 
 
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
@@ -451,13 +434,11 @@ public class Panel_HandlingIncident extends JPanel {
                 }
             }
         });
-
-        // Load dữ liệu ban đầu
         refreshTable();
     }
 
     private void updateTable(List<Incident> incidents) {
-        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+        tableModel.setRowCount(0);
         if (incidents == null || incidents.isEmpty()) {
             return;
         }
@@ -476,7 +457,7 @@ public class Panel_HandlingIncident extends JPanel {
 
     public void refreshTable() {
         try {
-            tableModel.setRowCount(0); // Xóa dữ liệu cũ
+            tableModel.setRowCount(0);
             for (Incident incident : controller.getAllIncidents()) {
                 tableModel.addRow(new Object[]{
                     incident.getIdReport(),
